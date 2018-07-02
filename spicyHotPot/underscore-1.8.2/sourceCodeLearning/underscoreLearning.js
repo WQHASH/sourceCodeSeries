@@ -218,6 +218,22 @@
         return false;
     };
 
+    // 确定数组或对象中是否包含给定的值
+    // 如果obj中包含指定的target 则返回true, obj可能是对象，或数组
+    _.contains = _.includes = _.include = function (obj, target, fromIndex) {
+        if (!isArrayLike(obj)) obj = _.values(obj);
+        return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
+    };
+
+    _.invoke = function (obj, method) {
+        var args = slice.call(arguments, 2);
+        var isFunc = _.isFunction(method);
+        return _.map(obj, function (value) {
+            var func = isFunc ? method : value[method];
+            return func == null ? func : func.apply(value, args);
+        });
+    };
+
 
 
     _.where = function (obj, attrs) {
@@ -237,6 +253,35 @@
             //return !predicate.apply(this, arguments);
         };
     };
+
+
+    _.indexOf = function (array, item, isSorted) {
+        var i = 0, length = array && array.length;
+        if (typeof isSorted == 'number') {
+            // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接冲0开始算
+            i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
+        } else if (isSorted && length) {
+            i = _.sortedIndex(array, item);
+            return array[i] === item ? i : -1;
+        }
+        if (item !== item) {
+            return _.findIndex(slice.call(array, i), _.isNaN);
+        }
+        for (; i < length; i++) if (array[i] === item) return i;
+        return -1;
+    };
+
+    //检索 对象的属性值
+    _.values = function (obj) {
+        var keys = _.keys(obj);
+        var length = keys.length;
+        var values = Array(length);
+        for (var i = 0; i < length; i++) {
+            values[i] = obj[keys[i]];
+        }
+        return values;
+    };
+
 
     function createIndexFinder(dir) {
         return function (array, predicate, context) {

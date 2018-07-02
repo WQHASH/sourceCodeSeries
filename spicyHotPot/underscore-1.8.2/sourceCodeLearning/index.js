@@ -1,4 +1,5 @@
-﻿(function () {
+﻿console.log("====== _.each ======");
+(function () {
     /**
     * _.each 遍历
     *
@@ -24,6 +25,7 @@
 
 })();
 
+console.log("====== _.map ======");
 (function () {
     /**
     * _.map 迭代
@@ -51,6 +53,7 @@
 
 })();
 
+console.log("====== _.reduce ======");
 (function () {
     /**
     * _.retuce 遍历
@@ -81,6 +84,7 @@
     //_.reduceWq(arr, function (memo, num) { return memo}, 0);
 })();
 
+console.log("====== _.reduceRight ======");
 (function () {
     /**
     * _.retuceRight 遍历
@@ -94,6 +98,7 @@
 
 })();
 
+console.log("====== _.find ======");
 (function () {
     /**
     * _.findIndex(arr, predicate, [context])
@@ -109,6 +114,7 @@
 
 })();
 
+console.log("====== _.filter ======");
 (function () {
     /**
     * _.filter(arr, predicate, [context])
@@ -126,6 +132,7 @@
 
 })();
 
+console.log("====== _.where ======");
 (function () {
     /**
     * _.where(list, properties)
@@ -138,6 +145,7 @@
 
 })();
 
+console.log("====== _.reject ======");
 (function () {
     /**
     * _.reject(list, properties [,context])
@@ -151,6 +159,7 @@
 
 })();
 
+console.log("====== _.every ======");
 (function () {
     
     /**
@@ -167,6 +176,7 @@
 
 })();
 
+console.log("====== _.some ======");
 (function () {
 
     /**
@@ -182,3 +192,29 @@
 
 })();
 
+console.log("====== _.contains ======");
+(function () {
+    /**
+     * _.contains(list [,properties] [,context])
+     *  当list中的任何一个元素都通过 predicate的判断就返回true
+     */
+    var arr = [7, 3, 23, 243];
+    var obj = { "sname": "wq", "sage": "11" };
+    var elem = _.contains(arr, 23, 0);
+    //console.log(elem);
+})();
+
+console.log("====== _.invoke ======");
+(function () {
+    /**
+     * _.invoke(list [,methodName] [,arguments])
+     *  该方法可以对list中的每一项都执行methodName,  arguments[_.invoke穿入的第2个以后的参数]将传递给 methodName函数
+     *  作用=> As: 该方法可以用于对  list中的每一项进行排序  
+     */
+    var arr = [7, 3, 23, 243];
+    var obj = { "sname": "wq", "sage": "11" };
+    var elem = _.invoke(arr, function () {
+          console.log(arguments, "argument")  
+    },"wq");
+    console.log(elem);
+})();
