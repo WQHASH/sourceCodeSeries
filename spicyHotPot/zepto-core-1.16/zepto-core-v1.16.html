@@ -1,0 +1,86 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Zepto-core-v1.1.6</title>
+</head>
+<body>
+    <div id="hash">我是谁</div>
+
+    <!--<script src="zepto-core-v1.16.js"></script>-->
+    <script src="underscore.js"></script>
+    <script>
+
+        
+        function extend(target, source, deep) {
+            // key 在上文已经定义，否则就污染全局变量了
+            for (key in source)
+
+                // 深度递归，首先必须 deep 参数为 true
+                // 其次，source[key] 必须是数组或者对象，才有必要深度递归（否则没必要）
+                if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
+
+
+                    // source[key] 是对象，而 target[key] 不是对象
+                    // 则 target[key] = {} 初始化一下，否则递归会出错的
+                    if (isPlainObject(source[key]) && !isPlainObject(target[key]))
+                        target[key] = {}
+
+
+                    // source[key] 是数组，而 target[key] 不是数组
+                    // 则 target[key] = [] 初始化一下，否则递归会出错的
+                    if (isArray(source[key]) && !isArray(target[key]))
+                        target[key] = []
+
+                    // 执行递归
+                    extend(target[key], source[key], deep)
+                }
+
+                    // 不满足以上条件，说明 source[key] 是一般的值类型，直接赋值给 target 就是了
+                else if (source[key] !== undefined) target[key] = source[key]
+        };
+
+        //var target = {};
+        //var arr = ["hash", "temp", "func", "data"];
+        //console.log(extend(target, arr, true));
+
+
+        function deserializeValue(value) {
+            try {
+                return value ?
+                  // value『有值』的情况：
+                  value == "true" ||  // 如果 value == 'true'，那么这个表达式本身就返回 true ，导致整个函数返回true
+                    // value !== 'true' 的情况：
+                    (
+                      value == "false" ? false : // "null"  => null
+                      value == "null" ? null : // "null"  => null
+                      +value + "" == value ? +value :  // 数字："42" => 42  "42.5" => 42.5  （ 但是 '08' 却不符合这个条件 ）
+                      /^[\[\{]/.test(value) ? $.parseJSON(value) : // '[...]' 或者 '{...}'
+                      value // 其他
+
+
+                    //value == "false" ? 
+                    //    false : 
+                    //    value == "null" ? 
+                    //    null :
+                    //    +value + "" == value ? 
+                    //    +value :
+                    //    /^[\[\{]/.test(value) ?  
+                    //    $.parseJSON(value) :value
+                    )
+
+                  // value『无值』的情况： undefined / '' / flase / 0 / null
+                  : value
+            } catch (e) {
+                return value
+            }
+        };
+        var ssh = '[{"sname":"e"},{"sage":"12"}]';
+        //console.log(typeof deserializeValue("08"));
+
+        var obj = { "sname": "wq", "sage": "12" };
+        //_.each(shh, function () { },2);
+        debugger
+        console.log(_.each(ssh, function () { }, 3));
+        
+    </script>
+</body>
+</html>
