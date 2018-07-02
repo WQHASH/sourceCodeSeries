@@ -80,7 +80,6 @@
                     if (!undefinedOnly || obj[key] === void 0) obj[key] = source[key];
                 }
             }
-            console.log(obj, "obj")
             return obj;
         };
     };
@@ -181,6 +180,7 @@
     //匹配所有的元素，过滤出满足条件的元素
     _.filter = _.select = function (obj, predicate, context) {
         var results = [];
+        // cd(function) =>  predicate === optimizeCb(function)=>因无第二个参数，所以 => function()===predicate
         predicate = cb(predicate, context);
         //这里不用再单独对obj进行处理， _.each中已经封装处理好了
         _.each(obj, function (value, index, list) {
@@ -189,13 +189,54 @@
         return results;
     };
 
+    // 返回 obj中没有匹配 predicate中逻辑 集合 和 filter 相反
+    _.reject = function (obj, predicate, context) {
+        return _.filter(obj, _.negate(cb(predicate)), context);
+    };
+
+    // 当obj中的所有元素都通过 predicate的判断就返回true
+    _.every = _.all = function (obj, predicate, context) {
+        predicate = cb(predicate, context);
+        var keys = !isArrayLike(obj) && _.keys(obj),
+            length = (keys || obj).length;
+        for (var index = 0; index < length; index++) {
+            var currentKey = keys ? keys[index] : index;
+            // 在这里处理了，如果有1次不满足则返回false,那么循环外边的return也就不执行了
+            if (!predicate(obj[currentKey], currentKey, obj)) return false;
+        }
+        return true;
+    };
+
+    _.some = _.any = function (obj, predicate, context) {
+        predicate = cb(predicate, context);
+        var keys = !isArrayLike(obj) && _.keys(obj),
+            length = (keys || obj).length;
+        for (var index = 0; index < length; index++) {
+            var currentKey = keys ? keys[index] : index;
+            if (predicate(obj[currentKey], currentKey, obj)) return true;
+        }
+        return false;
+    };
+
+
+
     _.where = function (obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
     };
 
 
 
+    _.negate = function (predicate) {
+        //这里返回的函数中的参数 是  _.filter => predicate() 调用时接受到的参数，所以这里形参虽然没有，但argument并不是空的
+        return function () {
+            // 返回 除满足 predicate 条件之外的
+            return !predicate.apply(this, arguments);
+            //return !predicate(arguments)
 
+            // 返回 满足 predicate 条件的 
+            //return !predicate.apply(this, arguments);
+        };
+    };
 
     function createIndexFinder(dir) {
         return function (array, predicate, context) {

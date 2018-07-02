@@ -46,7 +46,7 @@
     ////console.log(objResults, "objResults ")
 
     var results = _.map([{ name111: 'wangqi', "city": "bj","sage22":"12","gg":"jj" }, ], { name111: 'wqhash', age111: 12, "city": "bj" });
-    console.log(results, "results")
+    //console.log(results, "results")
 
 
 })();
@@ -117,10 +117,10 @@
     */
     var arr= [1, 2, 4, 9, 8];
     var obj = {"sname":"wq","sage":"11"};
-    var elem = _.filter(obj, function (num) {
+    var elem = _.filter(obj, function (value, index, list) {
         //console.log(arguments);
-        //console.log(num)
-        return num == 11;
+        //console.log(value)
+        return value == 11;
     });
     //console.log(elem)
 
@@ -137,3 +137,48 @@
     //console.log(elem)
 
 })();
+
+(function () {
+    /**
+    * _.reject(list, properties [,context])
+    */
+    var arr = [1, 2, 4, 9, 8];
+    var obj = { "sname": "wq", "sage": "11" };
+    var elem = _.reject(arr, function (value) {
+        return value % 2 ===0;
+    });
+    //console.log(elem)
+
+})();
+
+(function () {
+    
+    /**
+     * _.every(list [,properties] [,context])
+     *  当list中的所有元素都通过 predicate的判断就返回true
+     */
+    var arr = [ 2, 4, 8, 1];
+    var obj = { "sname": "wq", "sage": "11" };
+    var elem = _.every(arr, function (value) {
+        return value % 2 === 0;
+    });
+    //console.log(elem);
+
+
+})();
+
+(function () {
+
+    /**
+     * _.some(list [,properties] [,context])
+     *  当list中的任何一个元素都通过 predicate的判断就返回true
+     */
+    var arr = [7, 3, 23, 1];
+    var obj = { "sname": "wq", "sage": "11" };
+    var elem = _.some(arr, function (value) {
+        return value % 2 === 0;
+    });
+    //console.log(elem);
+
+})();
+
