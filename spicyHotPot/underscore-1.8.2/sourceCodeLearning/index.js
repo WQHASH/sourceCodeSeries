@@ -244,9 +244,29 @@ console.log("====== _.max ======");
 
     var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
     var obj= [1,3]
-    //var elem = _.max(obj, 'age');  //有 list 有  age[iteratee]
-    //var elem = _.max(obj);         //只有list
-    var elem = _.max();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
+    var elem = _.max(stooges, 'age');  //有 list 有  age[iteratee]
+    //var elem = _.max(obj);          //只有list
+    //var elem = _.max();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
     //console.log(elem, "elem ");
 
 })();
+
+
+console.log("====== _.min ======");
+(function () {
+    /**
+    * _.min(list [,iteratee] [,context])
+    *   list： 指的是数组或对象
+    *   iteratee：迭代器，这里 _.max 方法内部 用了cb(iteratee) =>它对iteratee的形式做了不同的处理
+    */
+
+    var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
+    var obj = [1, 3];
+    var elem = _.min(stooges, 'age');  //有 list 有  age[iteratee]
+    //var elem = _.min(obj);          //只有list
+    //var elem = _.min();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
+    //console.log(elem, "elem111");
+
+})();
+
+

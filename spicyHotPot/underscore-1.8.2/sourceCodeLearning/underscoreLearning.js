@@ -28,13 +28,13 @@
     };
     //wq:数据初始化的处理 end
 
-
-
     _.iteratee = function (value, context) {
         return cb(value, context, Infinity);
     };
-    //用于 _.each 中回调函数的[优化]判断处理 => 判断了有无context[this]对象,和 argCount
-    //返回一个 回调函数,用户传入的那个 
+
+    /**
+    * 功能：对cb回调函数的[优化]判断处理 => 判断了有无context[this]对象,和 argCount
+    */
     var optimizeCb = function (func, context, argCount) {
         // void 0 === "undefined"
         if (context === void 0) return func;
@@ -160,13 +160,20 @@
             return iterator(obj, iteratee, memo, keys, index, length);
         };
     };
-    //从左边叠加
+
+    /**
+    * 功能：从左边叠加
+    */
     _.reduce = _.foldl = _.inject = createReduce(1);
 
-    //从右边叠加
+    /**
+    * 功能：从右边叠加
+    */
     _.reduceRight = _.foldr = createReduce(-1);
 
-    //查找匹配的第一个元素
+    /**
+    * 功能：查找匹配的第一个元素
+    */
     _.find = _.detect = function (obj, predicate, context) {
         var key;
         if (isArrayLike(obj)) {
@@ -177,7 +184,9 @@
         if (key !== void 0 && key !== -1) return obj[key];
     };
 
-    //匹配所有的元素，过滤出满足条件的元素
+    /**
+    * 功能：匹配所有的元素，过滤出满足条件的元素
+    */
     _.filter = _.select = function (obj, predicate, context) {
         var results = [];
         // cd(function) =>  predicate === optimizeCb(function)=>因无第二个参数，所以 => function()===predicate
@@ -189,12 +198,16 @@
         return results;
     };
 
-    // 返回 obj中没有匹配 predicate中逻辑 集合 和 filter 相反
+    /**
+    * 功能：返回 obj中没有匹配 predicate中逻辑 集合 和 filter 相反
+    */
     _.reject = function (obj, predicate, context) {
         return _.filter(obj, _.negate(cb(predicate)), context);
     };
 
-    // 当obj中的所有元素都通过 predicate的判断就返回true
+    /**
+    * 功能：当obj中的所有元素都通过 predicate的判断就返回true
+    */
     _.every = _.all = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
@@ -206,7 +219,7 @@
         }
         return true;
     };
-
+   
     _.some = _.any = function (obj, predicate, context) {
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
@@ -218,14 +231,19 @@
         return false;
     };
 
-    // 确定数组或对象中是否包含给定的值
-    // 如果obj中包含指定的target 则返回true, obj可能是对象，或数组
+    /**
+    * 功能：确定数组或对象中是否包含给定的值， 
+    *       如果obj中包含指定的target 则返回true, obj可能是对象，或数组
+    */
     _.contains = _.includes = _.include = function (obj, target, fromIndex) {
         if (!isArrayLike(obj)) obj = _.values(obj);
         return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
     };
 
-    //让obj中的每一个元素都会执行一次method方 (个人认为该方法不常用)
+    /**
+    * 功能：让obj中的每一个元素都会执行一次method方法， 
+    *        (个人认为该方法不常用)   
+    */
     _.invoke = function (obj, method) {
         // 将伪数组装成数组的形式， argument.slice(2) [这时候argument已经继承了来自 Array.protype.slice 该方法]
         var args = slice.call(arguments, 2);
@@ -236,13 +254,19 @@
         });
     };
 
-    //用于获取 obj[数组对象]中的某属性值，返回一个数组
+    /**
+    * 功能：用于获取 obj[数组对象]中的某属性值，返回一个数组， 
+    *       
+    */
     _.pluck = function (obj, key) {
         // 注意： _.property() 方法这里已经使用了调用1次，返回该函数内部的方法 [函数式编程]
         return _.map(obj, _.property(key));
     };
 
-
+    /**
+    * 功能：返回obj中最大的值， 
+    *       iteratee将作为list中每个值的排序依据
+    */
     _.max = function (obj, iteratee, context) {
         var result = -Infinity, lastComputed = -Infinity,
             value, computed;
@@ -256,19 +280,52 @@
             }
         } else {
             iteratee = cb(iteratee, context);
+            //如果迭代器是一个String形式，那么返回的是如下
+            //- _.property = function (key) {
+            //+    return function (obj) {
+            //+        return obj == null ? void 0 : obj[key];
+            //-    };
+            //}-;
             _.each(obj, function (value, index, list) {
-                return function (obj) {
-                    return obj == null ? void 0 : obj[key];
-                };
+                computed = iteratee(value, index, list);
                 if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
                     result = value;
-                    //这里个人理解可能是代码扩展性吧
+                    //这里将本次比上次的结果大的数都进行了，保存同时又进行了下次比较 
                     lastComputed = computed;
                 }
             });
         }
         return result;
     };
+
+    /**
+    * 功能：返回obj中最小的值， 
+    *       iteratee将作为list中每个值的排序依据
+    */
+    _.min = function (obj, iteratee, context) {
+        var result = Infinity, lastComputed = Infinity,
+            value, computed;
+        if (iteratee == null && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value < result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index, list) {
+                computed = iteratee(value, index, list);
+                if (computed < lastComputed || computed === Infinity && result === Infinity) {
+                    result = value;
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };
+
 
     _.where = function (obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
