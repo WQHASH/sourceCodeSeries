@@ -1,0 +1,34 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>underscore.js-v1.8.2</title>
+</head>
+<body>
+    <script src="underscore.js-v1.8.2.js"></script>
+
+    <script >
+        //console.log(this, "this");
+        var arr = ["sname", "wq", "12", "js"];
+        var arrNum = [2, 3, 4];
+        var obj = { "sname": "wangqi", "sage": "12", "city": "jx" };
+        var isArrayLikes = { "sname": "wangqi", "sage": "12", "city": "bj", length: 4 };
+
+        _.each(isArrayLikes, function () {
+            //console.log(arguments)
+
+        }, this)
+
+        
+        _.map(obj, function () {
+            //console.log(arguments)
+        })
+
+        //需要用新值进行承接
+        var sum = _.reduce(arrNum, function (memo, num, index, list) {
+            console.log(arguments);
+            return memo + num;
+        }, 0);
+        console.log(sum)
+
+    </script>
+</body>
+</html>
