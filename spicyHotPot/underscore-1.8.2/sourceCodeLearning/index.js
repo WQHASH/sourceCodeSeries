@@ -218,3 +218,7 @@ console.log("====== _.invoke ======");
     },"wq");
     console.log(elem);
 })();
+
+(function () {
+// 用于测试 git reset --hard commit_id
+})();
