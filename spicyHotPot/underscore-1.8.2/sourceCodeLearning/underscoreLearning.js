@@ -225,7 +225,9 @@
         return _.indexOf(obj, target, typeof fromIndex == 'number' && fromIndex) >= 0;
     };
 
+    //让obj中的每一个元素都会执行一次method方 (个人认为该方法不常用)
     _.invoke = function (obj, method) {
+        // 将伪数组装成数组的形式， argument.slice(2) [这时候argument已经继承了来自 Array.protype.slice 该方法]
         var args = slice.call(arguments, 2);
         var isFunc = _.isFunction(method);
         return _.map(obj, function (value) {
@@ -234,7 +236,39 @@
         });
     };
 
+    //用于获取 obj[数组对象]中的某属性值，返回一个数组
+    _.pluck = function (obj, key) {
+        // 注意： _.property() 方法这里已经使用了调用1次，返回该函数内部的方法 [函数式编程]
+        return _.map(obj, _.property(key));
+    };
 
+
+    _.max = function (obj, iteratee, context) {
+        var result = -Infinity, lastComputed = -Infinity,
+            value, computed;
+        if (iteratee == null && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value > result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index, list) {
+                return function (obj) {
+                    return obj == null ? void 0 : obj[key];
+                };
+                if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+                    result = value;
+                    //这里个人理解可能是代码扩展性吧
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };
 
     _.where = function (obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
@@ -356,6 +390,7 @@
     _.identity = function (value) {
         return value;
     };
+
 
     /**     
     * 判断是不是一个函数 

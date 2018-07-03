@@ -211,14 +211,42 @@ console.log("====== _.invoke ======");
      *  该方法可以对list中的每一项都执行methodName,  arguments[_.invoke穿入的第2个以后的参数]将传递给 methodName函数
      *  作用=> As: 该方法可以用于对  list中的每一项进行排序  
      */
-    var arr = [7, 3, 23, 243];
+    var arr = [[7,2], [6,4,5]];
+    var arr1= [2,4,1,8,9,5]
     var obj = { "sname": "wq", "sage": "11" };
-    var elem = _.invoke(arr, function () {
-          console.log(arguments, "argument")  
-    },"wq");
-    console.log(elem);
+    var elem = _.invoke(arr1, function () {
+        return (arr1.sort());
+    },"0");
+    //console.log(elem);
 })();
 
+console.log("====== _.pluck ======");
 (function () {
-// 用于测试 git reset --hard commit_id
+    /**
+    * _.pluck(list, propertyName)
+    *   list： 指的是数组对象的形式
+    *   propertyName：string 表示要在list中通过 该键名 找到 所有的键值
+    */
+
+    var stooges = [{name: 'moe', age: 40}, {name: 'larry', age: 50}, {name: 'curly', age: 60}];
+    var elem = _.pluck(stooges, 'name');
+    //console.log(elem, "elem ");
+
+})();
+
+console.log("====== _.max ======");
+(function () {
+    /**
+    * _.max(list [,iteratee] [,context])
+    *   list： 指的是数组或对象
+    *   iteratee：迭代器，这里 _.max 方法内部 用了cb(iteratee) =>它对iteratee的形式做了不同的处理
+    */
+
+    var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
+    var obj= [1,3]
+    //var elem = _.max(obj, 'age');  //有 list 有  age[iteratee]
+    //var elem = _.max(obj);         //只有list
+    var elem = _.max();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
+    //console.log(elem, "elem ");
+
 })();
