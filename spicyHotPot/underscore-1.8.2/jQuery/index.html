@@ -1,0 +1,64 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>jQuery-Test</title>
+</head>
+<body>
+
+    <script src="jQuery-v3.3.1.js"></script>
+    <script src="../sourceCodeLearning/underscoreLearning.js"></script>
+    <script >
+        (function () {
+
+            var arr = ["sanme", "sage", "city", "sex"];
+            console.log(arr, "arr1");
+            _.each(arr, function () {
+                //console.log(arguments, "arg");
+                //console.log(this, "this+")
+            }, this)
+            var objThis = {
+                x: 10,
+                fn: function () {
+                    //console.log(this, "this")
+
+                    _.each(arr, function () {
+                        //console.log(arguments, "arg");
+                        //console.log(this, "this+")
+                    }, this);
+
+                },
+            };
+
+            var newObjThis = objThis.fn()
+            //newObjThis()
+
+            //case 3: return function (value, index, collection) {
+            //    return func.call(context, value, index, collection);
+            //};
+            //  thisF(value, index, coll)
+
+            function plus(a, b) {
+                //return a - b;
+                console.log(a - b, "plus")
+            };
+            function reduce(a, b) {
+                //return a - b
+                console.log(a - b, "reduce")
+            };
+
+            //console.log(plus.call(reduce, 2,3))
+            plus.call(reduce, 2, 3)
+            // 这里充分说明 call的用法，猫.吃鱼.call(狗，吃肉) 
+            // 改变了猫方法的this指向，狗方法中的 也就相当于借用了猫中的方法， [注意的是，不管自身有没有，只要有call就是借用他人的]
+        }.call(this));
+
+
+        (function () {
+            var arr = ["sanme", "sage", "city", "sex11"];
+            console.log(arr, "arr1222");
+
+
+
+        }.call(this))
+    </script>
+</body>
+</html>
