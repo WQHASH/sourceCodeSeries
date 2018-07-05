@@ -33,7 +33,7 @@ console.log("====== _.map ======");
     *       iteratee： 1.为空    =>返回原list
     *                  2.为函数  =>则返回 iteratee内部逻辑的处理
     *                  3.为对象  =>则返回当前 对象是否和 list匹配
-    *
+    *   该方法使用的时候一定要加上 return 
     */
     var arr = ["sname", "wq", "12", "js"];
     var obj = { "sname": "wangqi", "sage": "12", "city": "jx" };

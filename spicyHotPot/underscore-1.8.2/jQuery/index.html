@@ -10,7 +10,7 @@
         (function () {
 
             var arr = ["sanme", "sage", "city", "sex"];
-            console.log(arr, "arr1");
+            //console.log(arr, "arr1");
             _.each(arr, function () {
                 //console.log(arguments, "arg");
                 //console.log(this, "this+")
@@ -38,11 +38,11 @@
 
             function plus(a, b) {
                 //return a - b;
-                console.log(a - b, "plus")
+                //console.log(a - b, "plus")
             };
             function reduce(a, b) {
                 //return a - b
-                console.log(a - b, "reduce")
+                //console.log(a - b, "reduce")
             };
 
             //console.log(plus.call(reduce, 2,3))
@@ -54,11 +54,27 @@
 
         (function () {
             var arr = ["sanme", "sage", "city", "sex11"];
-            console.log(arr, "arr1222");
+            //console.log(arr, "arr1222");
 
 
 
-        }.call(this))
+        }.call(this));
+
+
+        (function () {
+            function func() {
+                console.log(arguments, "argu")
+                console.log(this, "this+")
+            };
+            function fun2() {
+                console.log("other")
+            }
+
+            func.call(fun2, "sanme")
+
+        })();
+
+        
     </script>
 </body>
 </html>
