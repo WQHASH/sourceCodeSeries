@@ -58,6 +58,7 @@
             return func.apply(context, arguments);
         };
     };
+
     var cb = function (value, context, argCount) {
         if (value == null) return _.identity;
         if (_.isFunction(value)) return optimizeCb(value, context, argCount);
@@ -66,6 +67,7 @@
         //最后如果传过来的是字符串
         return _.property(value);
     };
+
     var createAssigner = function (keysFunc, undefinedOnly) {
         // function (obj) == _.extendOwn({}, attrs);
         return function (obj) {
