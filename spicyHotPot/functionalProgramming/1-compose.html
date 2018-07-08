@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>compose-组合</title>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+	(function() {
+
+	    /**
+	     * [函数式编程 组合]
+	     * @Author   wq
+	     * @DateTime 2018-07-08T19:24:17+0800
+	     * 
+	     */
+	    var fun1 = function(num) { 
+	        console.log(num);
+	    };
+	    var func2 = function(arg) {
+	        return arg;
+	    };
+
+	    func2(fun1)(2);
+
+	})();
+	console.log("=====组合====");
+	(function() {
+	    var add1 = function(a) {
+	    	// console.log(a+1);
+	        return a + 1;
+	    };
+	    var times2 = function(a) {
+	    	// console.log(a*2);
+	        return a * 2;
+	    };
+	    var compose = function(a, b) {
+	        return function(c) {
+	            a(b(c));
+	        };
+	    };
+
+	    var add1Totimes2 = compose(add1, times2);
+	    console.log(add1Totimes2(5));
+
+	})();
+
+	console.log("=====函数式编程例子====");
+	(function(){
+
+		const users = [
+		  {
+		    age: 10,
+		    name: '张三',
+		  }, {
+		    age: 20,
+		    name: '李四'
+		  }, {
+		    age: 30,
+		    name: '王五'
+		  }
+		];
+
+
+		const names = users.filter(u => u.age > 15).map(u => u.name);
+		// const names = users.filter(function(u){
+		// 	return u.age > 15
+		// }).map(function(u){
+		// 	return u.name
+		// })
+
+		console.log(names, "names")
+
+	})();
+
+
+
+	/**
+	 *	函数式编程：
+	 * 		
+	 *   特性：
+	 *   	1.函数是一等公民。就是说函数可以跟其他变量一样，可以作为其他函数的输入输出。喔，回调函数就*是典型应用。
+	 *
+	 *		2.不可变量。就是说，不能用var跟let咯。按这要求，我似乎有点难写代码。
+	 *
+	 * 		3.纯函数。就是没有副作用的函数。这个好理解，就是不修改函数外部的变量。
+	 *
+	 *		4.引用透明。这个也好理解，就是说同样的输入，必定是同样的输出。函数内部不依赖外部状态，如一些全局变量。
+	 *	
+	 * 		5.惰性计算。大意就是：一个表达式绑定的变量，不是声明的时候就计算出来，而是真正用到它的时候才去计算。
+	 *
+	 * 	还有一些衍生的特性，如柯里化与组合
+	 */
+
+</script>
+
+</html>
