@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     //wq:数据初始化的处理 start
     var root = this;
     var previousUnderscore = root;
@@ -146,6 +146,10 @@
         return function (obj, iteratee, memo, context) {
             //优化 iteratee函数处理
             iteratee = optimizeCb(iteratee, context, 4);
+
+            //function (accumulator, value, index, collection) {
+            //    return func.call(context, accumulator, value, index, collection);
+            //}
             var keys = !isArrayLike(obj) && _.keys(obj),
                 length = (keys || obj).length,
                 //这里dir传入正负值可以，处理左右不同的计算方式
@@ -221,8 +225,8 @@
         }
         return true;
     };
-
-    _.some = _.any = function (obj, predicate, context) {
+    
+    _.some = _.any = function (obj, predicate, context) { 
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length;
@@ -388,7 +392,6 @@
             return -1;
         };
     }
-
     _.findIndex = createIndexFinder(1);
     //_.findLastIndex = createIndexFinder(-1);
     _.findKey = function (obj, predicate, context) {
