@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     //wq:数据初始化的处理 start
     var root = this;
     var previousUnderscore = root;
@@ -224,7 +224,7 @@
         return true;
     };
    
-    _.some = _.any = function (obj, predicate, context) {
+    _.some = _.any = function (obj, predicate, context) { 
         predicate = cb(predicate, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
             length = (keys || obj).length;
