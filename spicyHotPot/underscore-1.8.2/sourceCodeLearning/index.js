@@ -269,9 +269,22 @@ console.log("====== _.min ======");
 
 })();
 
-
+console.log("====== _.size ======");
+/**
+ * [description 返回对象中元素的数量]
+ * @Author   wq
+ * @DateTime 2018-07-10T00:02:35+0800
+ * @param    {[type]}                 obj [ 数组 类数组 对象,只要有length的属性的都可以]
+ */
 (function(){
-    //test
+    var obj = {"sname": "wq", "sage": "12", "city": "bj", "sex": "man"};
+    var arr = ["sname", "sage", "city", "sex", "job"];
+    var str = "wnagqi";
+    var size = _.size(obj);
+    // console.log(size, "objSize");
+    console.log(_.size(str), "arrSize");
+    
+
 })();
 
 

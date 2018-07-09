@@ -3,9 +3,9 @@
     <title>underscoreLearning</title>
 </head>
 <body>
-    <!--<script src="underscoreLearning.js"></script>-->
-    <script src="codeReview.js"></script>
-    <!--<script src="index.js"></script>-->
+    <script src="underscoreLearning.js"></script>
+    <!-- <script src="codeReview.js"></script> -->
+    <script src="index.js"></script>
     <script>
         /**
         *   函数 =>　体现出对象的特性   
@@ -22,15 +22,15 @@
         *
         */
 
-        var arr = ["sname11", "sage", "city"]
+        var arr = ["sname11", "sage", "city"];
         var each = _.each(arr, function () {
             //console.log(arguments, "argu")
         });
 
         var map = _.map(arr, function () {
             return arguments
-        })
-        console.log(map, "map");
+        });
+        // console.log(map, "map");
 
 
         (function () {
@@ -53,7 +53,7 @@
         })();
 
 
-        console.log("====== _.find ======");
+        // console.log("====== _.find ======");
         (function () {
             /**
             * _.findIndex(arr, predicate, [context])
@@ -63,10 +63,10 @@
             var arr = [1, 3, 5, 9, 8];
             var obj = { "sname": "is sname", "sage": "11" };
             var elem = _.find(obj, function (value) {
-                console.log(arguments)
+                // console.log(arguments)
                 return value.length >2
             });
-            console.log(elem);
+            // console.log(elem);
 
         })();
     </script>
