@@ -1,74 +1,143 @@
 ﻿<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <title>underscoreLearning</title>
 </head>
+
 <body>
-    <script src="underscoreLearning.js"></script>
-    <!-- <script src="codeReview.js"></script> -->
-    <script src="index.js"></script>
+    <!-- <script src="underscoreLearning.js"></script> -->
+    <script src="codeReview.js"></script>
+    <!-- <script src="index.js"></script> -->
     <script>
+    /**
+     *   函数 =>　体现出对象的特性   
+     *
+     *   function Fun(){ this.sname = "wq"; this.sage = "22"};
+     *   console.log(new Fun())  // => {sname:"" sage:"" _proto:{}}
+     *   
+     *   function fun(){};
+     *   fun.sname = "wangqi", fun.sage = 11;
+     *   console.log(func.__proto__)  // 这里找原型命名的东西 只能这么找
+     *                               // { constructor:｛"sname":"", "sage":"", ｝, __proto__:{}}
+     *   
+     *   这就是 实例函数的区别
+     *
+     */
+
+    var arr = ["sname11", "sage", "city"];
+    var each = _.each(arr, function() {
+        //console.log(arguments, "argu")
+    });
+
+    var map = _.map(arr, function() {
+        return arguments
+    });
+    // console.log(map, "map");
+
+
+    (function() {
+
+        var arr = [2, 3, 4];
+        var arrayLike = {
+            0: 2,
+            1: 3,
+            2: 4,
+            length: 3
+        };
+        var list = [
+            [0, 1],
+            [2, 3],
+            [4, 5]
+        ];
+
+        //console.log(_(), "this");
+        var sum = _.reduceRight(list, function(memo, num, index, list) {
+            //console.log(arguments);
+            return num.concat(memo);
+        });
+        //console.log(sum, "sum")
+    })();
+
+
+    // console.log("====== _.find ======");
+    (function() {
         /**
-        *   函数 =>　体现出对象的特性   
-        *
-        *   function Fun(){ this.sname = "wq"; this.sage = "22"};
-        *   console.log(new Fun())  // => {sname:"" sage:"" _proto:{}}
-        *   
-        *   function fun(){};
-        *   fun.sname = "wangqi", fun.sage = 11;
-        *   console.log(func.__proto__)  // 这里找原型命名的东西 只能这么找
-        *                               // { constructor:｛"sname":"", "sage":"", ｝, __proto__:{}}
-        *   
-        *   这就是 实例函数的区别
-        *
-        */
-
-        var arr = ["sname11", "sage", "city"];
-        var each = _.each(arr, function () {
-            //console.log(arguments, "argu")
+         * _.findIndex(arr, predicate, [context])
+         *  返回匹配到参数1 中首次匹配到的下标
+         *  如果没找到则 返回 -1
+         */
+        var arr = [1, 3, 5, 9, 8];
+        var obj = { "sname": "is sname", "sage": "11" };
+        var elem = _.find(obj, function(value) {
+            // console.log(arguments)
+            return value.length > 2
         });
+        // console.log(elem);
 
-        var map = _.map(arr, function () {
-            return arguments
-        });
-        // console.log(map, "map");
+    })();
 
+    // ============= rest 的理解 =============
+    (function() {
+        function add() {
+            var numbers = Array.prototype.slice.call(arguments);
+            return _.reduce(numbers, function(accum, current) {
+                return accum + current;
+            }, 0);
+        }
+        console.log(add(4, 3, 4, 1, 1)); // => 13
 
-        (function () {
+    })();
 
-            var arr = [2, 3, 4];
-            var arrayLike = {
-                0: 2,
-                1: 3,
-                2: 4,
-                length: 3
-            };
-            var list = [[0, 1], [2, 3], [4, 5]];
+    // 如果现在的需求变为必须传递至少一个数到加法器呢？
+    (function() {
+        function add(a) {
+            var rest = Array.prototype.slice.call(arguments, 1);
+            console.log(rest, "rest");
+            return _.reduce(rest, function(accum, current) {
+                return accum + current;
+            }, a);
+        }
+        console.log(add(2, 3, 4, 5)); // => 14
 
-            //console.log(_(), "this");
-            var sum = _.reduceRight(list, function (memo, num, index, list) {
-                //console.log(arguments);
-                return num.concat(memo);
-            });
-            //console.log(sum, "sum")
-        })();
+    })();
 
+    (function() {
 
-        // console.log("====== _.find ======");
-        (function () {
-            /**
-            * _.findIndex(arr, predicate, [context])
-            *  返回匹配到参数1 中首次匹配到的下标
-            *  如果没找到则 返回 -1
-            */
-            var arr = [1, 3, 5, 9, 8];
-            var obj = { "sname": "is sname", "sage": "11" };
-            var elem = _.find(obj, function (value) {
-                // console.log(arguments)
-                return value.length >2
-            });
-            // console.log(elem);
+        function add(a, rest) {
+            return _.reduce(rest, function(accum, current) {
+                return accum + current;
+            }, a);
+        }
 
-        })();
+        function genRestFunc(func) {
+            // 新返回的函数支持rest参数
+            return function() {     // addWithRest(1, 2, 3, 4)
+                // 获得形参个数
+                var argLength = func.length;
+                // rest参数的起始位置为最后一个形参位置
+                var startIndex = argLength - 1;
+                // 最终需要的参数数组
+                var args = Array(argLength);
+                // 设置rest参数
+                var rest = Array.prototype.slice.call(arguments, startIndex);
+                // 设置最终调用时需要的参数
+                for (var i = 0; i < startIndex; i++) {
+                    args[i] = arguments[i]
+                }
+                args[startIndex] = rest;
+                // => args:[a,b,c,d,[rest[0],rest[1],rest[2]] ]
+                // wq => args: [arg1, [arg2, agr3, agr4,...]]
+                return func.apply(this, args);
+                // return func.call(this, 1, args);
+            }
+        }
+        //addWithRest = genRestFunc(add);
+        console.log(genRestFunc(add)(1, 2, 3, 4), "genRestFunc");
+        // console.log(addWithRest(1, 2, 3, 4), "addWithRest"); // => 10
+
+    })();
+    // ============= rest 的理解 =============
     </script>
 </body>
+
 </html>

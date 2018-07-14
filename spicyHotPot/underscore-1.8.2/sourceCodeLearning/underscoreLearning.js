@@ -36,6 +36,11 @@
 
     /**
      * 功能：对cb回调函数的[优化]判断处理 => 判断了有无context[this]对象,和 argCount
+     * @param func 待优化回调函数
+     * @param context 执行上下文
+     * @param argCount 参数个数
+     * optimizeCb 的总体思路就是：传入待优化的回调函数 func，以及迭代回调需要的参数个数 argCount，
+     *                          根据参数个数分情况进行优化。
      */
     var optimizeCb = function(func, context, argCount) {
         // void 0 === "undefined"
@@ -66,11 +71,14 @@
     };
 
     var cb = function(value, context, argCount) {
+        //  如果value 没有值 cb会给我们返回一个返回，该函数返回迭代的对象 
+        //  As: _.map({"sname":"wq"}) => 直接返回迭代对象[{}]
         if (value == null) return _.identity;
+        // 如果value 是一个函数, cb会为我们用optimizeCb优化处理
         if (_.isFunction(value)) return optimizeCb(value, context, argCount);
-        // 正常来说 value传过来的是 function，如果传过来的是对象,
+        // 如果传过来的是对象, (_.matcher)  的目的是想要知道当前被迭代元素是否匹配给定的这个对象 ??[需要再次理解]
         if (_.isObject(value)) return _.matcher(value);
-        //最后如果传过来的是字符串
+        // 最后如果传过来的是字符串 他指示了一个对象的属性 key，返回的 _.property 将用来获得该属性对应的值
         return _.property(value);
     };
 
@@ -125,6 +133,7 @@
         //return 目前用不到 [可能只是这个方法以后的扩展吧]
         return obj;
     };
+
     _.map = _.collect = function(obj, iteratee, context) {
         iteratee = cb(iteratee, context);
         var keys = !isArrayLike(obj) && _.keys(obj),
@@ -139,6 +148,13 @@
         return results;
     };
 
+    /**
+     * [createReduce reduce 函数的工厂函数, 用于生成一个 reducer, 通过参数决定 reduce 的方向]
+     * @Author   wq
+     * @DateTime 2018-07-14T18:11:08+0800
+     * @param    {[num ]}                 dir [方向 left or right]
+     * @return   {[function]}                     [description]
+     */
     function createReduce(dir) {
         //iteratee (memo, value, index, list)
         function iterator(obj, iteratee, memo, keys, index, length) {
@@ -341,6 +357,52 @@
         return result;
     };
 
+    /**
+     * [sortBy 排序]
+     * @Author   wq
+     * @DateTime 2018-07-14T12:35:46+0800
+     * @param    {[Object || Array]}                 obj      [description]
+     * @param    {[Function]}                 iteratee [迭代器]
+     * @param    {[type]}                 context  [上下文环境]
+     */
+    _.sortBy = function (obj, iteratee, context) {
+        iteratee = cb(iteratee, context);
+        return _.pluck(_.map(obj, function (value, index, list) {
+            return {
+                value: value,
+                index: index,
+                criteria: iteratee(value, index, list)
+            };
+        }).sort(function (left, right) {
+            var a = left.criteria;
+            var b = right.criteria;
+            if (a !== b) {
+                if (a > b || a === void 0) return 1;
+                if (a < b || b === void 0) return -1; 
+            }
+            return left.index - right.index;
+        }), 'value');
+    };
+
+
+    var group = function (behavior) {
+        return function (obj, iteratee, context) {
+            var result = {};
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index) {
+                var key = iteratee(value, index, obj);
+                behavior(result, value, key);
+            });
+            return result;
+        };
+    };
+
+    _.groupBy = group(function (result, value, key) {
+        if (_.has(result, key)) result[key].push(value); else result[key] = [value];
+    });
+
+    
+
 
     _.where = function(obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
@@ -473,11 +535,23 @@
 
     //工具方法
     // -----------------
-    //start
+    //start 
+    /**
+     * 返回一个 underscore 对象，把_所有权交还给原来的拥有者（比如 lodash）
+     */
     _.noConflict = function() { //1270
+         // 回复原来的_指代的对象
         root._ = previousUnderscore;
+        // 返回 underscore 对象
         return this;
     };
+    /**
+     * [identity 返回函数本身 （为cb迭代器中 如果第二个迭代函数没有，则这里会返回一个函数）]
+     * @Author   wq
+     * @DateTime 2018-07-14T17:22:13+0800
+     * @param    {[type]}                 value [description]
+     * @return   {[type]}                       [description]
+     */
     _.identity = function(value) {
         return value;
     };
@@ -509,6 +583,7 @@
             return _.isMatch(obj, attrs);
         };
     };
+
 
     /**
      *  处理属性的方法

@@ -258,5 +258,26 @@
     };
 
 }.call(this));
-(function() {}).call(this);
+
 (function() {})("arg");
+
+
+(function() {
+
+    var root = this;
+    var wqhash = function(obj) {
+        if (obj instanceof wqhash) return obj;
+        if (!(this instanceof wqhash)) return new wqhash(obj);
+        this._wrapped = obj;
+    };
+    root.wqhash = wqhash;
+
+}.call(this));
+
+(function(){
+    // var root = this;
+    // var wqhash = function(obj) {
+    // };
+    // root.wqhash = wqhash;
+
+})(this);
