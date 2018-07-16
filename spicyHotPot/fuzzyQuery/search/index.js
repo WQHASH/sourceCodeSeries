@@ -26,9 +26,41 @@
     };
     btnSearch.on("click", vagueSearch.searchKay);
 
+})();
+
+console.log("====== 循环删除数组的区别 =====");
+(function () {
+    var obj = [
+                { versionid: "250066544703188992", content: "CK腾讯公司" },
+                { versionid: "331702270565429248", content: "c" },
+                { versionid: "258052216458194944", content: "ygvcfgghed" },
+                { versionid: "260702489345404928", content: "abc" },
+                { versionid: "260702489345404928", content: "CK腾讯" },
+                { versionid: "241093206194663424", content: "ace据我哦哦" },
+                { versionid: "268925472895545344", content: "兔兔LOL5卡bac" }
+    ];
 
 
+    var arr = [1, 2, 2, 3, 4, 5];
+    var len = arr.length;
+    for (var i = 0; i < len; i++) {
+        //打印数组中的情况，便于跟踪数组中数据的变化
+        //console.log(i + "=" + arr[i]);
+        //删除掉所有为2的元素
+        if (arr[i] == 2) {
+            // 注意对比这行代码：删除元素后调整i的值,如果不调整i的值，当前删除的i是没了，但是数组中i后边的元素会补上i当前的位置，
+            // 而i现在又i++，那么这样就跳过当前这个元素了
+            //所以需要 每次删除的时候 arr.splice(i--, 1);
+            //debugger
+            arr.splice(i--, 1);
+        }
+    }
+    console.log(arr);
 
+    //或者说从后往前开始遍历
 
+})();
 
+(function () {
+   
 })();
