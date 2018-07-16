@@ -10,7 +10,7 @@
             本地电脑中保存了 私钥，他就像用户的密码一样，如果账号和密码匹配
             那么说明这个用户相对github来说是合法的，则可以push项目。
            注意点: 当github1,于gitub2两个账号都存在，有可能github2的账号在push
-            项目时，会报没有权限，那么则需要去.git中的配置文件里，更改 [remote "origin"]的url            
+            项目时，会报没有权限，那么则需要去.git中的配置文件里，更改 [remote "origin"]的url => 更改的也就是 ssh -> config里的 主机，邮箱之类的           
 
         ②：一个账号多台电脑上的使用，这时候就需要分配多个ssh密码给用户   
           github组员的邀请：=>注意的是Email消息一定要记得打开，或者直接发送链接（在当前用户下开网页即可）
@@ -25,7 +25,8 @@
                  git branch --set-upstream-to origin/feture-temptest feture-temptest  
                  当做完这些可 查看本地分支和哪个远程分支相关联           
                   git branch --vv => 查看本地分支和哪个远程分支相关联
-                  git remote --vv => 查看远程关联的地址
+                  git branch --v => 查看远程仓库信息
+                  git remote -vv => 查看远程关联的地址
 
              切换分支的好处在于每次的切换，整个项目的内容就随之改变了，这一切归功于 .git中config的
                    [branch "feture-temptest"]
@@ -33,3 +34,11 @@
 	                     merge = refs/heads/feture-temptest[master] =>这里没设置之前默认 master
 
              个人认为关联 分支很重要，因为当切换分支的时候git找的就是--set-upstream-to设置的,否则为master
+
+             git 也在不断的更新 所以在本地分支关联远程分支 也出现了2中写法：
+              old: => git branch --set-upstream-to origin/branch-name
+                      git branch -u origin/branch-name [本人没试过]
+              new: => git branch --track origin/branch-name
+
+              撤销本地与远程分支的关联
+                      git branch --unset-upstream
