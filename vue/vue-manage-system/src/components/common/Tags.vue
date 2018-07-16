@@ -51,6 +51,12 @@
             },
             // 关闭其他标签
             closeOther(){
+                /**
+                 * [description filter]
+                 *     [4,5,6,7,8].filter(callback) 
+                 *         =>   callback(ele) { return ele>=6}      
+                 *         =>   [6,7,8]
+                 */
                 const curItem = this.tagsList.filter(item => {
                     return item.path === this.$route.fullPath;
                 })
@@ -58,6 +64,12 @@
             },
             // 设置标签
             setTags(route){
+                /**
+                 * [description some]
+                 *     对数组中每个元素执行一次ck函数，知道某个元素返回true，则直接返回true。
+                 *     如果都返回false,则返回false,   
+                 *     检查整个数组中是否有满足ck函数的元素。
+                 */
                 const isExist = this.tagsList.some(item => {
                     return item.path === route.fullPath;
                 })
@@ -77,12 +89,14 @@
                 return this.tagsList.length > 0;
             }
         },
-        watch:{
+        watch: {
             $route(newValue, oldValue){
                 this.setTags(newValue);
             }
+            
         },
         created(){
+            console.log(this, "this.$route")
             this.setTags(this.$route);
         }
     }
