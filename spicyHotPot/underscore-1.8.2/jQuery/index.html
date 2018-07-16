@@ -63,14 +63,16 @@
 
         (function () {
             function func() {
-                console.log(arguments, "argu")
+                //console.log(arguments, "argu")
                 console.log(this, "this+")
             };
             function fun2() {
                 console.log("other")
             }
 
-            func.call(fun2, "sanme")
+            //func.call(fun2, "sanme")
+            window = "sss";
+            func.bind(window)
 
         })();
 
