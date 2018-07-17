@@ -6,6 +6,8 @@
             <v-tags></v-tags>
             <div class="content">
                 <transition name="move" mode="out-in">
+                    <!-- keep-alive: 是vue的内置组件，能在组件切换过程中将状态保留在内存中，防止重复渲染Dom -->
+                    <!-- 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们 -->
                     <keep-alive :include="tagsList">
                         <router-view></router-view>
                     </keep-alive>
