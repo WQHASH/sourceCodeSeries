@@ -297,6 +297,20 @@ console.log("====== .groupBy ======");
     var obj = {"sname": "wq", "sage": "12", "city": "bj"};
     var wqhash = _.groupBy([1.3, 2.1, 2.4], function(num){ return Math.floor(num); }); 
     console.log(wqhash, "wqhash");
+})();
 
-  
+console.log("======= 数组(Array)篇 ======");
+console.log("======= _.first ======");
+(function(){
+    var arr = [4,5,6,7,8];
+    /**
+     * [newArr _.first]
+     * @type {[arr]}
+     * @type {[n]}
+     * 返回数组的第一个元素。 传递n参数将返回数组中第一个元素开始的n个元素。(从1开始算的)
+     */
+    var newArr = _.first(arr,4);
+    console.log(newArr, "newArr++")
+
+
 })();

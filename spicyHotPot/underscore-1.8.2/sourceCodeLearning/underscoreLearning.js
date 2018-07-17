@@ -402,6 +402,17 @@
     });
 
     
+    //======================================== 数组(Array) ========================================
+    _.first = _.head = _.take = function (array, n, guard) {
+        if (array == null) return void 0;
+        if (n == null || guard) return array[0];
+        return _.initial(array, array.length - n);
+    };
+    _.initial = function (array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    };
+
+
 
 
     _.where = function(obj, attrs) {
@@ -421,7 +432,6 @@
         }
         return isArrayLike(obj) ? obj.length :_.keys(obj).length;
     };
-
 
 
     _.negate = function(predicate) {
