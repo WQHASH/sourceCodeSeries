@@ -73,7 +73,8 @@
                 this.collapse = !this.collapse;
                 bus.$emit('collapse', this.collapse);
             },
-            // 全屏事件
+            // 全屏事件 
+            // wq: html5中有这种全屏事件的API
             handleFullScreen(){
                 let element = document.documentElement;
                 if (this.fullscreen) {
@@ -100,12 +101,12 @@
                 }
                 this.fullscreen = !this.fullscreen;
             }
-        },
+        },        
         mounted(){
             if(document.body.clientWidth < 1500){
                 this.collapseChage();
             }
-        }
+        },
     }
 </script>
 <style scoped>
