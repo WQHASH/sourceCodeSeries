@@ -30,17 +30,6 @@
 
 console.log("====== 循环删除数组的区别 =====");
 (function () {
-    var obj = [
-                { versionid: "250066544703188992", content: "CK腾讯公司" },
-                { versionid: "331702270565429248", content: "c" },
-                { versionid: "258052216458194944", content: "ygvcfgghed" },
-                { versionid: "260702489345404928", content: "abc" },
-                { versionid: "260702489345404928", content: "CK腾讯" },
-                { versionid: "241093206194663424", content: "ace据我哦哦" },
-                { versionid: "268925472895545344", content: "兔兔LOL5卡bac" }
-    ];
-
-
     var arr = [1, 2, 2, 3, 4, 5];
     var len = arr.length;
     for (var i = 0; i < len; i++) {
@@ -60,7 +49,31 @@ console.log("====== 循环删除数组的区别 =====");
     //或者说从后往前开始遍历
 
 })();
-
+console.log("====== 循环删除数组的的理解 =====");
 (function () {
-   
+    var obj = [
+                { versionid: "331702270565429248", content: "cxxx" },
+                { versionid: "331702270565429248", content: "c" },
+                { versionid: "250066544703188992", content: "CK腾讯公司" },
+                { versionid: "260702489345404928", content: "abc" },
+                { versionid: "260702489345404928", content: "CK腾讯" },
+                { versionid: "241093206194663424", content: "ace据我哦哦" },
+                { versionid: "268925472895545344", content: "兔兔LOL5卡bac" },
+                { versionid: "241093206194663424", content: "ace" },
+             ];
+
+    var newObj = [
+        { versionid: "250066544703188992", content: "CK腾讯公司" },
+        { versionid: "331702270565429248", content: "c" },
+    ];
+
+    for (var i = 0; i < obj.length; i++) {
+        for (var j = 0; j < newObj.length; j++) {
+            if (obj[i]["content"] == newObj[j]["content"]) {
+                obj.splice(i--, 1); 
+            }
+        }
+    }
+    //console.log(obj, "obj+");
+    //这和上边的是同一个道理，每次删除一个元素，删除元素后边的下标会顶替删除的下标，这样就会漏删除东西
 })();
