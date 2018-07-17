@@ -35,7 +35,7 @@ new Vue({
 }).$mount('#app');
 
 /**
- * 对于 render函数的理解：
+ * 对于 render函数的理解： ====>
  *     render: function(createElement){ return createElement(App)}  [es5]
  *     render(createElement){ return createElement(App)}            [es6]
  *     render(h){ render h(App)}  === render: h => (App)            [箭头函数的缩写]
