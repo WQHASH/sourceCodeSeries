@@ -235,8 +235,95 @@
     };
 
 
+    /**
+     * 功能：返回obj中最小的值，
+     *       iteratee将作为list中每个值的排序依据
+     */
+    _.min = function(obj, iteratee, context) {
+        var result = Infinity,
+            lastComputed = Infinity,
+            value, computed;
+        if (iteratee == null && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value < result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function(value, index, list) {
+                computed = iteratee(value, index, list);
+                if (computed < lastComputed || computed === Infinity && result === Infinity) {
+                    result = value;
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };  
 
-    _.where = function (obj, attrs) {
+
+    /**
+     * [sortBy 排序]
+     * @Author   wq
+     * @DateTime 2018-07-14T12:35:46+0800
+     * @param    {[Object || Array]}                 obj      [description]
+     * @param    {[Function]}                 iteratee [迭代器]
+     * @param    {[type]}                 context  [上下文环境]
+     */
+    _.sortBy = function (obj, iteratee, context) {
+        iteratee = cb(iteratee, context);
+        return _.pluck(_.map(obj, function (value, index, list) {
+            return {
+                value: value,
+                index: index,
+                criteria: iteratee(value, index, list)
+            };
+        }).sort(function (left, right) {
+            var a = left.criteria;
+            var b = right.criteria;
+            if (a !== b) {
+                if (a > b || a === void 0) return 1;
+                if (a < b || b === void 0) return -1; 
+            }
+            return left.index - right.index;
+        }), 'value');
+    };
+
+
+    var group = function (behavior) {
+        return function (obj, iteratee, context) {
+            var result = {};
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index) {
+                var key = iteratee(value, index, obj);
+                behavior(result, value, key);
+            });
+            return result;
+        };
+    };
+
+    _.groupBy = group(function (result, value, key) {
+        if (_.has(result, key)) result[key].push(value); else result[key] = [value];
+    });
+
+    
+    //======================================== 数组(Array) ========================================
+    _.first = _.head = _.take = function (array, n, guard) {
+        if (array == null) return void 0;
+        if (n == null || guard) return array[0];
+        return _.initial(array, array.length - n);
+    };
+    _.initial = function (array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    };
+
+
+
+
+    _.where = function(obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
     };
 
