@@ -50,7 +50,8 @@
 <!-- https://blog.csdn.net/azureternite/article/details/76154807 --> 
 <!-- 超详细的 -->
 <!-- https://blog.csdn.net/TTKatrina/article/details/79288238 -->
-  理解 git pull:  [使用git fetch和git rebase处理多人开发同一分支的问题（不过都是多分支情况）]       
+  理解 git pull:  [使用git fetch和git rebase处理多人开发同一分支的问题（）]       
+                  [解决了使用git pull远端被人修改时，和本地出现冲突，自动merge出现的记录，如果多了则会更乱]
 
     git pull == git fetch 和   git merge   
                 git fetch: 他会把远程的提交拉去到本地仓库，但是他并不是直接放在当前分支后面，而是在最后一次push的那个节点

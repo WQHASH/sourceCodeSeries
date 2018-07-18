@@ -1,4 +1,5 @@
-﻿console.log("====== _.each ======");
+﻿console.log("======= 集合(collections)篇 ======");
+console.log("\n====== _.each ======");
 (function() {
     /**
      * _.each 遍历
@@ -282,7 +283,7 @@ console.log("====== _.sortBy ======");
     // console.log(arr, "arr");
 
     var sinArr = [30, 20, 800, 90];
-    var newSinArr = _.sortBy(sinArr, function(value, index, list) {
+    var newSinArr = _.sortBy(sinArr, function(value, index, list) {     
         return value > 40;
     })
     // console.log(newSinArr, "newSinArr")
@@ -296,11 +297,11 @@ console.log("====== .groupBy ======");
     var arr = [4,5,6,7,8,9];
     var obj = {"sname": "wq", "sage": "12", "city": "bj"};
     var wqhash = _.groupBy([1.3, 2.1, 2.4], function(num){ return Math.floor(num); }); 
-    console.log(wqhash, "wqhash");
+    // console.log(wqhash, "wqhash");
 })();
 
-console.log("======= 数组(Array)篇 ======");
-console.log("======= _.first ======");
+console.log("\n======= 数组(Array)篇 ======");
+console.log("\n======= _.first ======");
 (function(){
     var arr = [4,5,6,7,8];
     /**
@@ -309,8 +310,74 @@ console.log("======= _.first ======");
      * @type {[n]}
      * 返回数组的第一个元素。 传递n参数将返回数组中第一个元素开始的n个元素。(从1开始算的)
      */
-    var newArr = _.first(arr,4);
-    console.log(newArr, "newArr++")
+    var newArr = _.first(arr,3);
+    // console.log(newArr, "newArr++")
 
 
+})();
+
+console.log("======= _.initial ======");
+(function(){
+    var arr = [4,5,6,7,8];
+    /**
+     * [newArr _.initial]
+     * @type {[Array]}      arr
+     * @type {[Number]} [可选参数]    n
+     * 返回数组的第一个元素。 传递n参数将返回数组中第一个元素开始的n个元素。(从1开始算的)
+     */
+    var newArr = _.initial(arr,3);
+    // console.log(arr, "arr");
+    // console.log(newArr, "newArr++");
+
+
+})();
+
+console.log("======= _.last ======");
+(function(){
+    var arr = [4,5,6,7,8];
+    /**
+     * [newArr _.initial]
+     * @type {[Array]}      arr
+     * @type {[Number]} [可选参数]    n
+     * 返回数组中最后一个元素。 传递n参数将返回数组中第一个元素开始的n个元素。(从1开始算的)
+     */
+    var newArr = _.last(arr);
+    // console.log(arr, "arr");
+    // console.log(newArr, "newArr++");
+        
+})();
+
+console.log("======= _.last ======");
+(function(){
+    var arr = [4,5,6,7,8];
+    /**
+     * [newArr _.initial]
+     * @type {[Array]}      arr
+     * @type {[Number]} [可选参数]    n
+     * 返回数组中最后一个元素。 传递n参数将返回数组中第一个元素开始的n个元素。(从1开始算的)
+     */
+    var newArr = _.last(arr);
+    // console.log(arr, "arr");
+    // console.log(newArr, "newArr++");
+        
+})();
+
+console.log("======= _.rest ======");
+(function(){
+    var arr = [4,5,6,7,8];
+    /**
+     * [newArr _.initial]
+     * 返回数组中除了第一个元素外的其他全部元素
+     * @type {[Array]}      arr
+     * @type {[Number]} [可选参数]    n
+     */
+    var newArr = _.rest(arr);
+    // console.log(arr, "arr");
+    // console.log(newArr, "newArr++");
+
+    /**
+     * _.rest 方法 和 _.initial 方法相反，
+     * 但处理的过程 却只是  [].slice.call(arr, 0,index) || [].slice.call(arr, 0) 这么点区别
+     */
+        
 })();

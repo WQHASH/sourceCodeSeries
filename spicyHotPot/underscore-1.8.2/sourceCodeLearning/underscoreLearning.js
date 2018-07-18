@@ -234,7 +234,36 @@
         });
     };
 
+     _.pluck = function (obj, key) {
+        return _.map(obj, _.property(key));
+    };
 
+
+    _.max = function (obj, iteratee, context) {
+        var result = -Infinity, lastComputed = -Infinity,
+            value, computed;
+        if (iteratee == null && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value > result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index, list) {
+                computed = iteratee(value, index, list);
+                if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+                    result = value;
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };
+
+    
     /**
      * 功能：返回obj中最小的值，
      *       iteratee将作为list中每个值的排序依据
@@ -263,6 +292,7 @@
         }
         return result;
     };  
+
 
 
     /**
@@ -309,18 +339,59 @@
         if (_.has(result, key)) result[key].push(value); else result[key] = [value];
     });
 
+
+    _.size = function (obj) {
+        if (obj == null) return 0;
+        return isArrayLike(obj) ? obj.length : _.keys(obj).length;
+    };    
     
     //======================================== 数组(Array) ========================================
+    /**
+     * @author wq
+     * @DateTime 2018-07-18T16:04:52+0800
+     * 返回数组中的第一个
+     * @param    {[Array]}                 array [需要截取的数组]
+     * @param    {[Number]}                 n     [截取的返回，从1开始算的，可选参数]
+     * @param    {[Number]}                 guard [该参数暂时不清楚]
+     * @return   {[Array]}                       [返回一个新数组]
+     */
     _.first = _.head = _.take = function (array, n, guard) {
         if (array == null) return void 0;
         if (n == null || guard) return array[0];
         return _.initial(array, array.length - n);
     };
+    /**
+     * @author wq
+     * @DateTime 2018-07-18T16:04:52+0800
+     * 返回 除了 数组中的 最后一个
+     * @param    {[Array]}                 array [需要截取的数组]
+     * @param    {[Number]}                 n     [截取的返回，从1开始算的]
+     * @param    {[Number]}                 guard [该参数暂时不清楚]
+     * @return   {[Array]}                       [返回一个新数组]
+     */
     _.initial = function (array, n, guard) {
         return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
     };
 
-
+    /**
+     * @author wq
+     * @DateTime 2018-07-18T16:04:52+0800
+     * 返回数组中的最后一个
+     * @param    {[Array]}                 array [需要截取的数组]
+     * @param    {[Number]}                 n     [截取的返回，从1开始算的]
+     * @param    {[Number]}                 guard [该参数暂时不清楚]
+     * @return   {[Array]}                       [返回一个新数组]
+     */    
+    _.last = function (array, n, guard) {
+        if (array == null) return void 0;
+        if (n == null || guard) return array[array.length - 1];
+        return _.rest(array, Math.max(0, array.length - n));
+    };
+    
+     // 返回数组中 除了 第一个 元素外的其他全部元素
+    _.rest = _.tail = _.drop = function (array, n, guard) {
+        return slice.call(array, n == null || guard ? 1 : n);
+    };
 
 
     _.where = function(obj, attrs) {
