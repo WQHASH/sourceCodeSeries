@@ -42,3 +42,21 @@
 
               撤销本地与远程分支的关联
                       git branch --unset-upstream
+
+
+<!-- 简单的 -->
+<!-- https://www.cnblogs.com/sjhsszl/p/8708471.html -->
+<!-- 详细的 -->
+<!-- https://blog.csdn.net/azureternite/article/details/76154807 --> 
+
+  理解 git pull:  [使用git fetch和git rebase处理多人开发同一分支的问题（不过都是多分支情况）]       
+
+    git pull == git fetch 和   git merge   
+                git fetch: 他会把远程的提交拉去到本地仓库，但是他并不是直接放在当前分支后面，而是在最后一次push的那个节点
+                在拉去一个新的分支，[这样就多出了一条分支了]
+
+                git merge: git pull在拉取完之后,就会将新建的分支跟你原来的分支进行合并，
+                [这样能最后一次push的节点，到fetch出来的分支，就合并成了一条新的分支]
+
+    git pull --rebase origin (origin-branch-name)  => 当git pull 
+                这里用到  --rebase 他属于优化的，解决了fetch的的提交日志，到git log中只会出现最后一次的操作
