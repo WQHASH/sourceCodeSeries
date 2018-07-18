@@ -48,7 +48,8 @@
 <!-- https://www.cnblogs.com/sjhsszl/p/8708471.html -->
 <!-- 详细的 -->
 <!-- https://blog.csdn.net/azureternite/article/details/76154807 --> 
-
+<!-- 超详细的 -->
+<!-- https://blog.csdn.net/TTKatrina/article/details/79288238 -->
   理解 git pull:  [使用git fetch和git rebase处理多人开发同一分支的问题（不过都是多分支情况）]       
 
     git pull == git fetch 和   git merge   
