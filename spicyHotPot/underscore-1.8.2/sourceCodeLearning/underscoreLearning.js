@@ -182,7 +182,8 @@
         var results = [];
         // cd(function) =>  predicate === optimizeCb(function)=>因无第二个参数，所以 => function()===predicate
         predicate = cb(predicate, context);
-        //这里不用再单独对obj进行处理， _.each中已经封装处理好了
+        //这里不用再单独对obj类型进行处理， _.each中已经封装处理好了
+        //这里的value将是obj中的每个元素，如果该元素为空的话，那么不会被push到results
         _.each(obj, function (value, index, list) {
             if (predicate(value, index, list)) results.push(value);
         });
@@ -393,6 +394,74 @@
         return slice.call(array, n == null || guard ? 1 : n);
     };
 
+    // 返回一个出去所有false值的副本
+    _.compact = function (array) {
+        // 该方法的重点在于_.filter 中的_.filter方法进行了处理（如果迭代的元素为空的话，改迭代方法不会push到显示的副本数组中）
+        return _.filter(array, _.identity);
+    };
+
+    /** 
+     * [flatten 对数组的扁平化处理]
+     * @author wq
+     * @DateTime 2018-07-19T13:43:39+0800
+     * @param    {[Array]}                   input      [description]
+     * @param    {[Bollean]}                 shallow    [description]
+     * @param    {[Bollean]}                 strict     [false]
+     * @param    {[undefined]}               startIndex [这个值在这里，相当于提前的什么的变量，(函数式编程就爱这么搞，)]
+     * @return   {[type]}                            [description]
+     */
+    var flatten = function (input, shallow, strict, startIndex) {   
+        var output = [], idx = 0;
+        for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
+            var value = input[i];
+            if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+                //flatten current level of array or arguments object
+                //wq 无strict的处理 （递归处理，value的中每个元素都不在是数组）
+                if (!shallow) value = flatten(value, shallow, strict);
+
+                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,知道for循环结束
+                var j = 0, len = value.length;
+                output.length += len;
+                while (j < len) {
+                    output[idx++] = value[j++];
+                }
+            } else if (!strict) {
+                output[idx++] = value;
+            }
+        }
+        return output;
+    };
+    /**
+     * [flatten 对数组的扁平化处理]
+     * @author wq
+     * @DateTime 2018-07-19T13:33:07+0800
+     * @param    {[Array]}                 array   [进行处理的 数组||类数组]
+     * @param    {[Bollean]}   [可选]              shallow [true: 只是将数组降一维， 默认false:将数组中的每个元素都降维，扁平化]
+     * @return   {[Array]}                         [返回扁平化后的数组]
+     */
+    _.flatten = function (array, shallow) {
+        return flatten(array, shallow, false);
+    };
+
+    /**
+     * [without 返回一个删除所有values值后的 array副本]
+     * @author wq
+     * @DateTime 2018-07-19T13:48:01+0800
+     * @param    {[Array]}                 array [description]
+     * @return   {[Array]}                       [description]
+     */
+    _.without = function (array) {
+        return _.difference(array, slice.call(arguments, 1));
+    };
+
+    _.difference = function (array) {
+        var rest = flatten(arguments, true, true, 1);
+        return _.filter(array, function (value) {
+            return !_.contains(rest, value);
+        });
+    };
+
+
 
     _.where = function(obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
@@ -412,7 +481,15 @@
         };
     };
 
-
+    /**
+     * [indexOf 返回value在该 array 中的索引值]
+     * @author wq
+     * @DateTime 2018-07-19T14:00:09+0800
+     * @param    {[Array]}                 array    [目标数组]
+     * @param    {[Number]}                 item    []
+     * @param    {Boolean}                isSorted  [description]
+     * @return   {[type]}                           [description]
+     */
     _.indexOf = function (array, item, isSorted) {
         var i = 0, length = array && array.length;
         if (typeof isSorted == 'number') {
@@ -526,7 +603,15 @@
     };
 
     /**
-    * 判断是不是一个对象
+    * 判断是不是一个数组
+    * 返回Bool
+    */
+    _.isArray = nativeIsArray || function (obj) {
+        return toString.call(obj) === '[object Array]';
+    };
+
+    /**
+    * 判断是不是一个对象 =>对于函数也是也是对象做了处理，所以选择了这种方式判断 
     * 返回Bool
     */
     _.isObject = function (obj) {
@@ -534,6 +619,11 @@
        return type === 'function' || type === 'object' && !!obj;
    };
 
+   // if (!_.isArguments(arguments)) {
+   //      _.isArguments = function (obj) {
+   //          return _.has(obj, 'callee');
+   //      };
+   //  }
 
     _.matcher = _.matches = function (attrs) {
         attrs = _.extendOwn({}, attrs);

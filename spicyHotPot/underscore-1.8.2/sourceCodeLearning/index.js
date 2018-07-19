@@ -185,12 +185,12 @@ console.log("====== _.contains ======");
 (function() {
     /**
      * _.contains(list [,properties] [,context])
-     *  当list中的任何一个元素都通过 predicate的判断就返回true
+     *  当list中的 任何一个 元素都通过 predicate的判断就返回true
      */
     var arr = [7, 3, 23, 243];
     var obj = { "sname": "wq", "sage": "11" };
     var elem = _.contains(arr, 23, 0);
-    //console.log(elem);
+    // console.log(elem);
 })();
 
 console.log("====== _.invoke ======");
@@ -379,5 +379,36 @@ console.log("======= _.rest ======");
      * _.rest 方法 和 _.initial 方法相反，
      * 但处理的过程 却只是  [].slice.call(arr, 0,index) || [].slice.call(arr, 0) 这么点区别
      */
+        
+})();
+
+console.log("======= _.compact ======");
+(function(){
+    var arr = [null,0,false,7,""];
+    /** 
+     * [newArr 返回一个除去了所有false值的 array副本]
+     * @type {[Array]}
+     */
+    var newArr = _.compact(arr);
+    // console.log(newArr, "newArr");
+        
+})();
+
+console.log("======= _.flatten ======");
+(function(){
+
+    /** 
+     * [flatten 将数组进行扁平化， 目的：将数组进行降维]
+     * @type {[Array]}
+     * @type {[Bollean]}  
+     */
+    var arr = [1, [2], [3, [[4]]]];
+    var arr1 = [[1, [2], [3, [[4]]]]];
+
+    var flatten = _.flatten(arr);
+    // var flatten1 = _.flatten(arr, true);
+     console.log(flatten, "flatten");
+     // console.log(flatten1, "flatten1");
+   
         
 })();
