@@ -29,7 +29,7 @@
 	</div>
 </template>
 <script>
-	import bus from '../common/bus.js';
+	import bus from '../common/bus';
 	export default {
 		data(){
 			return {
@@ -101,12 +101,7 @@
 				return this.$route.path.replace('/','');
 			},
 		},
-		create(){
-			// bus.$on('collapse', (msg) => {
-			// 	this.collapse = msg;
-			// 	console.log(this.collapse, "sidebar-collapse");
-			// })
-			// 
+		created(){
 			bus.$on('collapse', msg => {
                 this.collapse = msg;
             });

@@ -3,12 +3,14 @@
 		<v-head></v-head>
 		<v-sidebar></v-sidebar>
 
-		<h2 style="color:pink;">===我是home页面===</h2>
-		
 		<!-- 这里显示home 中的子级路由 -->
 		<div class="content-box" :class="{'content-collapse':collapse}">
 			<div class="content">
-				<router-view></router-view>
+				<!-- <transition name="move" mode="out-in"> -->
+					<!-- <keep-alive :include="tagsList"> -->
+						<router-view></router-view>
+					<!-- </keep-alive> -->
+				 <!-- </transition> -->
 			</div>
 		</div>
 		
@@ -23,18 +25,14 @@
 	export default {
 		data(){
 			return {
-				name:"home-wqahsh",
-				collapse: false
+				tagsList: [],
+				collapse: false,
 			}
 		},
 		components: {
 			vHead, vSidebar
 		},
 		create(){
-			// bus.$on('collapse', (msg) => {
-			// 	this.collapse = msg;
-			// 	console.log(this.collapse, "home.collapse+")
-			// })
 			bus.$on('collapse', msg => {
                 this.collapse = msg;
             })

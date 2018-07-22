@@ -1,6 +1,6 @@
 <template>
 	<div class="header">
-		<div class="collapse-btn" @click="collapseChage($event)">
+		<div class="collapse-btn" @click="collapseChage">
 			<i class="el-icon-menu"></i>
 		</div>
 		<div class="logo">后台管理系统</div>
@@ -39,7 +39,7 @@
 </template>
 <script>
 	// vue中 组件之间的交互可以通过 这种中间者的形式俩交互。
-	import bus from '../common/bus.js';
+	import bus from '../common/bus';
 	export default {
 		data(){
 			return {
@@ -52,11 +52,11 @@
 
 		computed: {},
 		methods: {
-			collapseChage(event){
-				this.collapse = !this.collapse;
-				// 将侧栏的状态传递出去
-				bus.$emit('collapse', this.collapse);
-			},
+			// 侧边栏折叠
+			collapseChage(){
+                this.collapse = !this.collapse;
+                bus.$emit('collapse', this.collapse);
+            },
 			//html5的全屏事件
 			handleFullScreen(){
 				let element = document.documentElement;
@@ -98,7 +98,7 @@
 </script>
 
 <style scoped>
-	.header {
+    .header {
         position: relative;
         box-sizing: border-box;
         width: 100%;
