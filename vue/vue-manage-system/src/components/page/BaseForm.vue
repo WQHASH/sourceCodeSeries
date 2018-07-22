@@ -2,10 +2,13 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-date"></i> 表单</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <i class="el-icon-date"></i> 表单
+                </el-breadcrumb-item>
                 <el-breadcrumb-item>基本表单</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
+
         <div class="container">
             <div class="form-box">
                 <el-form ref="form" :model="form" label-width="80px">
@@ -14,9 +17,9 @@
                     </el-form-item>
                     <el-form-item label="选择器">
                         <el-select v-model="form.region" placeholder="请选择">
-                            <el-option key="bbk" label="步步高" value="bbk"></el-option>
-                            <el-option key="xtc" label="小天才" value="xtc"></el-option>
-                            <el-option key="imoo" label="imoo" value="imoo"></el-option>
+                            <el-option key="bbk1" label="步步高" value="bbk"></el-option>
+                            <el-option key="xtc1" label="小天才" value="xtc"></el-option>
+                            <el-option key="imoo1" label="imoo" value="imoo"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="日期时间">
@@ -43,9 +46,9 @@
                     </el-form-item>
                     <el-form-item label="单选框">
                         <el-radio-group v-model="form.resource">
-                            <el-radio label="步步高"></el-radio>
-                            <el-radio label="小天才"></el-radio>
-                            <el-radio label="imoo"></el-radio>
+                            <el-radio label="步步高" value="bbk-hash"></el-radio>
+                            <el-radio label="小天才" value="xtc-hash"></el-radio>
+                            <el-radio label="imoo" value="mkw-hash"></el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="文本框">
@@ -120,8 +123,8 @@
                     }
                 ],
                 form: {
-                    name: '',
-                    region: '',
+                    name: 'wq: 来自表单数据',
+                    region: 'wq: 默认选择-步步高',
                     date1: '',
                     date2: '',
                     delivery: true,
@@ -134,7 +137,17 @@
         },
         methods: {
             onSubmit() {
+                // console.log(this.$message,"this.$message");
                 this.$message.success('提交成功！');
+
+
+                // sele找的是value
+                //单选框找的是 label
+                // textare直接找的是绑定的值
+                
+                // console.log(this.form.resource, "==选择器");
+
+
             }
         }
     }

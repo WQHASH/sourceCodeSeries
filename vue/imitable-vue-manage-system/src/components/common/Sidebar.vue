@@ -1,34 +1,39 @@
 <template>
-    <div class="sidebar">
-        <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-            text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
-            <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-submenu :index="item.index" :key="item.index">
-                        <template slot="title">
-                            <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
-                        </template>
-                        <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
-                            {{ subItem.title }}
-                        </el-menu-item>
-                    </el-submenu>
-                </template>
-                <template v-else>
+	<div class="sidebar">
+		<!--router: 是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转 -->
+		<!-- :default-active 当前激活菜单的 index [所有这里的 router 和 ：default-active是配合一起使用的] -->
+		<el-menu router class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157" text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened >
+			<template v-for="item in items">
+				<template v-if="item.subs">
+					<el-submenu :index="item.index" :key="item.index">
+						<template slot="title">
+	                        <i :class="item.icon"></i>
+	                        <span slot="title">{{ item.title }}</span>
+	                    </template>
+	                    <el-menu-item v-for="(subItem,i) in item.subs" :key="i" :index="subItem.index">
+	                        {{ subItem.title }}
+	                    </el-menu-item>
+					</el-submenu>
+				</template>
+
+				<template v-else>
                     <el-menu-item :index="item.index" :key="item.index">
-                        <i :class="item.icon"></i><span slot="title">{{ item.title }}</span>
+                        <i :class="item.icon"></i>
+                        <span slot="title">{{ item.title }}</span>
                     </el-menu-item>
                 </template>
-            </template>
-        </el-menu>
-    </div>
-</template>
+			</template>
+			
 
+		</el-menu>
+	</div>
+</template>
 <script>
-    import bus from '../common/bus';
-    export default {
-        data() {
-            return {
-                collapse: false,
+	import bus from '../common/bus.js';
+	export default {
+		data(){
+			return {
+				collapse: false,
                 items: [
                     {
                         icon: 'el-icon-setting',
@@ -89,25 +94,28 @@
                         title: '404页面'
                     }
                 ]
-            }
-        },
-        computed:{
-            onRoutes(){
-                //  this.$route.path === '/dashboard'
-                return this.$route.path.replace('/','');
-            }
-        },
-        created(){            
-            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
-            bus.$on('collapse', msg => {
+			}
+		},
+		computed: {
+			onRoutes(){
+				return this.$route.path.replace('/','');
+			},
+		},
+		create(){
+			// bus.$on('collapse', (msg) => {
+			// 	this.collapse = msg;
+			// 	console.log(this.collapse, "sidebar-collapse");
+			// })
+			// 
+			bus.$on('collapse', msg => {
                 this.collapse = msg;
             });
-        },
-    }
-</script>
+		},
 
+	};
+</script>
 <style scoped>
-    .sidebar{
+	.sidebar{
         display: block;
         position: absolute;
         left: 0;

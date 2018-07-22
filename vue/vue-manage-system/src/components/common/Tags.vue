@@ -96,7 +96,6 @@
             
         },
         created(){
-            console.log(this, "this.$route")
             this.setTags(this.$route);
         }
     }

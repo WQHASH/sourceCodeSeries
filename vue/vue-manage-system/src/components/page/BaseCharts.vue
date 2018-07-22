@@ -2,7 +2,9 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-date"></i> 图表</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <i class="el-icon-date"></i> 图表
+                </el-breadcrumb-item>
                 <el-breadcrumb-item>基础图表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -11,6 +13,7 @@
                 vue-schart：vue.js封装sChart.js的图表组件。
                 访问地址：<a href="https://github.com/lin-xin/vue-schart" target="_blank">vue-schart</a>
             </div>
+            
             <div class="schart-box">
                 <div class="content-title">柱状图</div>
                 <schart class="schart" canvasId="bar" :data="data1" type="bar" :options="options1"></schart>
