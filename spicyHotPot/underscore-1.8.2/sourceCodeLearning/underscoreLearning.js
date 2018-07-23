@@ -406,15 +406,17 @@
      * @DateTime 2018-07-19T13:43:39+0800
      * @param    {[Array]}                   input      [description]
      * @param    {[Bollean]}                 shallow    [description]
-     * @param    {[Bollean]}                 strict     [false]
-     * @param    {[undefined]}               startIndex [这个值在这里，相当于提前的什么的变量，(函数式编程就爱这么搞，)]
+     * @param    {[Bollean]}                 strict     [-----------这个参数暂时没搞明白？--------]
+     * @param    {[undefined]}               startIndex [这个值在这里，第一起到的变量undefined作用，第二也是为了Argument参数的值从第二个开始]
      * @return   {[type]}                            [description]
      */
     var flatten = function (input, shallow, strict, startIndex) {   
         var output = [], idx = 0;
         for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
             var value = input[i];
-            if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+            //_.isArguments是对类数组的处理，但这个方法没看明白
+            // if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+            if (isArrayLike(value) && (_.isArray(value) )) {
                 //flatten current level of array or arguments object
                 //wq 无strict的处理 （递归处理，value的中每个元素都不在是数组）
                 if (!shallow) value = flatten(value, shallow, strict);
@@ -443,6 +445,17 @@
         return flatten(array, shallow, false);
     };
 
+
+
+
+    _.difference = function (array) {
+        // 作用，对arguments进行扁平化，且只降一次维度，拿到用户调用 _.without(arr,arg1,arg2..)第二以后的参数
+        var rest = flatten(arguments, true, true, 1);
+        return _.filter(array, function (value) {
+            return !_.contains(rest, value);
+        });
+    };
+
     /**
      * [without 返回一个删除所有values值后的 array副本]
      * @author wq
@@ -451,15 +464,54 @@
      * @return   {[Array]}                       [description]
      */
     _.without = function (array) {
+        // 如果传递进来的第一个以后的参数是数组 这里的slice.call(arguments, 1) 又会在数组的外层包裹一层数组
+        // 因为调用的过程 [].slice.call() 他是这么调用的，在空数组来slice选中的是第一个后，数据也会被放进这个空数组中
         return _.difference(array, slice.call(arguments, 1));
     };
 
-    _.difference = function (array) {
-        var rest = flatten(arguments, true, true, 1);
-        return _.filter(array, function (value) {
-            return !_.contains(rest, value);
-        });
+
+
+
+    _.uniq = _.unique = function (array, isSorted, iteratee, context) {
+        if (array == null) return [];
+        if (!_.isBoolean(isSorted)) {
+            context = iteratee;
+            iteratee = isSorted;
+            isSorted = false;
+        }
+        if (iteratee != null) iteratee = cb(iteratee, context);
+        var result = [];
+        var seen = [];
+        for (var i = 0, length = array.length; i < length; i++) {
+            var value = array[i],
+                computed = iteratee ? iteratee(value, i, array) : value;
+            if (isSorted) {
+                if (!i || seen !== computed) result.push(value);
+                seen = computed;
+            } else if (iteratee) {
+                if (!_.contains(seen, computed)) {
+                    seen.push(computed);
+                    result.push(value);
+                }
+            } else if (!_.contains(result, value)) {
+                result.push(value);
+            }
+        }
+        return result;
     };
+
+
+    _.union = function () {
+        return _.uniq(flatten(arguments, true, true));
+    };
+
+
+
+
+
+
+
+
 
 
 
@@ -569,6 +621,29 @@
         }
         return true;
     };
+    /**
+     * [isNaN 判断是不是NaN] NaN是一个不等自身的数
+     *  这里的_.isNumber在 :704行 动态遍历生成 
+     *  和原生的不同在于 _.isNumber 值处理number类型，对于undefined的返回false,而不是true
+     * @author wq
+     * @DateTime 2018-07-19T17:44:31+0800
+     * @param    {[type]}                 obj [一个值]
+     * @return   {Boolean}                    [description]
+     */
+     _.isNaN = function (obj) {
+        return _.isNumber(obj) && obj !== +obj;
+    };
+
+    /** 
+     * [isBoolean 判断是不是Boolean]
+     * @author wq
+     * @DateTime 2018-07-20T11:03:32+0800
+     * @param    {[type]}                 obj [description]
+     * @return   {Boolean}                    [返回一个Bool值]
+     */
+    _.isBoolean = function (obj) {
+        return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
+    };
 
     /**
     *  判断对象中的属性是不是自身的（不包含prototype中的）
@@ -619,11 +694,22 @@
        return type === 'function' || type === 'object' && !!obj;
    };
 
-   // if (!_.isArguments(arguments)) {
-   //      _.isArguments = function (obj) {
-   //          return _.has(obj, 'callee');
-   //      };
-   //  }
+   /**  
+    * [手动添加了一些 js类型判断的方法]
+    * 
+    */
+    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function (name) {
+        _['is' + name] = function (obj) {
+            return toString.call(obj) === '[object ' + name + ']';
+        };
+    });
+
+
+    //  if (!_.isArguments(arguments)) {
+    //     _.isArguments = function (obj) {
+    //         return _.has(obj, 'callee');
+    //     };
+    // }
 
     _.matcher = _.matches = function (attrs) {
         attrs = _.extendOwn({}, attrs);

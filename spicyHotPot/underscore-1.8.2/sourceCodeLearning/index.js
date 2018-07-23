@@ -404,11 +404,34 @@ console.log("======= _.flatten ======");
      */
     var arr = [1, [2], [3, [[4]]]];
     var arr1 = [[1, [2], [3, [[4]]]]];
-
-    var flatten = _.flatten(arr);
+    var arr3 = [3,4,5,6]
+    // var flatten = _.flatten(arr1);
     // var flatten1 = _.flatten(arr, true);
-     console.log(flatten, "flatten");
+     // console.log(flatten, "flatten");
      // console.log(flatten1, "flatten1");
    
         
+})();
+
+console.log("======= _.without ======");
+(function(){
+
+    var arr = [0,0,3,4,5,6,7,8,2,3,3,2];
+    /** 
+     * [without 返回一个删除所有values值后的 array副本]
+     * @type {[Array]}
+     * @type {[Number]} 这里的第一个参数以后的数据最好是一个Number类型的数据
+     */
+    var without = _.without(arr,0,2,3,4);
+    // console.log(without, "without");
+   
+        
+})();
+
+(function(){
+    var arr = [3,4,5,6,7,6];
+    var unique = _.uniq(arr);
+    console.log(unique, "unique");
+
+
 })();
