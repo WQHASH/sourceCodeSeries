@@ -31,6 +31,8 @@
                     </el-col>
                 </el-row>
             </el-col>
+
+            
             <el-col :span="16">
                 <el-row :gutter="20" class="mgb20">
                     <el-col :span="8">

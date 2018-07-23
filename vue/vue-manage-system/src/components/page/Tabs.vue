@@ -2,18 +2,25 @@
     <div class="">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-message"></i> tab选项卡</el-breadcrumb-item>
+                <el-breadcrumb-item>
+                    <i class="el-icon-message"></i> 
+                    tab选项卡
+                </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
+
         <div class="container">
             <el-tabs v-model="message">
                 <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
                     <el-table :data="unread" :show-header="false" style="width: 100%">
                         <el-table-column>
                             <template slot-scope="scope">
+                                <!--wq:  {{scope.row}} 这里通过该方法拿到之前定义的数组 -->
                                 <span class="message-title">{{scope.row.title}}</span>
                             </template>
                         </el-table-column>
+
+                        <!--wq:  el-table-column prop="date" 这种直接加属性的方法，只能加上时间 -->
                         <el-table-column prop="date" width="180"></el-table-column>
                         <el-table-column width="120">
                             <template slot-scope="scope">

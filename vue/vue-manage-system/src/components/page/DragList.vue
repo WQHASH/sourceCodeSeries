@@ -5,11 +5,13 @@
                 <el-breadcrumb-item><i class="el-icon-rank"></i> 拖拽排序</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
+
         <div class="container">
             <div class="plugins-tips">
                 Vue.Draggable：基于 Sortable.js 的 Vue 拖拽组件。
                 访问地址：<a href="https://github.com/SortableJS/Vue.Draggable" target="_blank">Vue.Draggable</a>
             </div>
+
             <div class="drag-box">
                 <div class="drag-box-item">
                     <div class="item-title">todo</div>
@@ -21,6 +23,7 @@
                         </transition-group>
                     </draggable>
                 </div>
+
                 <div class="drag-box-item">
                     <div class="item-title">doing</div>
                     <draggable v-model="doing" @remove="removeHandle" :options="dragOptions">
@@ -31,6 +34,7 @@
                         </transition-group>
                     </draggable>
                 </div>
+                
                 <div class="drag-box-item">
                     <div class="item-title">done</div>
                     <draggable v-model="done" @remove="removeHandle" :options="dragOptions">
