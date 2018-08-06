@@ -7,7 +7,11 @@ const state = {
   checkoutStatus: null
 }
 
-// getters
+// getters 
+// wq: 从store中的state中派生出一些状态，一般将新的状态用在组件的computed中,来直接更新页面
+//      这里的state是指当前module局部的state，、
+//      getters指当前module局部的getters,
+//      rootState指的是所有module中的state
 const getters = {
   cartProducts: (state, getters, rootState) => {
     return state.items.map(({ id, quantity }) => {
@@ -28,6 +32,9 @@ const getters = {
 }
 
 // actions
+// wq: module中的actions来的参数  checkout(context){} 
+// 这里的context为一个对象，可以用结构思想处理 context = {state, commit, rootState}
+// action本身就是用来提交mutation中定义的事件（来改变state）的
 const actions = {
   checkout ({ commit, state }, products) {
     const savedCartItems = [...state.items]
