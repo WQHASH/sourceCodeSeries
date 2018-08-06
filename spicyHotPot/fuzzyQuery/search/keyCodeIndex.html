@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <style type="text/css">
+        #container {
+            position: absolute;
+            left: 50%;
+            top: 40%;
+        }
+
+        #content {
+            float: left;
+            position: relative;
+            right: 50%;
+        }
+
+        input {
+            border: 0;
+            width: 288px;
+            height: 30px;
+            font-size: 16px;
+            padding: 0 5px;
+            line-height: 30px;
+        }
+
+        .item {
+            padding: 3px 5px;
+            cursor: pointer;
+        }
+
+        .addbg {
+            background: #87A900;
+        }
+
+        .first {
+            border: solid #87A900 2px;
+            width: 300px;
+        }
+
+        #append {
+            border: solid #87A900 2px;
+            border-top: 0;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="container">
+        <div id="content">
+            <div class="first">
+                <input id="kw" onKeyup="getContent(this);" />
+            </div>
+            <div id="append" style="max-height:200px; overflow:auto;"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="jQuery-v3.3.1.js"></script>
+    <script src="keyCodeIndex.js"></script>
+    
+</body>
+</html>  
