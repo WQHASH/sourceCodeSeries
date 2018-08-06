@@ -49,6 +49,17 @@ console.log("====== _.map ======");
 
     var results = _.map([{ name111: 'wangqi', "city": "bj", "sage22": "12", "gg": "jj" }, ], { name111: 'wqhash', age111: 12, "city": "bj" });
     //console.log(results, "results")
+    //
+    var tempHash = [5,6,7,8];
+    var tempHashVal = _.map(tempHash, function(val, index, list){
+        return {
+            "val":val,
+            "index":index,
+            "list":list
+        }
+    });
+
+    console.log(tempHashVal, "tempHashVal");
 })();
 
 console.log("====== _.reduce ======");
@@ -279,8 +290,8 @@ console.log("====== _.sortBy ======");
 (function() {
     var arr = [2, 3, 7, 5, 69, 0.7, 0.8];
     var newVal = _.sortBy(arr);
-    // console.log(newVal, "newVal");
-    // console.log(arr, "arr");
+     console.log(newVal, "newVal");
+     console.log(arr, "arr");
 
     var sinArr = [30, 20, 800, 90];
     var newSinArr = _.sortBy(sinArr, function(value, index, list) {     
@@ -428,10 +439,15 @@ console.log("======= _.without ======");
         
 })();
 
+/**
+ * [返回数组去重后的副本，这里只是去重]
+ * @author wq
+ * @DateTime 2018-08-06T11:13:24+0800
+ * @return   {[type]}                 [description]
+ */
 (function(){
-    var arr = [3,4,5,6,7,6];
-    var unique = _.uniq(arr);
+    var arr = [5,6,3,5,4,3];
+    var unique = _.uniq(arr, true);
     console.log(unique, "unique");
-
 
 })();

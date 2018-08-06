@@ -235,7 +235,7 @@
         });
     };
 
-     _.pluck = function (obj, key) {
+    _.pluck = function (obj, key) {
         return _.map(obj, _.property(key));
     };
 
@@ -313,6 +313,7 @@
                 criteria: iteratee(value, index, list)
             };
         }).sort(function (left, right) {
+            // 本质上还是用数组原生的 sort来实现的
             var a = left.criteria;
             var b = right.criteria;
             if (a !== b) {
@@ -471,7 +472,18 @@
 
 
 
-
+    /**
+     * [unique 返回数组去重后的副本，]
+     * @author wq
+     * @DateTime 2018-08-06T11:38:18+0800
+     * @param    {[Array]}                 array    [需要去重的数组]
+     * 个人暂时认为以下参数意义不是特别大
+     * 改方法的核心 体现在 _.contains(data, targetData) 处理是否存在相同数据
+     * @param    {Boolean}                isSorted [description]
+     * @param    {[type]}                 iteratee [description]
+     * @param    {[type]}                 context  [description]
+     * @return   {[type]}                          [description]
+     */
     _.uniq = _.unique = function (array, isSorted, iteratee, context) {
         if (array == null) return [];
         if (!_.isBoolean(isSorted)) {
@@ -539,19 +551,20 @@
      * @DateTime 2018-07-19T14:00:09+0800
      * @param    {[Array]}                 array    [目标数组]
      * @param    {[Number]}                 item    []
-     * @param    {Boolean}                isSorted  [description]
+     * @param    {Boolean}                isSorted  [传递isSorted将从你给定的索性值开始搜索]
      * @return   {[type]}                           [description]
      */
     _.indexOf = function (array, item, isSorted) {
         var i = 0, length = array && array.length;
         if (typeof isSorted == 'number') {
-            // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接冲0开始算
+            // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接从0开始算
             i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
         } else if (isSorted && length) {
             i = _.sortedIndex(array, item);
             return array[i] === item ? i : -1;
         }
         if (item !== item) {
+            // slice.call(array, i) 这里可能是为了确保得到的一定是数组
             return _.findIndex(slice.call(array, i), _.isNaN);
         }
         for (; i < length; i++) if (array[i] === item) return i;
@@ -591,6 +604,31 @@
             key = keys[i];
             if (predicate(obj[key], key, obj)) return key;
         }
+    };
+    /**
+     * [sortedIndex 用二分查找确定value在list中的下标，不管value存不存在于list中（如果没有，改方法会计算出合理的位置）]
+     * @author wq
+     * @DateTime 2018-08-06T15:45:01+0800
+     * @param    {[Array]}                 array    [数组]
+     * @param    {[type]}                 obj      [目标元素]
+     * @param    {[type]}                 iteratee [description]
+     * @param    {[type]}                 context  [description]
+     * @return   {[type]}                          [description]
+     */
+    _.sortedIndex = function (array, obj, iteratee, context) {
+        iteratee = cb(iteratee, context, 1);
+        var value = iteratee(obj);
+        var low = 0, high = array.length;
+        while (low < high) {
+            var mid = Math.floor((low + high) / 2); 
+            // if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+            if (iteratee(array[mid]) < value) {
+                low = mid + 1;
+            } else{
+                high = mid;
+            }
+        }
+        return low;
     };
 
 
