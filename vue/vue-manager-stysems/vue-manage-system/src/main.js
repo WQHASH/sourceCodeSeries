@@ -45,4 +45,6 @@ new Vue({
  *     该函数是用来生成一个VNode节点，render函数得到这个VNode节点之后，返回给vue.js的 mount函数，
  *     渲染成真实的DOM节点，并挂载到根节点上
  *     
+ *     render: 暂时就理解是为了生成App组件 [VNode节点] ，
+ *             脚手架中的 components: {App} 也是为了生成组件 [VNode节点]
  */
