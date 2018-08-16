@@ -451,3 +451,15 @@ console.log("======= _.without ======");
     console.log(unique, "unique");
 
 })();
+
+/**
+ * [返回数组去重后的副本，这里只是去重]
+ * @author wq
+ * @DateTime 2018-08-06T11:13:24+0800
+ * @return   {[type]}                 [description]
+ */
+(function(){
+    var arr = [22,33,22,6,7,89,6,7];
+   var deleRepe = _.indexOf(arr,7,5);
+   console.log(deleRepe, "deleRepe++")
+})();

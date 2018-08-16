@@ -549,10 +549,10 @@
      * [indexOf 返回value在该 array 中的索引值]
      * @author wq
      * @DateTime 2018-07-19T14:00:09+0800
-     * @param    {[Array]}                 array    [目标数组]
-     * @param    {[Number]}                 item    []
+     * @param    {[Array]}                 array    [查询的数组]
+     * @param    {[Number]}                 item    [目标数组]
      * @param    {Boolean}                isSorted  [传递isSorted将从你给定的索性值开始搜索]
-     * @return   {[type]}                           [description]
+     * 这里的重点在于第三个参数 isSorted 的处理
      */
     _.indexOf = function (array, item, isSorted) {
         var i = 0, length = array && array.length;
