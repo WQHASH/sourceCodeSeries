@@ -1,10 +1,12 @@
 (function(win, doc){
+    //得到html元素
     var docEl = doc.documentElement,
+    //横屏处理，只要用户改变了设备的查看模式，就会触发orientationchange事件
         resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
         refresh = function () { 
             var w = docEl.clientWidth,
                 dpr = win.devicePixelRatio || 1;
-                // wq: 这里 *100 是因为在标准版本上 的得到一个 1rem== mmPX的这也一个换算标准
+                // wq: 这里 *100 是因为在设计师给的标准版本上 的得到一个 1rem== （??）PX的这么一个换算标准
                 // 因为可能这里的 w == 375 这么算1rem == 1px  而最小也只能是12px,综合考虑 *100比较合理
             docEl.style.fontSize = 100 * (w/375) + 'px';
 

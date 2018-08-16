@@ -5,7 +5,9 @@
                 <router-view id="view"></router-view>
             </keep-alive>
         </transition>
-        <Login :class="{'login-active': isLogin}" @close="$store.state.user.isLogin=false"></Login>
+        <!-- <Login :class="{'login-active': isLogin}" @close="$store.state.user.isLogin=false"></Login> -->
+        <!-- wq 修改-->
+        <Login :class="{'login-active': isLogin}" @close="tempMethod()"></Login>
         <!--wq: 转圈加载 -->
         <FullCircleLoading v-show="pageLoading"></FullCircleLoading>
     </div>
@@ -30,8 +32,8 @@
                 4: 下切换
                  */
                 let animate = this.$router.animate || to.meta.slide
-                if (!animate) {
                     this.animate = '' 
+                if (!animate) {
                 }else{
                     this.animate = animate === 1 ?  'slide-left' :
                         animate === 2 ?  'slide-right' :
@@ -46,7 +48,13 @@
                 'isLogin',
                 'pageLoading'
             ])
-        }
+        },
+        // wq 修改
+        methods: {
+            tempMethod(data){
+                this.$store.state.user.isLogin = data;
+            },
+        },
     }
 </script>
 <style lang="less" scoped>

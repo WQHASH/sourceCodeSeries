@@ -1,6 +1,6 @@
 <template>
     <div class="login-wrapper">
-        <Icon name="close" class="close" @click.native="$emit('close')"></Icon>
+        <Icon name="close" class="close" @click.native="tempMethod"></Icon>
         <h2>登陆你的头条，精彩永不消失</h2>
         <div class="input username">
             <input type="text" placeholder="用户名随便填" v-model="username">
@@ -30,6 +30,7 @@
                 }else{
                     this.username_msg = ''
                 }
+
                 if (this.username_msg) return
 
                 if (!this.password) {
@@ -41,6 +42,7 @@
                 }
                 if (this.password_msg) return
 
+                //wq:显示Dom节点页面    
                 this.$showLoading()
                 try {
                     await this.$store.dispatch('login', {
@@ -50,9 +52,11 @@
                 }catch (e) {
 
                 }
+                //wq:隐藏Dom节点页面    
                 this.$hideLoading()
                 this.$set(this.$store.state.user.footerBarList, 3, {title: '我的', icon: 'account1', path: '/account'})
                 this.$emit('close')
+
                 // let avatar = require('assets/images/avatar.png')
                 // this.Cookie.set('username', this.username)
                 // this.Cookie.set('avatar', avatar)
@@ -60,7 +64,12 @@
                 // this.$store.state.app.user.avatar = avatar
                 // this.$emit('close')
                 
-            }
+            },
+            // wq 修改
+            async tempMethod(){
+                var data = false;
+                this.$emit('close', data);
+            },
         }
     }
 </script>
