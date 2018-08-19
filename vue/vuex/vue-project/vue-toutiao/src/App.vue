@@ -5,6 +5,7 @@
                 <router-view id="view"></router-view>
             </keep-alive>
         </transition>
+
         <!-- <Login :class="{'login-active': isLogin}" @close="$store.state.user.isLogin=false"></Login> -->
         <!-- wq 修改-->
         <Login :class="{'login-active': isLogin}" @close="tempMethod()"></Login>
@@ -22,6 +23,7 @@
                 animate: ''
             }
         },
+        // wq: 理解 只要可以动过this的方式拿到的属性，watch 就可以监听到
         watch: {
             $route (to, from) {
                 /*

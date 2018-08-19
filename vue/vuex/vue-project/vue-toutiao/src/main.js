@@ -51,12 +51,17 @@ new Vue({
  *  参考： https://segmentfault.com/q/1010000012470922
  *  
  *  比较 =>  new Vue({render: h=> h(App)}).$mounth('#app');
- *  对比理解：脚手架中的 App相当于一个大组件 大组件需要一个容器[template]
- *  而这个容器要插入到#app节点中去,
+ *  对比理解：脚手架中的  App 相当于一个大组件 大组件需要知道被放在哪里用，
+ *  而这个 大组件 要插入到 index.html中#app节点中去,此时会大组件会直接替换掉#app的内容
+ *  这里起到作用的是  template: '<App/>', 如果将其注释，然后在index.html中这么写  <div id="app"><App/></div>
+ *  也能将大组件插入到index.html中去，但#app节点还在，和之前结构就不一样了
  *
  *  而采用render函数的这种，个人理解是， render他是一个函数，用他来生成Vnode,
  *  这里Vnode中做好了一切处理，然后返回到mounth函数，通过该函数渲染真实Dom节点，
  *  并将其挂载到 #app 这个元素下，此时也就替换了index.html中#app的内容
  *
- * 区别于 vue-cli的 el template他们做的工作就是, Vnode => 真实Dom转换的位置
+ *
+ * 	理解： 在components: { App }是Vnode转为真实Dom的过程中需要知道 转换后被放在那里用，
+ * 		这时需要有 el: #app 起到将让大组件替换#app节点，明确了位置，
+ * 		而 template: '<App/>',必须存在，他不像有$mount一样（原理不是很清楚）
  */

@@ -3,7 +3,10 @@ import Vue from 'vue'
 import { router } from './index'
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.login) { //判断前往的界面是否需要登陆
+   
+    //if (to.meta.login) { //判断前往的界面是否需要登陆
+    //wq:
+    if (to.matched.some(data => data.meta.login)) { 
         if (store.state.user.user.name) { // 是否已经登陆
             next()
         }else{

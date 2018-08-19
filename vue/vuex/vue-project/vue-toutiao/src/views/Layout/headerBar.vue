@@ -14,6 +14,8 @@
         methods: {
             skipSearch () {
                 this.$router.push('/search')
+                //wq: 路由跳转也动态添加参数可以
+                // this.$router.push({path: '/search',query:{sname:"wq"}})
             }
         }
     }
