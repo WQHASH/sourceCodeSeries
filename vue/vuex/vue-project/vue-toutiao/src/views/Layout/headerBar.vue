@@ -19,6 +19,13 @@
             }
         }
     }
+    /**
+     * 有关vueRouter学习： https://www.jianshu.com/p/ee7ff3d1d93d
+     *     声明式：<router-link :to="...">
+     *     编程式：router.push(...) 声明式的本质该是编程时
+     *     这个方法会向 history 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，则回到之前的 URL。
+     */
+
 </script>
 <style lang="less" scoped>
     .header-wrapper {

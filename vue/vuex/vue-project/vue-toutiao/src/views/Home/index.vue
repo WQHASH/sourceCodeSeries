@@ -3,7 +3,7 @@
         <!-- 顶部tabs -->
         <TopBar></TopBar>
         
-        <!-- loading -->
+        <!-- loading --> 
         <div class="swiper-mask df-c" v-show="newsLoading">
             <CircleLoading></CircleLoading>
         </div>
@@ -57,6 +57,7 @@
                             </div>
                         </li>
                     </ul>
+                    <!-- 我也是有底线的 -->
                     <NoneData v-if="news.list&&news.list.length>0"></NoneData>
                 </section>
             </swiper-slide>

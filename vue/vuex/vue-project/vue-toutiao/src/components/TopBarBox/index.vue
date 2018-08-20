@@ -1,10 +1,10 @@
 <template>
-    <div class="top-bar-box">
+    <div class="top-bar-box">        
         <Icon name="close" class="close" @click.native="$emit('close')"></Icon>
         <div class="self-box">
             <div class="title df-sb">
                 <div class="title-l">
-                    <span>我的频道</span>
+                    <span >我的频道</span>
                     <small>点击删除以下频道</small>
                 </div>
             </div>
@@ -50,8 +50,12 @@
                     return !this.newsList.some( v => news.title === v.title)
                 }) 
             }
-        }
+        },
     }
+    /**
+     * 关于@click 和@click.native之间的关系：   https://segmentfault.com/q/1010000011186651
+     * 简单些： 意思就是当你给一个vue组件绑定事件时候，要加上native！如果是普通的html元素！就不需要
+     */
 </script>
 <style lang="less" scoped>
     

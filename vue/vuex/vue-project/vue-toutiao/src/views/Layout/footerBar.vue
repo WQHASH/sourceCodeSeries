@@ -5,7 +5,8 @@
                 <Icon :name="item.icon"></Icon>
                 <div> {{item.title}}</div>       
                 <!-- //wq -->
-                <!-- {{recordTypes}}       -->
+                <!-- {{recordTypes}} -->
+                <!-- {{item.path}} -->
             </router-link>
         </ul>
 

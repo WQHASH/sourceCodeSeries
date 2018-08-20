@@ -16,7 +16,6 @@ import './directive'
 
 import { Cookie } from 'src/utils/storage'
 Vue.prototype.Cookie = Cookie
-
 // 返回
 Vue.prototype.back = (route) => {
     route.animate = 2
