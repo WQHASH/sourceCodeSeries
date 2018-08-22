@@ -48,7 +48,6 @@ new Vue({
 /**
  *  理解vue-cli 中的new Vue() 和用 render生成的vue
  *  参考： https://segmentfault.com/q/1010000012470922
- *  
  *  比较 =>  new Vue({render: h=> h(App)}).$mounth('#app');
  *  对比理解：脚手架中的  App 相当于一个大组件 大组件需要知道被放在哪里用，
  *  而这个 大组件 要插入到 index.html中#app节点中去,此时会大组件会直接替换掉#app的内容

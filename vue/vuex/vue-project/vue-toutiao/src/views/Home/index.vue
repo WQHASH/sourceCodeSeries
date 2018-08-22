@@ -13,6 +13,7 @@
             <swiper-slide v-for="(news, index) in newsList" :key="index">
                 <section class="swiper-box">
                     <ul>
+                        <!-- 这里的 skip在main.js中就已经挂载在Vue.prototype.skip中了 -->
                         <li v-for="item in news.list" class="item border-half-bottom" @click="skip($router, item.id)">
                             <div v-if="item.images.length === 0">
                                 <h4>{{item.title}}</h4>
