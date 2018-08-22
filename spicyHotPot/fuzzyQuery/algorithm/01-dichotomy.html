@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js的算法部分</title>
+</head>
+<body>
+	
+</body>
+</html>
+<script>
+	// 利用二分法实现一个 类似indexOf功能
+	// 
+	
+	function sortIndex(array, value){
+		var low = 0, high = array.length;
+		// var mid = Math.floor((high+low)/2);
+		// if(value>mid){
+		// 	low = mid;
+		// 	mid = Math.floor((high+low)/2);
+		// } else if(value<mid){
+		// 	hid = mid;
+		// 	mid = Math.floor((high+low)/2);
+		// } else {
+		// 	return array[hid];
+		// }
+		// 
+		
+		while (low<high) {
+			var mid = Math.floor((low + high) / 2); 
+			if(array[mid] < value){
+				low = mid+1;
+			}else {
+				high = mid;
+			}
+		};
+		return low;
+	}
+	 
+	function indexof(array, target, isSorted){
+		var i=0, length = array && array.length;
+		if(isSorted){
+			i = sortIndex(array,target);
+			return array[i] === target ? i : -1;
+		}
+
+		for(;i<length;i++){
+			if(array[i] === target){
+				return i
+			}
+		}
+		return -1
+	} 
+
+	var arr = [22,33,55,66,88,9,7];
+	console.log(indexof(arr,7,1));
+	
+
+</script>

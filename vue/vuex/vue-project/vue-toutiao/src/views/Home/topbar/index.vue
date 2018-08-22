@@ -24,6 +24,7 @@
         data () {
             return{
                 swiperOption: {
+                    // 这里用的插件机制，控制top-menu-bar 显示几个选项
                     slidesPerView: 6
                 },
                 isTopBarBox: false
@@ -32,6 +33,7 @@
         methods: {
             async active (index) {
                 this.$store.state.home.newsIndex = index
+                //这里的数据的都是来自 stroe -> getters中事先定义好的数据，即可理解成全局的
                 await this.$store.dispatch('getHomeList', this.newsList[this.homeNewsIndex])
             }
         },

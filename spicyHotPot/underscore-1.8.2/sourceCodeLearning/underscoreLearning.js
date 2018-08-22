@@ -182,7 +182,8 @@
         var results = [];
         // cd(function) =>  predicate === optimizeCb(function)=>因无第二个参数，所以 => function()===predicate
         predicate = cb(predicate, context);
-        //这里不用再单独对obj进行处理， _.each中已经封装处理好了
+        //这里不用再单独对obj类型进行处理， _.each中已经封装处理好了
+        //这里的value将是obj中的每个元素，如果该元素为空的话，那么不会被push到results
         _.each(obj, function (value, index, list) {
             if (predicate(value, index, list)) results.push(value);
         });
@@ -234,7 +235,7 @@
         });
     };
 
-     _.pluck = function (obj, key) {
+    _.pluck = function (obj, key) {
         return _.map(obj, _.property(key));
     };
 
@@ -312,6 +313,7 @@
                 criteria: iteratee(value, index, list)
             };
         }).sort(function (left, right) {
+            // 本质上还是用数组原生的 sort来实现的
             var a = left.criteria;
             var b = right.criteria;
             if (a !== b) {
@@ -393,6 +395,137 @@
         return slice.call(array, n == null || guard ? 1 : n);
     };
 
+    // 返回一个出去所有false值的副本
+    _.compact = function (array) {
+        // 该方法的重点在于_.filter 中的_.filter方法进行了处理（如果迭代的元素为空的话，改迭代方法不会push到显示的副本数组中）
+        return _.filter(array, _.identity);
+    };
+
+    /** 
+     * [flatten 对数组的扁平化处理]
+     * @author wq
+     * @DateTime 2018-07-19T13:43:39+0800
+     * @param    {[Array]}                   input      [description]
+     * @param    {[Bollean]}                 shallow    [description]
+     * @param    {[Bollean]}                 strict     [-----------这个参数暂时没搞明白？--------]
+     * @param    {[undefined]}               startIndex [这个值在这里，第一起到的变量undefined作用，第二也是为了Argument参数的值从第二个开始]
+     * @return   {[type]}                            [description]
+     */
+    var flatten = function (input, shallow, strict, startIndex) {   
+        var output = [], idx = 0;
+        for (var i = startIndex || 0, length = input && input.length; i < length; i++) {
+            var value = input[i];
+            //_.isArguments是对类数组的处理，但这个方法没看明白
+            // if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+            if (isArrayLike(value) && (_.isArray(value) )) {
+                //flatten current level of array or arguments object
+                //wq 无strict的处理 （递归处理，value的中每个元素都不在是数组）
+                if (!shallow) value = flatten(value, shallow, strict);
+
+                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,知道for循环结束
+                var j = 0, len = value.length;
+                output.length += len;
+                while (j < len) {
+                    output[idx++] = value[j++];
+                }
+            } else if (!strict) {
+                output[idx++] = value;
+            }
+        }
+        return output;
+    };
+    /**
+     * [flatten 对数组的扁平化处理]
+     * @author wq
+     * @DateTime 2018-07-19T13:33:07+0800
+     * @param    {[Array]}                 array   [进行处理的 数组||类数组]
+     * @param    {[Bollean]}   [可选]              shallow [true: 只是将数组降一维， 默认false:将数组中的每个元素都降维，扁平化]
+     * @return   {[Array]}                         [返回扁平化后的数组]
+     */
+    _.flatten = function (array, shallow) {
+        return flatten(array, shallow, false);
+    };
+
+
+
+
+    _.difference = function (array) {
+        // 作用，对arguments进行扁平化，且只降一次维度，拿到用户调用 _.without(arr,arg1,arg2..)第二以后的参数
+        var rest = flatten(arguments, true, true, 1);
+        return _.filter(array, function (value) {
+            return !_.contains(rest, value);
+        });
+    };
+
+    /**
+     * [without 返回一个删除所有values值后的 array副本]
+     * @author wq
+     * @DateTime 2018-07-19T13:48:01+0800
+     * @param    {[Array]}                 array [description]
+     * @return   {[Array]}                       [description]
+     */
+    _.without = function (array) {
+        // 如果传递进来的第一个以后的参数是数组 这里的slice.call(arguments, 1) 又会在数组的外层包裹一层数组
+        // 因为调用的过程 [].slice.call() 他是这么调用的，在空数组来slice选中的是第一个后，数据也会被放进这个空数组中
+        return _.difference(array, slice.call(arguments, 1));
+    };
+
+
+
+    /**
+     * [unique 返回数组去重后的副本，]
+     * @author wq
+     * @DateTime 2018-08-06T11:38:18+0800
+     * @param    {[Array]}                 array    [需要去重的数组]
+     * 个人暂时认为以下参数意义不是特别大
+     * 改方法的核心 体现在 _.contains(data, targetData) 处理是否存在相同数据
+     * @param    {Boolean}                isSorted [description]
+     * @param    {[type]}                 iteratee [description]
+     * @param    {[type]}                 context  [description]
+     * @return   {[type]}                          [description]
+     */
+    _.uniq = _.unique = function (array, isSorted, iteratee, context) {
+        if (array == null) return [];
+        if (!_.isBoolean(isSorted)) {
+            context = iteratee;
+            iteratee = isSorted;
+            isSorted = false;
+        }
+        if (iteratee != null) iteratee = cb(iteratee, context);
+        var result = [];
+        var seen = [];
+        for (var i = 0, length = array.length; i < length; i++) {
+            var value = array[i],
+                computed = iteratee ? iteratee(value, i, array) : value;
+            if (isSorted) {
+                if (!i || seen !== computed) result.push(value);
+                seen = computed;
+            } else if (iteratee) {
+                if (!_.contains(seen, computed)) {
+                    seen.push(computed);
+                    result.push(value);
+                }
+            } else if (!_.contains(result, value)) {
+                result.push(value);
+            }
+        }
+        return result;
+    };
+
+
+    _.union = function () {
+        return _.uniq(flatten(arguments, true, true));
+    };
+
+
+
+
+
+
+
+
+
+
 
     _.where = function(obj, attrs) {
         return _.filter(obj, _.matcher(attrs));
@@ -412,17 +545,26 @@
         };
     };
 
-
+    /**
+     * [indexOf 返回value在该 array 中的索引值]
+     * @author wq
+     * @DateTime 2018-07-19T14:00:09+0800
+     * @param    {[Array]}                 array    [查询的数组]
+     * @param    {[Number]}                 item    [目标数组]
+     * @param    {Boolean}                isSorted  [传递isSorted将从你给定的索性值开始搜索]
+     * 这里的重点在于第三个参数 isSorted 的处理
+     */
     _.indexOf = function (array, item, isSorted) {
         var i = 0, length = array && array.length;
         if (typeof isSorted == 'number') {
-            // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接冲0开始算
+            // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接从0开始算
             i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
         } else if (isSorted && length) {
             i = _.sortedIndex(array, item);
             return array[i] === item ? i : -1;
         }
         if (item !== item) {
+            // slice.call(array, i) 这里可能是为了确保得到的一定是数组
             return _.findIndex(slice.call(array, i), _.isNaN);
         }
         for (; i < length; i++) if (array[i] === item) return i;
@@ -463,6 +605,31 @@
             if (predicate(obj[key], key, obj)) return key;
         }
     };
+    /**
+     * [sortedIndex 用二分查找确定value在list中的下标，不管value存不存在于list中（如果没有，改方法会计算出合理的位置）]
+     * @author wq
+     * @DateTime 2018-08-06T15:45:01+0800
+     * @param    {[Array]}                 array    [数组]
+     * @param    {[type]}                 obj      [目标元素]
+     * @param    {[type]}                 iteratee [description]
+     * @param    {[type]}                 context  [description]
+     * @return   {[type]}                          [description]
+     */
+    _.sortedIndex = function (array, obj, iteratee, context) {
+        iteratee = cb(iteratee, context, 1);
+        var value = iteratee(obj);
+        var low = 0, high = array.length;
+        while (low < high) {
+            var mid = Math.floor((low + high) / 2); 
+            // if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+            if (iteratee(array[mid]) < value) {
+                low = mid + 1;
+            } else{
+                high = mid;
+            }
+        }
+        return low;
+    };
 
 
     /**
@@ -491,6 +658,29 @@
             if (attrs[key] !== obj[key] || !(key in obj)) return false;
         }
         return true;
+    };
+    /**
+     * [isNaN 判断是不是NaN] NaN是一个不等自身的数
+     *  这里的_.isNumber在 :704行 动态遍历生成 
+     *  和原生的不同在于 _.isNumber 值处理number类型，对于undefined的返回false,而不是true
+     * @author wq
+     * @DateTime 2018-07-19T17:44:31+0800
+     * @param    {[type]}                 obj [一个值]
+     * @return   {Boolean}                    [description]
+     */
+     _.isNaN = function (obj) {
+        return _.isNumber(obj) && obj !== +obj;
+    };
+
+    /** 
+     * [isBoolean 判断是不是Boolean]
+     * @author wq
+     * @DateTime 2018-07-20T11:03:32+0800
+     * @param    {[type]}                 obj [description]
+     * @return   {Boolean}                    [返回一个Bool值]
+     */
+    _.isBoolean = function (obj) {
+        return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
     };
 
     /**
@@ -526,7 +716,15 @@
     };
 
     /**
-    * 判断是不是一个对象
+    * 判断是不是一个数组
+    * 返回Bool
+    */
+    _.isArray = nativeIsArray || function (obj) {
+        return toString.call(obj) === '[object Array]';
+    };
+
+    /**
+    * 判断是不是一个对象 =>对于函数也是也是对象做了处理，所以选择了这种方式判断 
     * 返回Bool
     */
     _.isObject = function (obj) {
@@ -534,6 +732,22 @@
        return type === 'function' || type === 'object' && !!obj;
    };
 
+   /**  
+    * [手动添加了一些 js类型判断的方法]
+    * 
+    */
+    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function (name) {
+        _['is' + name] = function (obj) {
+            return toString.call(obj) === '[object ' + name + ']';
+        };
+    });
+
+
+    //  if (!_.isArguments(arguments)) {
+    //     _.isArguments = function (obj) {
+    //         return _.has(obj, 'callee');
+    //     };
+    // }
 
     _.matcher = _.matches = function (attrs) {
         attrs = _.extendOwn({}, attrs);

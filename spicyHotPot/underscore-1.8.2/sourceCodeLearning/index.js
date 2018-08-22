@@ -49,6 +49,17 @@ console.log("====== _.map ======");
 
     var results = _.map([{ name111: 'wangqi', "city": "bj", "sage22": "12", "gg": "jj" }, ], { name111: 'wqhash', age111: 12, "city": "bj" });
     //console.log(results, "results")
+    //
+    var tempHash = [5,6,7,8];
+    var tempHashVal = _.map(tempHash, function(val, index, list){
+        return {
+            "val":val,
+            "index":index,
+            "list":list
+        }
+    });
+
+    console.log(tempHashVal, "tempHashVal");
 })();
 
 console.log("====== _.reduce ======");
@@ -185,12 +196,12 @@ console.log("====== _.contains ======");
 (function() {
     /**
      * _.contains(list [,properties] [,context])
-     *  当list中的任何一个元素都通过 predicate的判断就返回true
+     *  当list中的 任何一个 元素都通过 predicate的判断就返回true
      */
     var arr = [7, 3, 23, 243];
     var obj = { "sname": "wq", "sage": "11" };
     var elem = _.contains(arr, 23, 0);
-    //console.log(elem);
+    // console.log(elem);
 })();
 
 console.log("====== _.invoke ======");
@@ -279,8 +290,8 @@ console.log("====== _.sortBy ======");
 (function() {
     var arr = [2, 3, 7, 5, 69, 0.7, 0.8];
     var newVal = _.sortBy(arr);
-    // console.log(newVal, "newVal");
-    // console.log(arr, "arr");
+     console.log(newVal, "newVal");
+     console.log(arr, "arr");
 
     var sinArr = [30, 20, 800, 90];
     var newSinArr = _.sortBy(sinArr, function(value, index, list) {     
@@ -380,4 +391,75 @@ console.log("======= _.rest ======");
      * 但处理的过程 却只是  [].slice.call(arr, 0,index) || [].slice.call(arr, 0) 这么点区别
      */
         
+})();
+
+console.log("======= _.compact ======");
+(function(){
+    var arr = [null,0,false,7,""];
+    /** 
+     * [newArr 返回一个除去了所有false值的 array副本]
+     * @type {[Array]}
+     */
+    var newArr = _.compact(arr);
+    // console.log(newArr, "newArr");
+        
+})();
+
+console.log("======= _.flatten ======");
+(function(){
+
+    /** 
+     * [flatten 将数组进行扁平化， 目的：将数组进行降维]
+     * @type {[Array]}
+     * @type {[Bollean]}  
+     */
+    var arr = [1, [2], [3, [[4]]]];
+    var arr1 = [[1, [2], [3, [[4]]]]];
+    var arr3 = [3,4,5,6]
+    // var flatten = _.flatten(arr1);
+    // var flatten1 = _.flatten(arr, true);
+     // console.log(flatten, "flatten");
+     // console.log(flatten1, "flatten1");
+   
+        
+})();
+
+console.log("======= _.without ======");
+(function(){
+
+    var arr = [0,0,3,4,5,6,7,8,2,3,3,2];
+    /** 
+     * [without 返回一个删除所有values值后的 array副本]
+     * @type {[Array]}
+     * @type {[Number]} 这里的第一个参数以后的数据最好是一个Number类型的数据
+     */
+    var without = _.without(arr,0,2,3,4);
+    // console.log(without, "without");
+   
+        
+})();
+
+/**
+ * [返回数组去重后的副本，这里只是去重]
+ * @author wq
+ * @DateTime 2018-08-06T11:13:24+0800
+ * @return   {[type]}                 [description]
+ */
+(function(){
+    var arr = [5,6,3,5,4,3];
+    var unique = _.uniq(arr, true);
+    console.log(unique, "unique");
+
+})();
+
+/**
+ * [返回数组去重后的副本，这里只是去重]
+ * @author wq
+ * @DateTime 2018-08-06T11:13:24+0800
+ * @return   {[type]}                 [description]
+ */
+(function(){
+    var arr = [22,33,22,6,7,89,6,7];
+   var deleRepe = _.indexOf(arr,7,5);
+   console.log(deleRepe, "deleRepe++")
 })();

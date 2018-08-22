@@ -7,7 +7,6 @@
         <div class="swiper-mask df-c" v-show="newsLoading">
             <CircleLoading></CircleLoading>
         </div>
-
         <!-- 中间 -->
         <swiper ref="swiper-wrapper" id="swiper-container" @slideChangeTransitionEnd="end">
             <swiper-slide v-for="(news, index) in newsList" :key="index">
