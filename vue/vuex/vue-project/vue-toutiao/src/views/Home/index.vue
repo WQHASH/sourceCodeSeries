@@ -7,7 +7,6 @@
         <div class="swiper-mask df-c" v-show="newsLoading">
             <CircleLoading></CircleLoading>
         </div>
-
         <!-- 中间 -->
         <swiper ref="swiper-wrapper" id="swiper-container" @slideChangeTransitionEnd="end">
             <swiper-slide v-for="(news, index) in newsList" :key="index">
@@ -57,6 +56,8 @@
                             </div>
                         </li>
                     </ul>
+
+                    <!-- 我也是有底线的 -->
                     <NoneData v-if="news.list&&news.list.length>0"></NoneData>
                 </section>
             </swiper-slide>
