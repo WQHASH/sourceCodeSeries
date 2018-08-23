@@ -76,7 +76,7 @@
             TopBar
         },
         created () {
-            this.$store.dispatch('getHomeList', this.newsList[this.homeNewsIndex])
+            this.$store.dispatch('getHomeList', this.newsList[this.homeNewsIndex])     
         },
         methods: {
             async end () {

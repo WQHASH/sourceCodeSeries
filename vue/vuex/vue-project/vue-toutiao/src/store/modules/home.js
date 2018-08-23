@@ -59,6 +59,8 @@ const home = {
         },
         GETHOMELIST (state, list) {
             state.newsList[state.newsIndex].list = list
+            //wq 体现Ajax请求数据怎样加载到页面中 [newsList.list]
+            // state.newsList[state.newsIndex].wqhash = "wqhahs";
             Vue.prototype.$set(state.newsList, state.newsIndex, state.newsList[state.newsIndex])
         }
     }
