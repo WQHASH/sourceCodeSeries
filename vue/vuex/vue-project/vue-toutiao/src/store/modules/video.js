@@ -14,7 +14,7 @@ const video = {
             return new Promise( (resolve, reject) => {
                 axios.get('video/list', params)
                     .then( res => {
-                        console.log(res)
+                        console.log(res,"videoData+;")
                         state.loading = false
                         if (res.data.list.length < 6) {
                             state.loadingMore = true
@@ -30,6 +30,7 @@ const video = {
     },
     mutations: {
         GETVIDEOLIST (state, list) {
+            // 这里体现state在mutations中改变这一特点
             state.list = state.list.concat(list)
         }
     }

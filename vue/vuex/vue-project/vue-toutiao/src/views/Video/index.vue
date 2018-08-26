@@ -68,12 +68,15 @@
             },
             // 播放
             play (index, item) {
+                console.log(item,"play+");
                 item.playBol = true
+                // 这里的 $set目的只是将 playBol字段保存，配合 pause方法使用  video属性
                 this.$set(this.videoList, index, item)
                 this.dragVideo(index)
             },
             // 暂停
             pause (index, item) {
+                console.log(item,"pause+");
                 document.querySelectorAll('video')[index].pause()
                 item.playBol = false
                 this.$set(this.videoList, index, item)
@@ -129,7 +132,7 @@
                     height: 100%;
                 }
             }
-            
+
             .play {
                 position: absolute;
                 left: 50%;top: 50%;
@@ -145,7 +148,7 @@
             .title {
                 position: absolute;
                 left: 0;top: 0;
-                line-height: 0.2rem; 
+                line-height: 0.2rem;
                 width: 100%;
                 color: #f4f4f4;
                 padding: 0.04rem 0.1rem;

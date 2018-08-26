@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    	.time{
+    		position: absolute; 
+    		bottom: 45px; 
+    		right: 0px; 
+    		width: 100px;
+		    height: 30px;
+		    line-height: 30px;
+		    border-radius: 10px;
+		    text-align: center;
+		    background: rgba(25,25,25,.4);
+    	}
+    </style>
+</head>
+
+<body>
+    <div class="container" style="position: relative; width: 300px;">
+        <video id="video"   width='300' autoplay webkit-playsinline="true" src='http://www.w3school.com.cn/example/html5/mov_bbb.mp4'></video>
+        <div class="time" style=""><span style="color: #fff;">08-26 10:08</span></div>
+        <p>
+            <button type="button" id='btn-play'>开始</button>
+            <button type="button" id='btn-pause'>暂停</button>
+        </p>
+    </div>
+
+
+    <div class="testReplaceChild">
+    	<div class="first">我是第一个元素</div>	
+		<div class="tow">我是第二个</div>		
+    </div>
+    <p class="last">我是最后一个 <span>作呕一个</span></p>
+</body>
+<script type="text/javascript" src="1.videoToCanvas.js"></script>
+<script>
+	var video = document.getElementById('video');
+	var canvasVideo = new VideoToCanvas(video);
+	document.getElementById('btn-play').addEventListener('click', function() {
+	    canvasVideo.play();
+	}, false);
+	document.getElementById('btn-pause').addEventListener('click', function() {
+	    canvasVideo.pause();
+	}, false);
+
+
+
+	
+	(function(){
+		/**
+		 * [replaceChild 方法将把一个给定父元素里面的一个子节点替换为另一个子节点：]
+		 *  As: referencre = element.replaceChild(newChild,oldChild);
+		 *  	oldChild节点必须是element元素子节点，他的返回值是一个指向已经被替换的那个子节点的引用指针。
+		 */
+		var testReplaceChild = document.getElementsByClassName("testReplaceChild")[0];
+		var first = document.getElementsByClassName("first")[0];
+		var last = document.getElementsByClassName("last")[0];
+
+		var index = testReplaceChild.replaceChild(last, first);
+		console.log(index,"index+");
+
+	})();
+</script>
+
+</html>

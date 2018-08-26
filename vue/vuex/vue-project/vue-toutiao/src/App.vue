@@ -34,7 +34,7 @@
                 4: 下切换
                  */
                 let animate = this.$router.animate || to.meta.slide
-                    this.animate = '' 
+                    this.animate = ''
                 if (!animate) {
                 }else{
                     this.animate = animate === 1 ?  'slide-left' :
