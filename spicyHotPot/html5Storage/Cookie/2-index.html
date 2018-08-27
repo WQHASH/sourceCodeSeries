@@ -7,19 +7,12 @@
 <body>
 	
 </body>
+<script src="cookie.js"></script>
 <script>
-	(function(){
-		// document.cookie = "sname" + userName;
 
-		var userName = document.cookie;
-		console.log(document.cookie, "userName");
-
-
-	})();
-
-
-	(function(){})();
-	(function(){})();
+	console.log(Cookie.getCookie("name"));
+	var userName = document.cookie;
+	console.log(document.cookie, "userName");
 
 </script>
 </html>

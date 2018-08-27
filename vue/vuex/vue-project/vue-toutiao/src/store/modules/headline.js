@@ -28,6 +28,7 @@ const headline = {
             })
         },
         addHeadline ({commit, state}, params) {
+            //wq:提示加载数据的转圈
             state.loading = true
             return new Promise( (resolve, reject) => {
                 axios.post('headline/add', params)

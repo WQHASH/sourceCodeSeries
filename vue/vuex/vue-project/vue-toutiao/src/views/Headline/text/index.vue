@@ -5,7 +5,7 @@
             <div class="t-r t-disable" :class="{'t-active': val}" @click="send">发布</div>
         </div>
         <div class="text-box">
-            <textarea placeholder="分享新鲜事..." v-model="val" ref="text"></textarea>
+            <textarea class="datatext" placeholder="分享新鲜事..." v-model="val" ref="text"></textarea>
         </div>
     </div>
 </template>
@@ -25,7 +25,7 @@
                     intro: this.val,
                     name: this.$store.state.user.user.name
                 })
-                this.$emit('close')
+                this.$emit('close');
             }
         }
     }

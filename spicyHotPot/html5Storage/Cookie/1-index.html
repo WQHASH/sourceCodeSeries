@@ -7,47 +7,11 @@
 <body>
 	
 </body>
+<script src="cookie.js"></script>
 <script>
+
+	Cookie.setCookie("name","hayden$%^");
+	console.log(Cookie.getCookie("name"));
 	
-	(function(){
-		// var userName = "wangqi";
-		// document.cookie = "sname" + userName;
-
-
-		function setCookie(name, value){
-			va Days = 30;
-			var exp = new Date();
-			exp.setTime(exp.getTime() + Days*24*60*60*1000);
-			// https://www.cnblogs.com/huangshikun/p/6640835.html
-			// 在cookie 的名或值中不能使用分号（;）、逗号（,）、等号（=）以及空格
-			// 方 法是用escape()函数进行编码，它能将一些特殊符号使用十六进制表示，例如空格将会编码为“20%”，从而可以存储于cookie值中，而且使用此 种方案还可以避免中文乱码的出现。
-			// 当使用escape()编码后，在取出值以后需要使用unescape()进行解码才能得到原来的cookie值，
-			document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();  
-		};
-
-		function getCookie(name){
-			var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-			if(arr = document.cookie.match(reg)){
-				return unescape(arr[2]); 
-			}else{
-				return null;
-			}
-
-		};
-
-		function delCoolie(name){
-			
-		};
-
-
-
-
-	})();
-
-
-	(function(){})();
-	(function(){})();
-
-
 </script>
 </html>
