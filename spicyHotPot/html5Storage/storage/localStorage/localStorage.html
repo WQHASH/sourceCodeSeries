@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>localStorage</title>
+</head>
+<body>
+	<button class="btn" ="btn">btn</button>
+</body>
+<script src="localStorage.js"></script>
+
+<script>
+	// console.log($wqhash.local,"wqhash");
+
+	(function(){
+		localStorage.setItem("name","moomoo");
+
+		var sname = localStorage.getItem("name");
+		// console.log(sname, "getItem-之后");
+
+		var btn = document.getElementsByClassName("btn")[0];
+		btn.onclick = function(){
+			localStorage.removeItem("name");
+			// console.log(localStorage.getItem("name"), "removeItem-之后");
+		};
+		
+
+	})();
+
+	(function(){
+		$wqhash.local.set({"scity":"sage"},"BJ");
+		var scity = $wqhash.local.get("scity");
+
+		var btn = document.getElementsByClassName("btn")[0];
+		btn.onclick = function(){
+			$wqhash.local.remove("scity");
+			//这里如果需要查看删除后的 key 一定要用localStorage中的get方法、
+			//因为本地存储 的只能是String类型，那么这里是值传递的形式，
+			console.log($wqhash.local.get("scity"), "removeItem-之后");
+		};
+
+	})();
+
+
+</script>
+</html>

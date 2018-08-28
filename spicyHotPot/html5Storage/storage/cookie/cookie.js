@@ -1,4 +1,10 @@
-var Cookie = {
+
+(function(){
+	var root = this;
+	var $wqhash = function(){};
+	root.$wqhash = $wqhash;
+
+	var Cookie = {
 		setCookie: function(name, value){
 			var Days = 30;
 			var exp = new Date();
@@ -24,5 +30,6 @@ var Cookie = {
 			if(cval!=null)
 			document.cookie= name + "="+cval+";expires="+exp.toGMTString();	
 		},
-
 	};
+	$wqhash.Cookie = Cookie;
+})(this);
