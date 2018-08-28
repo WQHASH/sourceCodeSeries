@@ -28,6 +28,8 @@
 	})();
 
 	(function(){
+		//一般这里的值可以是一个 用JSON.stringify()设置之后的值，
+		//当要获取的时候再用JSON.parse()来进行转换
 		$wqhash.local.set({"scity":"sage"},"BJ");
 		var scity = $wqhash.local.get("scity");
 
