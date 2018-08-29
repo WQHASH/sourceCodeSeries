@@ -15,6 +15,8 @@
                     // body的默认字体大小 ，对rem无影响
                     doc.body.style.fontSize = '14px';
                 }else {
+                    //这里的DOMContentLoaded是等待dom元素都加载上了（jQ的 $(document).ready(））模仿于此，
+                    //不同于onload（是所有资源都加载了）
                     doc.addEventListener('DOMContentLoaded', refresh)
                 }
             }
