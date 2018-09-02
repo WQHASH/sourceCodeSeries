@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-
+//wq: 当我们把此配置项设置成默认配置项并且设置成true的时候，axios就可以设置cookies了。
 axios.defaults.withCredentials = true 
 
 // 发送时
