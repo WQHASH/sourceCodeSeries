@@ -1,1 +1,1 @@
-export default "来自B.js内容";
+export default "来自B.js内容---=";
