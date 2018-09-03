@@ -14,6 +14,9 @@ import './utils/rem.js'
 /*指令*/
 import './directive'
 
+// 这里简单总结下import和export姿势 => http://www.php.cn/js-tutorial-401597.html
+// 1. export导出多个对象，export default只能导出一个对象
+// 2. export导出对象需要用{ }，export default不需要{ }，同理在import使用时default的不需要{},
 import { Cookie } from 'src/utils/storage'
 Vue.prototype.Cookie = Cookie
 // 返回

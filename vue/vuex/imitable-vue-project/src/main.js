@@ -2,9 +2,10 @@ import Vue from 'vue';
 // 作为入口
 import App from './App.vue';
 import { router } from './router/index.js';
+import store from './store'
 // 样式
-import './styles/index.css'
-import './styles/index.less'
+import './styles/index.css';
+import './styles/index.less';
 
 // 工具类
 import './utils/iconfont.js';
@@ -30,6 +31,7 @@ Vue.use(VueAwesomeSwiper);
 
 new Vue({
 	router,
+	store,
 	render: h => h(App),
 }).$mount("#app");
 
