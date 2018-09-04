@@ -1,5 +1,7 @@
 <template>
     <article class="home-wrapper">
+        <!-- 顶部条 -->
+        <TopBar></TopBar>
         <!-- 转圈动画部分 -->
         <div class="swiper-mask df-c" v-show="newsLoading">
             <CircleLoading></CircleLoading>
@@ -61,6 +63,7 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import { mapState, mapGetters } from "vuex";
+import TopBar from "./topbar/index";
 // 这里简单总结下import和export姿势 => http://www.php.cn/js-tutorial-401597.html
 // 1. export导出多个对象，export default只能导出一个对象
 // 2. export导出对象需要用{ }，export default不需要{ }，同理在import使用时default的不需要{},
@@ -69,6 +72,7 @@ export default {
     components: {
         swiper,
         swiperSlide,
+        TopBar,
     },
     created() {
         // console.log(this.$store.state.home);  =>由于 Vuex 的状态存储是响应式的，从 store 实例中读取状态在计算属性中返回某个状态：
@@ -77,12 +81,13 @@ export default {
 
     methods: {
         async end (){
+            console.log(this,"this+++");
             // 参考 this.$store
             this.$store.state.home.newsIndex = this.swiper.activeIndex, 
             this.$store.state.home.newsPrevIndex = this.swiper.previousIndex
-            // this.homeNewsIndex = this.swiper.activeIndex,   ??
-            // this.homeNewsPrevIndex = this.swiper.previousIndex
-            let data = await this.$store.dispatch('getHomeList', this.newsList[this.homeNewsIndex])
+            // this.homeNewsIndex = this.swiper.activeIndex;
+            // this.homeNewsPrevIndex = this.swiper.previousIndex;
+            let data = await this.$store.dispatch('getHomeList', this.newsList[this.homeNewsIndex]);
         },
     },
     computed: {
@@ -94,13 +99,22 @@ export default {
         swiper(){
              return this.$refs['swiper-wrapper'].swiper
         },
-        ...mapGetters([
-            'newsList',
-            'newsLoading',
-            'homeNewsIndex',
-            'homeNewsPrevIndex',
-            'homeEnd'
-        ])        
+        // ...mapGetters([
+        //     'newsList',
+        //     'newsLoading',
+        //     'homeNewsIndex',
+        //     'homeNewsPrevIndex',
+        //     'homeEnd'
+        // ])        
+        
+        ...mapState({
+            "newsList":state => state.home.newsList,
+            "newsLoading": state => state.home.newsLoading,
+            "homeNewsIndex": state => state.home.newsIndex,
+            "homeNewsPrevIndex": state => state.home.newsPrevIndex,
+            "homeEnd": state => state.home.end,
+        })
+
     },
 
     watch: {},

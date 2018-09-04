@@ -32,7 +32,7 @@ const home = {
             return new Promise( (resolve, reject) => {
                 axios.get('home/list', params)
                     .then( res => {
-                        console.log(res)
+                        console.log(res,"res++");
                         state.newsLoading = false
                         if (res.data.list.length < 11) {
                             state.end = true
