@@ -27,34 +27,80 @@
                 </li>
             </ul>
         </div>
+        <div>
+            xxx:<input type="text" v-model="message" >
+            <p>{{message}}</p>
+            <p>{{allFooterBarList}}</p>
+        </div>
     </div>
 </template>
 <script>
-    import { mapGetters } from 'vuex'
-    import { newsList as allNewsList } from 'src/store/modules/classify'
+    import { mapGetters } from 'vuex';
+    // 另外再起一个名字  [来自所有的newsList的state]
+    import { newsList as allNewsList } from 'src/store/modules/classify';
+    import { footerBarList as allFooterBarList } from 'src/store/modules/classify';
     export default {
         data () {
             return {
-                animate: 'slide-top'
+                animate: 'slide-top',
+                message: 'Hello'
             }
         },
         created () {
             console.log(this.animate)
         },
+        methods: {
+            plus(){
+                this.count++;
+                console.log(this.count,"this")
+            },
+            reduce(){
+                this.count--;
+            },
+            changeEvent(){
+                this.message = this.message
+            },
+        },
         computed: {
+            // [来自所有的store.home.newsList的过滤后的部分state]
             ...mapGetters([
                 'newsList'
             ]),
+            /**
+             * filter():返回一个符合func条件的元素数组
+             * some():返回一个boolean，判断是否有元素是否符合func条件
+             */
             allNewsList () {
+                // console.log(allNewsList1,"allNewsList+");
+                console.log(this.newsList,"newsList+");
                 return allNewsList.filter( news => {
                     return !this.newsList.some( v => news.title === v.title)
                 }) 
-            }
+            },
+            //wq 该方法用于测试 import as 修改名字和 data(){}
+            allFooterBarList(){
+                 // return this.message.split('').reverse().join('')
+                 return this.message
+            },
+
         },
     }
     /**
      * 关于@click 和@click.native之间的关系：   https://segmentfault.com/q/1010000011186651
      * 简单些： 意思就是当你给一个vue组件绑定事件时候，要加上native！如果是普通的html元素！就不需要
+     *
+     *
+     * 关于 import as修改名字 和 data(){}
+     * As: 
+     *     import { newsList as allNewsList } from 'src/store/modules/classify'; =>这里会配合mapGetters取到state
+     *     data(){return { message:"xx"}};  => 自命名的state
+     *     然后到
+     *     computed:{
+     *         allNewsList(){},  =>不报错  
+     *         message(){},      => 报错   
+     *         理解： 暂时不清楚，可能因为自命名的已经存在2个名字 计算中的方法名是方法名，数据名是数据名
+     *     },
+     * 
      */
 </script>
 <style lang="less" scoped>
