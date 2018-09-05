@@ -47,7 +47,8 @@
             }
         },
         created () {
-            console.log(this.animate)
+
+            console.log(this.animate);
         },
         methods: {
             plus(){
@@ -74,6 +75,7 @@
                 // console.log(allNewsList1,"allNewsList+");
                 console.log(this.newsList,"newsList+");
                 return allNewsList.filter( news => {
+                    
                     return !this.newsList.some( v => news.title === v.title)
                 }) 
             },
