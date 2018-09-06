@@ -1,0 +1,45 @@
+<script type="text/javascript">
+	// 普通版排序
+	(function(){
+		var arr = [3,4,66,7,42,89,86,11,56,0];
+		var bubbleSort = function(arr){
+			for(var i = 0; i<arr.length; i++){
+				for(var j = 0; j<arr.length-1; j++){
+					if(arr[j]>arr[j+1]){
+						var temp = arr[j];
+						arr[j] = arr[j+1];
+						arr[j+1] = temp;
+					}
+				}
+			}
+			return arr;
+		};
+		var newArr = bubbleSort(arr);
+		// console.log(newArr, "newArr+");		
+
+	})();
+
+	// 改进版排序
+	(function(){
+		var arr = [3,4,66,7,42,89,86,11,56,0];
+		var bubbleSort = function(arr){
+			for(var i = 0; i<arr.length; i++){
+				// 这里在内循环中 减i, 因为每次外循环中最大的数已经排过了，
+				// 而在内循环不需要每次重新比较，减i刚好表示了内循环只比较外层循环没跑完的轮数 
+				for(var j = 0; j<arr.length-1-i; j++){
+					if(arr[j]>arr[j+1]){
+						var temp = arr[j];
+						arr[j] = arr[j+1];
+						arr[j+1] = temp;
+					}
+				}
+			}
+			return arr;
+		};
+		var newArr = bubbleSort(arr);
+		console.log(newArr, "newArr+");		
+
+	})(); 
+	
+
+</script>
