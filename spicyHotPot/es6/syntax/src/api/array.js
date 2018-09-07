@@ -135,9 +135,37 @@ export class ArrayFn {
         }
         return arr;
     };
-    
-    
 
+    /*最大值*/
+    max(arr){
+        return Math.max.apply(this, arr);
+    };
+
+    /*最小值*/
+    min(arr){
+        return Math.min.apply(this, arr);
+    };
+
+    /*求和*/
+    sum(arr){
+        return arr.reduce((pre, cur)=>{
+            return pre + cur
+        },0)
+    };
+
+    /*求差*/
+    subtraction(arr){
+        return arr.reduce((pre, cur)=>{
+            return pre - cur
+        })
+    };
+
+    /*平均值*/
+    average(arr){
+        return this.sum(arr)/arr.length;
+    };
+    
+    
 };
 
 
@@ -146,6 +174,12 @@ export class ArrayFn {
  */
 // console.log(typeof ArrayFn,"type");
 // console.log(ArrayFn.prototype.toString,"ArrayFn");
-
+/**
+ *   es6中数组的一些方法:
+ *       reduce: reduce函数可以理解成一个迭代函数
+ *           array.reduce((pre, cur, index, array)=>{}, [initValue])
+ *           previous值取决于[initialValue], 如果指定[initialValue]指定是，则作为previous的初始值，也可作为空数组[]，
+ * 
+ */
 
 
