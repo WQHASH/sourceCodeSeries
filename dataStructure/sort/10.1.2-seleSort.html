@@ -1,0 +1,31 @@
+<script type="text/javascript">
+	(function() {
+		var arr = [3,44,66,7,42,89,86,11,56,0];
+		var seleSort = function(arr){
+			var length = arr.length;
+			var indexMin; 
+			// 外层循环是为了定循环轮数, 不用自己比自己 length-1就够了 [**属于优化**]
+			for(var i = 0; i < length-1; i++){  
+				// 事先假设定义好最小的值
+				indexMin = i;
+				for(var j = i; j < length; j++){
+					if(arr[indexMin] > arr[j]){
+						indexMin = j
+					}
+				}
+				if(i!==indexMin){
+					var temp = arr[i];
+					arr[i] = arr[indexMin];
+					arr[indexMin] = temp;
+				}
+			}
+			return arr;
+		};
+
+	 	var newArr = seleSort(arr);
+	 	console.log(newArr,"newArr");		
+
+
+
+	})();
+</script>

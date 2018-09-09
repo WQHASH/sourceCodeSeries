@@ -1,0 +1,30 @@
+<script type="text/javascript">
+	(function(){
+		var arr = [53,44,2];
+
+		var insertSort = function(arr){
+			var length = arr.length,
+						j, temp;
+			for(var i=1; i<length; i++){
+				j = i;
+				//这里的temp的声明周期是在每次的 for循环中存在
+				temp = arr[i];
+				while(j>0 && arr[j-1] > temp){
+					arr[j] = arr[j-1];
+					j--;
+				}
+				
+				arr[j] = temp;
+			};	
+
+			return arr;
+		};
+
+	 	var newArr = insertSort(arr);
+	 	console.log(newArr,"newArr");			
+
+	})();	
+
+	(function(){})();	
+
+</script> 
