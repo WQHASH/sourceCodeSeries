@@ -1,6 +1,6 @@
 <script type="text/javascript">
 	(function(){
-		var arr = [53,44,2,1,444,56];
+		var arr = [53,44,2];
 
 		var merge = function(left, right){
 			var result = [],
@@ -42,6 +42,14 @@
 	})();	
 	// 归并排序理解
 	// https://segmentfault.com/a/1190000015488807
+	// 
+	// 理解过程：
+	// 	①  merge([53], [44, 2])  =>以为第二个参数还是一个length>2的参数
+	// 	②  merge([44], [2])    => 此时length==1， 参数刚好完成，则执行 merge合并方法，将44,2排序后放到result中
+	// 	
+	
+
+
 	(function(){})();	
 
 </script>
