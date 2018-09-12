@@ -12,9 +12,9 @@ let numberFn = new NumberFn()
 
 // 将阿拉伯数字翻译成中文的大写数字
 {
-	let numTransFormcharAt = numberFn.numberToChinese(58.56);
+	let numTransFormcharAt = numberFn.numberToChinese(58);
 	// console.log(numTransFormcharAt,"numTransFromChar");
 
 }
 
-export default {"sanem":"ww"};
+export {numberFn};
