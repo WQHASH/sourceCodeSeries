@@ -1,0 +1,91 @@
+<script type="text/javascript">
+	//快速排序
+
+	(function(){
+		// https://www.cnblogs.com/aaronjs/p/3539538.html  [方法详细讲解]
+		function swap (array, index1, index2){
+			var aux = array[index1];
+			array[index1] = array[index2];
+			array[index2] = aux;
+		}
+
+		function partition (array, left, right){
+			var pivot = array[Math.floor((right + left) / 2)],
+			i = left,
+			j = right;
+
+			while(i <= j){
+				while(array[i] < pivot){
+					i++;
+				};
+				while(array[j] > pivot){
+					j--;
+				};
+
+				if(i <= j){
+					swap(array, i, j);
+					i++;
+					j--;
+				}
+			}
+			return i;
+		};
+		var quick = function(array, left, right){
+			var index;
+			if(array.length>1){
+				index = partition(array, left, right);
+				if(left < index -1){
+					quick(array, left, index - 1);
+				}
+				if(index < right){
+					quick(array, index, right);
+				}
+			}
+			return array;
+		};
+
+		
+		var arr = [3,4,66,7,42,89,86,11,56,0];
+
+		var quickSort = function(array){
+			return quick(array, 0, array.length - 1);
+		};
+
+		var newArr = quickSort(arr);
+		console.log(newArr,"newArr")
+
+	})();
+
+
+(function(){
+	
+	//百度版本[阮一峰版]
+	function quickSort(arr){
+        //如果数组<=1,则直接返回
+        if(arr.length<=1){return arr;}
+        var pivotIndex=Math.floor(arr.length/2);
+        //找基准，并把基准从原数组删除
+        var pivot=arr.splice(pivotIndex,1)[0];
+        //定义左右数组
+        var left=[];
+        var right=[];
+
+        //比基准小的放在left，比基准大的放在right
+        for(var i=0;i<arr.length;i++){
+            if(arr[i]<=pivot){
+                left.push(arr[i]);
+            }
+            else{
+                right.push(arr[i]);
+            }
+        }
+        //递归
+        return quickSort(left).concat([pivot],quickSort(right));
+    }
+    var arr = [3,4,66,7];
+    console.log(quickSort(arr),"quickSort(arr)+");
+})();
+
+	
+
+</script>
