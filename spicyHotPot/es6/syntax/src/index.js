@@ -9,7 +9,9 @@ import { Local } from 'utils/storage.js';
 import {useArray, arrFn} from './useApi/useArray';
 import {numberFn} from './useApi/useNumber';
 import {dateFn} from './useApi/useDate';
-// console.log(dateFn, "numberFn");
+import {Ajax, FetchHttp} from './useApi/useHttp';
+
+// console.log(Ajax, "Ajax");
 
 
 

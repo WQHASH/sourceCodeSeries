@@ -49,6 +49,74 @@ class DateFn{
     };
 
 
+    /**
+     * 返回指定长度的天数集合
+     * 
+     * @param  {time} 时间
+     * @param  {len} 长度
+     * @param  {direction} 方向： 1: 前几天;  2: 后几天;  3:前后几天  默认 3
+     * @return {Array} 数组
+     *
+     * @example date.getDays('2018-1-29', 6) // -> ["2018-1-26", "2018-1-27", "2018-1-28", "2018-1-29", "2018-1-30", "2018-1-31", "2018-2-1"]
+     */
+    getDays(time, len, diretion) {
+    	var tt = new Date(time);
+    	//用于设置天数
+    	var getDay = function(day){
+    		var t = new Date(time);
+    		t.setDate(t.getDate() + day);
+    		var d = t.getDate();
+    		return t.getFullYear() + "-" + (t.getMonth()+1) + "-" + d;
+    	};
+    	var arr = [];
+    	//这里的循环都从1开始是因为 在最后拼接的时候加上了arr
+    	if(diretion == -1){    		
+    		for(var i=1;i<len;i++){    			
+    			arr.unshift(getDay(-i));
+    		}
+    	}else if(diretion == 1){
+			for(var i=1;i<len;i++){    			
+    			arr.push(getDay(i));
+    		}
+    	}else{
+			for(var i=1;i<len;i++){    			
+    			arr.unshift(getDay(-i));
+    		}
+    		arr.push(tt.getFullYear() + "-" + (tt.getMonth()+1) + "-" + tt.getDate());
+    		for(var i=1;i<len;i++){    			
+    			arr.push(getDay(i));
+    		}
+
+    	}
+
+    	return diretion ==-1
+    			? arr.concat([tt.getFullYear() + "-" + (tt.getMonth()+1) + "-" + tt.getDate()])
+    			: (diretion ==1? [tt.getFullYear() + "-" + (tt.getMonth()+1) + "-" + tt.getDate()].concat(arr) : arr)
+    };
+
+    getMonthOfDay(time){
+
+    	// https://zhidao.baidu.com/question/201827404873590325.html [计算润平年参考]
+    	// 四年一闰，百年不闰，四百年再闰。也就是说，每4年就是一个闰年，但是当年份是整百数时，必须是400的倍数才是闰年；不是400的倍数的年份，即使是4的倍数也不是闰年。
+	  	let date = new Date(time);
+	  	var y = date.getFullYear();
+	  	var mouth = date.getMonth() + 1;
+	  	var day;
+	  	if(mouth==2){
+	  		if((y%4==0 && y%100!=0)||y%400==0){
+	  			day = 29
+	  		}else{
+	  			day = 28
+	  		}
+
+	  	}else if(mouth==1 || mouth==3 || mouth==5 || mouth==7 || mouth==8 || mouth==10 || mouth==12){
+	  		day = 31
+	  	}else{
+	  		day = 30;
+	  	}
+	  	return day
+    }
+
 };
 
 export {DateFn};
