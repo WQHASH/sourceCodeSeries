@@ -4,7 +4,7 @@ function ajax(setting){
         method: (setting.method || "GET").toUpperCase(), //请求方式
         url: setting.url || "", // 请求地址
         async: setting.async || true, // 是否异步
-        dataType: setting.dataType || "json", // 解析方式
+        dataType: setting.dataType || "json", // 解析方式 
         data: setting.data || "", // 参数
         success: setting.success || function(){}, // 请求成功回调
         error: setting.error || function(){} // 请求失败回调

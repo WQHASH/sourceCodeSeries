@@ -1,7 +1,7 @@
 import {ajax, fetchHttp} from "../api/http";
 
 {
-	// 该方法测试失败 out!
+	// 该方法测试失败  out!
 	// var sendArg = {
 	// 	number:20,
 	// 	userid: 134217045907607552,

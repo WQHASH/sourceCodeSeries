@@ -8,7 +8,7 @@ class DateFn{
 	 * @param    {[String]}                 cFormat [格式]
 	 * @return   {[String]}                         [返回 格式化后的时间]
 	 */
-	formatTime(time, cFormat) {
+	formatTime(time, cFormat) { 
         if (arguments.length === 0) return null
         // if ((time + '').length === 10) {
         //     time = +time * 1000

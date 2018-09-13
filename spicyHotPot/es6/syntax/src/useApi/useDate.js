@@ -1,6 +1,6 @@
 import {DateFn} from '../api/date';
 
-let dateFn = new DateFn();
+let dateFn = new DateFn(); 
 
 {
 	// @example formatTime('2018-1-29', '{y}/{m}/{d} {h}:{i}:{s}') // -> 2018/01/29 00:00:00
