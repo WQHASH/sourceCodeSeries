@@ -4,10 +4,12 @@
 		var seleSort = function(arr){
 			var length = arr.length;
 			var indexMin; 
-			// 外层循环是为了定循环轮数, 不用自己比自己 length-1就够了 [**属于优化**]
+			// 外层循环是为了定循环轮数, 不用自己比自己 length-1就够了 [**属于优化**] 
+			// =>因为选择排序事先假设定义第0个是最小的 ，所以它自身可以不用比较
 			for(var i = 0; i < length-1; i++){  
 				// 事先假设定义好最小的值
 				indexMin = i;
+				// 这里是要让最小的值 和数组中每一个值都比较到
 				for(var j = i; j < length; j++){
 					if(arr[indexMin] > arr[j]){
 						indexMin = j
@@ -24,8 +26,5 @@
 
 	 	var newArr = seleSort(arr);
 	 	console.log(newArr,"newArr");		
-
-
-
 	})();
 </script>
