@@ -6,6 +6,8 @@
 			var result = [],
 			il = 0,
 			ir = 0;
+			// 这里用变量来控制的好处在于它不会修改原数组， 
+			// 这里push(left[i++]) 执行的顺序是先push i后++， push(left.shift())方法同理
 			while(il<left.length && ir<right.length){
 				if(left[il] < right[ir]){
 					result.push(left[il++]);
@@ -37,10 +39,10 @@
 
 
 	 	var newArr = mergeSort(arr);
-	 	console.log(newArr,"newArr");			
+	 	// console.log(newArr,"newArr");			
 
 	})();	
-	// 归并排序理解
+	// 归并排序理解 [分治图解版]
 	// https://segmentfault.com/a/1190000015488807
 	// 
 	// 理解过程：
@@ -50,6 +52,42 @@
 	
 
 
-	(function(){})();	
+
+
+	//csdn版本归并排序
+	//参考理解： https://blog.csdn.net/fendou_dexiaoniao/article/details/46594125  [文字版]
+	//			https://segmentfault.com/a/1190000014994237#articleHeader29   [算法系列+图文版]
+	(function(){
+		function merge(left, right){
+			var result = [];
+			while(left.length>0 && right.length>0){
+				if(left[0] < right[0] ){
+					result.push(left.shift());
+				}else{
+					result.push(right.shift());
+				}
+			}
+			// 当左右数组长度不等，[是指 当一遍的长度为0了] 至于 将大数组分成单个小数组后，
+			// 可能存在 ①left =>1   right =>2 这种情况，②right还需要在分，紧接着②中的left right会进行合并，
+			// 并且作为right 然后①中的left再次进行合并   [这就会出现左右长度不等情况]
+			return result.concat(left, right);
+
+		};
+
+		function mergeSort(arr){
+			var length = arr.length, left, right;
+			if(length===1){return arr}
+			var midIndex = Math.floor(arr.length/2);
+			left = arr.slice(0, midIndex);
+			right = arr.slice(midIndex, length);
+
+			return merge(mergeSort(left), mergeSort(right));
+		};
+
+		var arr = [53,44,2,45,33,7,8,9,12];
+		console.log(mergeSort(arr));
+
+
+	})();	
 
 </script>
