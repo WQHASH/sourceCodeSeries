@@ -14,10 +14,11 @@ import {Ajax, FetchHttp} from './useApi/useHttp';
 // console.log(Ajax, "Ajax");
 
 
-
-
-
-
+// Module 的语法test
+import {newHash as newHashLast, newHash1} from './syntax-test/module';
+// import hash1 from './syntax-test/module';
+// console.log(newHash,"fn")
+console.log(newHash,"fn")
 
 
 

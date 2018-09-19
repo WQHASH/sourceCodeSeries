@@ -27,6 +27,7 @@
   "dependencies": {
     "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
-    "style-loader": "^0.21.0"
+    "style-loader": "^0.21.0",
+    "webpack": "^4.19.1"
   }
 }
