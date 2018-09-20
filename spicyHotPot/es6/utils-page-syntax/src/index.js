@@ -15,13 +15,17 @@ import {Ajax, FetchHttp} from './useApi/useHttp';
 
 
 // Module 的语法test
-import {newHash as newHashLast, newHash1} from './syntax-test/module';
-import _, {obj, arr} from "./syntax-test/promise";
-// import hash1 from './syntax-test/module';
-// console.log(newHash,"fn")
+import {newHash as newHashLast, newHash1,PromiseObj} from './syntax-test/module';
+import _, {obj, arr, newObj} from "./syntax-test/promise";
+import *  as promiseAll from './syntax-test/promise';
+// import {hash1} from './syntax-test/module';
+// console.log(hash1,"fn")
+console.log(PromiseObj,"PromiseObj")
 console.log(_,"fn");
 console.log(obj,"obj");
 console.log(arr,"arr");
+console.log(newObj,"newObj");
+console.log(promiseAll,"promiseAll")
 
 
 
