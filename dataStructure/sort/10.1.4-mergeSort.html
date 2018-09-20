@@ -7,7 +7,7 @@
 			il = 0,
 			ir = 0;
 			// 这里用变量来控制的好处在于它不会修改原数组， 
-			// 这里push(left[i++]) 执行的顺序是先push i后++， push(left.shift())方法同理
+			// 这里push(left[i++]) 执行的顺序是先push i后++， push(left.shift())先执行 left.shift(),再把值push进去
 			while(il<left.length && ir<right.length){
 				if(left[il] < right[ir]){
 					result.push(left[il++]);
