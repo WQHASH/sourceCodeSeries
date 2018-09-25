@@ -103,7 +103,7 @@ class DateFn{
 	  	var mouth = date.getMonth() + 1;
 	  	var day;
 	  	if(mouth==2){
-	  		if((y%4==0 && y%100!=0)||y%400==0){
+	  		if(y%4==0 && (y%100!=0||y%400==0)){
 	  			day = 29
 	  		}else{
 	  			day = 28

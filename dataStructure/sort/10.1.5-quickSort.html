@@ -13,7 +13,6 @@
 			var pivot = array[Math.floor((right + left) / 2)],
 			i = left,
 			j = right;
-
 			while(i <= j){
 				while(array[i] < pivot){
 					i++;
@@ -74,8 +73,7 @@
         for(var i=0;i<arr.length;i++){
             if(arr[i]<=pivot){
                 left.push(arr[i]);
-            }
-            else{
+            }else{
                 right.push(arr[i]);
             }
         }
