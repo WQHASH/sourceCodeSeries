@@ -17,7 +17,7 @@ let dateFn = new DateFn();
 
 {
 	var getMonthOfDay = dateFn.getMonthOfDay('800-12-18');
-	console.log(getMonthOfDay,"getMonthOfDay")
+	// console.log(getMonthOfDay,"getMonthOfDay")
 
 };
 

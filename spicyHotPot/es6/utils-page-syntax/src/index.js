@@ -20,15 +20,16 @@ import _, {obj, arr, newObj} from "./syntax-test/promise";
 import *  as promiseAll from './syntax-test/promise';
 // import {hash1} from './syntax-test/module';
 // console.log(hash1,"fn")
-console.log(PromiseObj,"PromiseObj")
-console.log(_,"fn");
-console.log(obj,"obj");
-console.log(arr,"arr");
-console.log(newObj,"newObj");
-console.log(promiseAll,"promiseAll")
+// console.log(PromiseObj,"PromiseObj")
+// console.log(_,"fn");
+// console.log(obj,"obj");
+// console.log(arr,"arr");
+// console.log(newObj,"newObj");
+// console.log(promiseAll,"promiseAll")
 
 
-
+import {promise} from './useApi/usePromise';
+// console.log(promise,"promise")
 
 
 
