@@ -10,14 +10,13 @@
         var root = null;
 
         // 8.3.2-向树中插入一个键
-       this.insert = function(key) {
+        this.insert = function(key) {
             var newNode = new Node(key);
             if (root === null) {
                 root = newNode;
             } else {
                 this.insertNode(root, newNode);
             }
-            console.log(newNode,"newNode")
         };
 
         this.insertNode = function(node, newNode) {
@@ -35,23 +34,24 @@
                 }
             }
         };
+
+        // 中序遍历 [从最小到最大的顺序访问所有节点 因为这的递归直接能进行到最底外部节点]
+        this.inOrderTraverse = function(callback){
+        	console.log(root,"root")
+        	this.inOrderTraverseNode(root, callback);
+        };
+
+        this.inOrderTraverseNode = function(node, callback){ 
+        	if(node !== null){
+        		this.inOrderTraverseNode(node.left, callback);
+        		// console.log(node.key);
+        		callback(node.key);
+        		this.inOrderTraverseNode(node.right, callback);
+        	}
+        };
     };
 
-    BinarySearchTree.prototype = {
-    	
-        // // 8.4.1-中序遍历
-        // this.inOrderTraverse = function(callBack) {
-        //     inOrderTraverseNode(root, callBack);
-        // };
-        // var inOrderTraverseNode = function(node, callBack) {
-        //     if (node !== null) {
-        //         inOrderTraverseNode(node.left, callBack);
-        //         callBack(node.lfet);
-        //         inOrderTraverseNode(node.right, callBack);
-        //     }
-        // };
-    };
-
+    BinarySearchTree.prototype = {};
 
 
     var tree = new BinarySearchTree();
@@ -61,10 +61,14 @@
     tree.insert(22);
     tree.insert(37);
     tree.insert(99);
-    // function printNode(value) {
-    //     console.log(value, "printNode");
-    // };
-    // tree.inOrderTraverse(printNode(8));
+
+    function inOrderTraverseCallBack(value){
+    	console.log(value)
+    };
+
+    tree.inOrderTraverse(inOrderTraverseCallBack);
+    // console.log(tree, "tree+")
+  
 
 
 
