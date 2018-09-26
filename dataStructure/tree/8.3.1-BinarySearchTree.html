@@ -37,7 +37,7 @@
 
         // 中序遍历 [从最小到最大的顺序访问所有节点 因为这的递归直接能进行到最底外部节点]
         this.inOrderTraverse = function(callback){
-        	console.log(root,"root")
+        	// console.log(root,"root")
         	this.inOrderTraverseNode(root, callback);
         };
 
@@ -49,6 +49,79 @@
         		this.inOrderTraverseNode(node.right, callback);
         	}
         };
+
+        //先序遍历
+        this.perOrderTraverse = function(callback){
+        	// console.log(root, "perOrderTraverseRoot")
+        	this.perOrderTraverseNode(root, callback);
+        };
+
+        this.perOrderTraverseNode = function(node, callback){
+        	if(node !== null){
+        		callback(node.key);
+        		this.perOrderTraverseNode(node.left, callback);
+        		this.perOrderTraverseNode(node.right, callback);
+        	}
+        };
+
+        //后序遍历
+        this.postOrderTraverse = function(callback){
+        	// console.log(root, "postOrderTraverseRoot");
+        	this.postOrderTraverseNode(root, callback);
+        };
+        this.postOrderTraverseNode = function(node, callback){
+        	if(node !=null){
+        		this.postOrderTraverseNode(node.left, callback);
+        		this.postOrderTraverseNode(node.right, callback);
+        		callback(node.key);
+        	}
+        };
+
+        //搜索最小值
+        this.min = function(){
+        	return this.minNode(root);
+        };
+        this.minNode = function(node){
+        	if(node){
+        		while(node && node.left != null){
+        			node = node.left
+        		}
+        		return node.key;
+        	}
+        	return null;
+        };
+
+
+        //搜索最大值
+        this.max = function(){
+        	return this.maxNode(root);
+        }
+        this.maxNode = function(node){
+        	if(node){
+        		while(node && node.right != null){
+        			node = node.right;
+        		}
+        		return node.key;
+        	}
+        	return null;
+        };
+
+        // 搜索一个特定的值
+        this.search = function(key){
+        	console.log(root,"searchRoot")
+        	return this.searchNode(root, key); 
+        };
+        this.searchNode = function(node, key){
+        	if(node === null){ return false};
+        	if(key < node.key){
+        		return this.searchNode(node.left, key);
+        	}else if(key > node.key){
+        		return this.searchNode(node.right, key);
+        	}else {
+        		return true
+        	}
+        };
+
     };
 
     BinarySearchTree.prototype = {};
@@ -66,11 +139,21 @@
     	console.log(value)
     };
 
-    tree.inOrderTraverse(inOrderTraverseCallBack);
-    // console.log(tree, "tree+")
+    //中序遍历
+    // tree.inOrderTraverse(inOrderTraverseCallBack);
   
+  	//先序遍历
+   // tree.perOrderTraverse(inOrderTraverseCallBack);
+   console.log("==先序遍历==");
+   // tree.postOrderTraverse(inOrderTraverseCallBack);
 
+   console.log("==min==");
+   // console.log(tree.min());
 
+   console.log("==max==");
+   // console.log(tree.max());
 
+   console.log("==search==");
+   console.log(tree.search(99))
 })();
 </script>
