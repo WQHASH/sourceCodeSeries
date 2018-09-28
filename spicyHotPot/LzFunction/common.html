@@ -1,0 +1,90 @@
+<script>
+	// 时间处理
+	(function(){
+		var LZtranslateTime = {
+		    getDateDiff: function (time) {
+		        var curStandardTime = new Date();
+		        var curStandardTimeYear = curStandardTime.getFullYear();
+		        var curStandardTimeMonth = curStandardTime.getMonth() + 1;
+		        var curStandardTimeDay = curStandardTime.getDate();
+		        var time = time.replace(/T/g, " ");
+		        time = new Date(time.replace(/-/g, '/'));
+		        var timeYear = time.getFullYear();
+		        var timeMonth = time.getMonth() + 1 > 9 ? time.getMonth() + 1 : "0" + (time.getMonth() + 1);
+		        var timeDay = time.getDate() > 9 ? time.getDate() : "0" + time.getDate();
+		        var timeHours = time.getHours() > 9 ? time.getHours() : "0" + time.getHours();
+		        var timeMinutes = time.getMinutes() > 9 ? time.getMinutes() : "0" + time.getMinutes();
+		        var timeTime = timeHours + ":" + timeMinutes;
+		        var showTime = "";
+		        if (curStandardTimeYear == timeYear) {
+		            if (curStandardTimeMonth == timeMonth) {
+		                if (curStandardTimeDay == timeDay) {
+		                    showTime = "今天";
+		                } else if (curStandardTimeDay - 1 == timeDay) {
+		                    showTime = "昨天 ";
+		                } else {
+		                    showTime = timeMonth + "-" + timeDay;
+		                }
+		            } else if (curStandardTimeMonth - 1 == timeMonth) {
+		                if (curStandardTimeDay == 1) {
+		                    if (timeMonth == 1 || timeMonth == 3 || timeMonth == 5 || timeMonth == 7 || timeMonth == 8 || timeMonth == 10 || timeMonth == 12) {
+		                        if (timeDay == 31) {
+		                            showTime = "昨天 ";
+		                        }
+		                    } else if (timeMonth == 4 || timeMonth == 6 || timeMonth == 9 || timeMonth == 11) {
+		                        if (timeDay == 31) {
+		                            showTime = "昨天 ";
+		                        }
+		                    } else {
+		                        if (timeYear % 100 == 0) {
+		                            if (timeYear % 400 == 0) {
+		                                if (timeDay == 29) {
+		                                    showTime = "昨天 ";
+		                                } else {
+		                                    showTime = timeMonth + "-" + timeDay;
+		                                }
+		                            } else {
+		                                if (timeDay == 28) {
+		                                    showTime = "昨天 ";
+		                                } else {
+		                                    showTime = timeMonth + "-" + timeDay;
+		                                }
+		                            }
+		                        } else if (timeYear % 4 == 0) {
+		                            if (timeDay == 29) {
+		                                showTime = "昨天 ";
+		                            } else {
+		                                showTime = timeMonth + "-" + timeDay;
+		                            }
+		                        } else {
+		                            if (timeDay == 28) {
+		                                showTime = "昨天 ";
+		                            } else {
+		                                showTime = timeMonth + "-" + timeDay;
+		                            }
+		                        }
+		                    }
+		                } else {
+		                    showTime = timeMonth + "-" + timeDay;
+		                }
+		            } else {
+		                showTime = timeMonth + "-" + timeDay;
+		            }
+		        } else if (curStandardTimeYear - 1 == timeYear && curStandardTimeMonth == 1 && timeMonth == 12 && curStandardTimeDay == 1 && timeDay == 31) {
+		            showTime = "昨天";
+		        } else {
+		            showTime = timeYear + "-" + timeMonth + "-" + timeDay;
+		        }
+		        if (showTime == "") {
+		            showTime = timeYear + "-" + timeMonth + "-" + timeDay;
+		        }
+		        return showTime;
+		    }
+		};
+
+
+		console.log(LZtranslateTime.getDateDiff("2018-9-26T11:55:28"))
+	})();
+
+
+</script>
