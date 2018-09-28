@@ -17,9 +17,11 @@ function read(context){
 
 read(1).then((data)=>{
 	console.log(data, "成功");
-}, (err)=>{
-	console.log(err, "失败");
-	// return read(8)
+}, (...rest)=>{
+	console.log(rest, "rest-失败");
+
+	// return read(8)     // 在then方法中，你也可以直接return数据而不是Promise对象，在后面的then中就可以接收到数据了，
+	return 0
 })
 .then((data)=>{
 	console.log(data, "成功1")
@@ -27,6 +29,8 @@ read(1).then((data)=>{
 console.log(err, "失败1");
 })
 
+
+// 参考： https://blog.csdn.net/shan1991fei/article/details/78966297
 
 
 export {Promise}
