@@ -24,7 +24,7 @@ read(1).then((data)=>{
 	return 0
 })
 .then((data)=>{
-	console.log(data, "成功1")
+	console.log(data, "成功1");
 }, (err)=>{
 console.log(err, "失败1");
 })
@@ -32,5 +32,16 @@ console.log(err, "失败1");
 
 // 参考： https://blog.csdn.net/shan1991fei/article/details/78966297
 
+
+function hash(){
+	return new Promise(function (resolve, reject) {
+	 	get('http://www.google.com', function (err, res) {
+		    if (err) reject(err);
+		    else resolve(res);
+		  });
+		})
+}
+
+hash();
 
 export {Promise}
