@@ -67,12 +67,12 @@ console.log("====== _.reduce ======");
     /**
      * _.retuce 遍历
      *  该方法需要返回值： 个人认为这个方法很适合用于数字的 Math.ads(叠加)
-     *  retuce(obj, iteratee, [memo,] [context]) 
+     *  retuce(obj, iteratee, [Memo,] [context]) 
      *   obj: 需要遍历的数组||对象    
      *   iteratee: 回调函数
      *           iteratee(memo, value, index, list)
-     *                   memo: 初始值 value: 迭代下一个的值  index: 迭代的index list:需要遍历的数组||对象 
-     *   memo: reduce函数的初始值
+     *                   memo: 初始值[会受Memo值存在的影响，存在则为它，否则是list[0] ] value: 迭代下一个的值  index: 迭代的index[也就是value的index] list:需要遍历的数组||对象 
+     *   Memo: reduce函数的初始值
      *   context:  上下文对象，可以理解成this
      *       
      */
