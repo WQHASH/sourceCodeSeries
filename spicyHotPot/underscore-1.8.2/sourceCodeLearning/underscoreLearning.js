@@ -38,6 +38,7 @@
     var optimizeCb = function (func, context, argCount) {
         // void 0 === "undefined"
         if (context === void 0) return func;
+        // 这里的目的就是为了做优化，尽量避免使用arguments这个参数来提升性能，如果不是为了写库，可以不这么写！
         switch (argCount == null ? 3 : argCount) {
             case 1: return function (value) {
                 return func.call(context, value);
@@ -54,6 +55,7 @@
                 return func.call(context, accumulator, value, index, collection);
             };
         }
+        // call 比 apply性能高的原因 有一点可能是 call解析的值变量，而apply是一个数组还需要再次拆分 
         return function () {
             return func.apply(context, arguments);
         };
@@ -584,11 +586,14 @@
 
 
     function createIndexFinder(dir) {
+        // 注意整理未形成闭包，这种传递参数的还不能狗达到闭包条件，[保留的变量必须是外层函数内的变量]
+        // 记住一点 形成闭包 需要能够一直保存住 外层函数内的 活动对象[局部变量]，其他的则都是 window下的全局变量
         return function (array, predicate, context) {
             predicate = cb(predicate, context);
             var length = array != null && array.length;
             var index = dir > 0 ? 0 : length - 1;
             for (; index >= 0 && index < length; index += dir) {
+                // 这里说明在使用  _.findIndex的时候 【第二个参数一定要返回值】 否则拿不到 最后返回的index
                 if (predicate(array[index], index, array)) return index;
             }
             return -1;
