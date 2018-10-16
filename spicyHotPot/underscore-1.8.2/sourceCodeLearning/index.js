@@ -2,7 +2,7 @@
 console.log("\n====== _.each ======");
 (function() {
     /**
-     * _.each 遍历
+     * _.each 遍历 【【第一个更改
      *
      */
     //console.log(_());
@@ -27,7 +27,7 @@ console.log("\n====== _.each ======");
 console.log("====== _.map ======");
 (function() {
     /**
-     * _.map 迭代
+     * _.map 迭代   【【第二次更改
      *   _.map(list, iteratee, [context]) 
      *       iteratee： 1.为空    =>返回原list
      *                  2.为函数  =>则返回 iteratee内部逻辑的处理
@@ -65,7 +65,7 @@ console.log("====== _.map ======");
 console.log("====== _.reduce ======");
 (function() {
     /**
-     * _.retuce 遍历
+     * _.retuce 遍历  【【第3个更改
      *  该方法需要返回值： 个人认为这个方法很适合用于数字的 Math.ads(叠加)
      *  retuce(obj, iteratee, [Memo,] [context]) 
      *   obj: 需要遍历的数组||对象    
