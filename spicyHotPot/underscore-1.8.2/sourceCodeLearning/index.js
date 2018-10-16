@@ -20,6 +20,7 @@ console.log("\n====== _.each ======");
 
     var iteratee = function(elem, index, list) {
         //console.log(arguments)
+        //console.log("用作于测试的代码而已！")
     };
     _.each(obj, iteratee, this);
 })();
