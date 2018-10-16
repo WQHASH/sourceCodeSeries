@@ -1,5 +1,5 @@
 ﻿(function () {
-    //wq:数据初始化的处理 start  【【第4个更改
+    //wq:数据初始化的处理 start  
     var root = this;
     var previousUnderscore = root;
     var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
@@ -26,7 +26,7 @@
     } else {
         root._ = _;
     };
-    //wq:数据初始化的处理 end   【【第5个更改
+    //wq:数据初始化的处理 end   
 
 
 
