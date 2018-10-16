@@ -20,7 +20,6 @@ console.log("\n====== _.each ======");
 
     var iteratee = function(elem, index, list) {
         //console.log(arguments)
-        // xxxxxx
     };
     _.each(obj, iteratee, this);
 })();
@@ -268,6 +267,15 @@ console.log("====== _.min ======");
     //var elem = _.min(obj);          //只有list
     //var elem = _.min();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
     //console.log(elem, "elem111");
+})();
+
+console.log("====== _.toArray ======");
+(function(){
+     var obj = { "sname": "wq", "sage": "12", "city": "bj", "sex": "man" };
+     var arr = ["x","rt","f"]
+     var newObj = _.toArray(arr);
+     // console.log(newObj,"newObj");
+
 })();
 
 console.log("====== _.size ======");
