@@ -1,5 +1,5 @@
 ﻿(function () {
-    //wq:数据初始化的处理 start
+    //wq:数据初始化的处理 start  
     var root = this;
     var previousUnderscore = root;
     var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
@@ -26,7 +26,7 @@
     } else {
         root._ = _;
     };
-    //wq:数据初始化的处理 end
+    //wq:数据初始化的处理 end   
 
 
 
@@ -239,7 +239,7 @@
         return _.map(obj, _.property(key));
     };
 
-
+    // obj =>  [{},{}]这种形式
     _.max = function (obj, iteratee, context) {
         var result = -Infinity, lastComputed = -Infinity,
             value, computed;
@@ -252,7 +252,10 @@
                 }
             }
         } else {
+            //cb(iteratee): 当iteratee是一个String 返回一个 _.property("StrSearch")函数，
+            //该函数有返回一个函数 => fn(obj){return obj[key]}
             iteratee = cb(iteratee, context);
+            // value: 该值是一个对象
             _.each(obj, function (value, index, list) {
                 computed = iteratee(value, index, list);
                 if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
@@ -341,6 +344,12 @@
         if (_.has(result, key)) result[key].push(value); else result[key] = [value];
     });
 
+    _.toArray = function(obj){
+        if(!obj){return []};
+        if(_.isArray(obj)){ return slice.call(obj) };
+        if(isArrayLike(obj)){ return _.map(obj, _.identity) };
+        return _.values(obj);
+    };
 
     _.size = function (obj) {
         if (obj == null) return 0;

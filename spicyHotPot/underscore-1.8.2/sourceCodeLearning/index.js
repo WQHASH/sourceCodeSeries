@@ -2,7 +2,7 @@
 console.log("\n====== _.each ======");
 (function() {
     /**
-     * _.each 遍历
+     * _.each 遍历 
      *
      */
     //console.log(_());
@@ -27,7 +27,7 @@ console.log("\n====== _.each ======");
 console.log("====== _.map ======");
 (function() {
     /**
-     * _.map 迭代
+     * _.map 迭代   
      *   _.map(list, iteratee, [context]) 
      *       iteratee： 1.为空    =>返回原list
      *                  2.为函数  =>则返回 iteratee内部逻辑的处理
@@ -65,14 +65,14 @@ console.log("====== _.map ======");
 console.log("====== _.reduce ======");
 (function() {
     /**
-     * _.retuce 遍历
+     * _.retuce 遍历  
      *  该方法需要返回值： 个人认为这个方法很适合用于数字的 Math.ads(叠加)
-     *  retuce(obj, iteratee, [memo,] [context]) 
+     *  retuce(obj, iteratee, [Memo,] [context]) 
      *   obj: 需要遍历的数组||对象    
      *   iteratee: 回调函数
      *           iteratee(memo, value, index, list)
-     *                   memo: 初始值 value: 迭代下一个的值  index: 迭代的index list:需要遍历的数组||对象 
-     *   memo: reduce函数的初始值
+     *                   memo: 初始值[会受Memo值存在的影响，存在则为它，否则是list[0] ] value: 迭代下一个的值  index: 迭代的index[也就是value的index] list:需要遍历的数组||对象 
+     *   Memo: reduce函数的初始值
      *   context:  上下文对象，可以理解成this
      *       
      */
@@ -267,6 +267,15 @@ console.log("====== _.min ======");
     //var elem = _.min(obj);          //只有list
     //var elem = _.min();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
     //console.log(elem, "elem111");
+})();
+
+console.log("====== _.toArray ======");
+(function(){
+     var obj = { "sname": "wq", "sage": "12", "city": "bj", "sex": "man" };
+     var arr = ["x","rt","f"]
+     var newObj = _.toArray(arr);
+     // console.log(newObj,"newObj");
+
 })();
 
 console.log("====== _.size ======");
