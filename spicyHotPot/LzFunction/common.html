@@ -1,13 +1,17 @@
 <script>
+
 	// 时间处理
 	(function(){
 		var LZtranslateTime = {
 		    getDateDiff: function (time) {
+		    	// time = "2018-2-28T11:54:28"
 		        var curStandardTime = new Date();
+		        // var curStandardTime = new Date("2018-3-1 11:55:28");
 		        var curStandardTimeYear = curStandardTime.getFullYear();
 		        var curStandardTimeMonth = curStandardTime.getMonth() + 1;
 		        var curStandardTimeDay = curStandardTime.getDate();
 		        var time = time.replace(/T/g, " ");
+
 		        time = new Date(time.replace(/-/g, '/'));
 		        var timeYear = time.getFullYear();
 		        var timeMonth = time.getMonth() + 1 > 9 ? time.getMonth() + 1 : "0" + (time.getMonth() + 1);
@@ -85,6 +89,94 @@
 
 		console.log(LZtranslateTime.getDateDiff("2018-9-26T11:55:28"))
 	})();
+
+	// 时间处理 [模仿版]
+	(function(){
+		// 四年一润 百年不润 四百年再润  y%4==0 && ( y%100!=0 && y%400==0)
+		
+		function dateHandle(time){
+			var showTime = "";
+			time = "2018-2-28T11:54:28"
+			//当前时间
+			var curDate = new Date("2018-3-1 11:55:28");
+			var cT = {
+				y: curDate.getFullYear(),
+				m: curDate.getMonth()+1,
+				d: curDate.getDate(),
+				h: curDate.getHours(),
+				i: curDate.getMinutes(),
+				s: curDate.getSeconds(),
+			};
+			// 传递时间
+			time = time.replace(/T/g, " ");			
+			var resDate = new Date(time);
+			console.log(time,"time");
+			var rT = {
+				y: resDate.getFullYear(),
+				m: ((resDate.getMonth())+1 )>9? ((resDate.getMonth())+1):("0"+(resDate.getMonth()+1)),
+				d: resDate.getDate()>9?  resDate.getDate(): "0"+ resDate.getDate(),
+				h: resDate.getHours() >9? resDate.getHours(): "0"+ resDate.getHours(),
+				i: resDate.getMinutes()>9?resDate.getMinutes():"0"+resDate.getMinutes(),
+				s: resDate.getSeconds(),
+			};
+			if(cT.y == rT.y){
+				if(cT.m ==rT.m){
+					if(cT.d == rT.d){
+						showTime = "今天 "+ rT.h	+":" + rT.i;
+					}else if(cT.d-1 == rT.d){
+						showTime = "昨天 "+ rT.h	+":" + rT.i;
+					}else{
+						showTime = rT.h	+":" + rT.i;
+					}
+				}else if(cT.m-1 ==rT.m){
+					if(cT.d == 1){
+						if(rT.m ==1 ||rT.m==3 || rT.m==5 || rT.m==7 || rT.m==8 || rT.m==10 || rT.m==12){
+							if(rT.d ==31){
+								showTime = "昨天 "+ rT.h	+":" + rT.i;
+							}
+						}else if(rT.m ==4 ||rT.m==6 || rT.m==9 || rT.m==11 ){
+							if(rT.d ==30){
+								showTime = "昨天 "+ rT.h	+":" + rT.i;
+							}
+						}else{
+							//闰月
+							if(rT.y%4==0&&(rT.y%100!=0 || rT.y%400==0)){
+								if(rT.d == 29){
+									showTime = "昨天 "+ rT.h	+":" + rT.i;
+								}else{
+									showTime = rT.m+"-"+rT.d;
+								}
+							}else{
+								if(rT.d == 28){
+									showTime = "昨天 "+ rT.h	+":" + rT.i;
+								}else{
+									showTime = rT.m+"-"+rT.d;
+								}
+							}
+						}
+					}else{
+						showTime = rT.m+"-"+rT.d;
+					}
+					//这个月的最后一天，和下月的月初第一天
+				} else{
+					showTime = rT.m+"-"+rT.d;
+				}
+				//刚好到一年的最后一天
+			}else if(cT.y -1 == rT.y && cT.m==1&&rT.y==12 && cT.d==1&&rT.d==31 ){
+				showTime = "昨天 "+ rT.h	+":" + rT.i;
+			}else{
+				showTime = time;
+			}
+
+			return showTime;
+		};
+		var time = "2018-8-28T11:55:28";
+		console.log(dateHandle(time));
+
+	})();
+
+
+	
 
 
 </script>
