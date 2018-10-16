@@ -9,19 +9,7 @@
 
 
 (function(){
-	var sum = _.reduce([11, 22, 33], function(memo, num){
-		// console.log(arguments);
-		return memo + num; 
-	});
-	// console.log(sum, "reduce")
+	var sum = _.reduce([11, 22, 33], function(memo, num){console.log(arguments); return memo + num; });
+	console.log(sum, "reduce")
 })();
-(function(){
-var arr = [22,3,46];
-var num = _.findIndex(arr,function(val, index, list){
-	if(val == 46){
-		return ""
-	}
-});
-console.log(num)
-
-})();
+(function(){})();
