@@ -10,14 +10,14 @@
 
 (function(){
 	var sum = _.reduce([11, 22, 33], function(memo, num){console.log(arguments); return memo + num; });
-	console.log(sum, "reduce")
+	// console.log(sum, "reduce")
 })();
 
 (function(){
 
 	function cb(){return arguments};
 	var fn = _.invoke([[5, 1, 7], [3, 2, 1]], "sort");
-	console.log(fn,"fn")
+	// console.log(fn,"fn")
 })();
 
 console.log("====== _.max ======");
@@ -33,5 +33,14 @@ console.log("====== _.max ======");
     var elem = _.max(stooges, 'age'); //有 list 有  age[iteratee]
     //var elem = _.max(obj);          //只有list
     //var elem = _.max();             // 全无 => 这时因为无list 这里会返回 -Infinity 所以需要对 list进行判断
-    console.log(elem, "elem ");
+    // console.log(elem, "elem ");
 })();
+
+(function(){
+
+    var arr = [55,55,77,77,77,99];
+    var firstNum = _.uniq (arr);
+    console.log(arr,"arr");
+    console.log(firstNum,"firstNum");
+})();
+

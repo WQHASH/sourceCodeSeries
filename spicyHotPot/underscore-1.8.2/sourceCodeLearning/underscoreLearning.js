@@ -119,7 +119,7 @@
     };
     _.map = _.collect = function (obj, iteratee, context) {
         iteratee = cb(iteratee, context);
-        var keys = !isArrayLike(obj) && _.keys(obj),
+        var keys = !isArrayLike(obj) && _.keys(obj), 
             length = (keys || obj).length,
             //https://zhuanlan.zhihu.com/p/34772374
             //构造函数 一般需要 new Array()才能创建实例 ，但是javascript语言规范的制定者也加了可以不用new的写法
@@ -431,7 +431,7 @@
                 //wq 无strict的处理 （递归处理，value的中每个元素都不在是数组）
                 if (!shallow) value = flatten(value, shallow, strict);
 
-                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,知道for循环结束
+                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,直到for循环结束
                 var j = 0, len = value.length;
                 output.length += len;
                 while (j < len) {
