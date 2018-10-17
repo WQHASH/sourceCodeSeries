@@ -2,7 +2,7 @@
 console.log("\n====== _.each ======");
 (function() {
     /**
-     * _.each 遍历 
+     * _.each 遍历 xxx
      *
      */
     //console.log(_());
