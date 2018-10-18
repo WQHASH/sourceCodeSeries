@@ -555,6 +555,28 @@
     };
 
     /**
+     * [object 将数组转换为对象的形式]
+     * @author wq
+     * @DateTime 2018-10-18T10:44:25+0800
+     * @param    {[Array]}                 list   [用来最为键名]
+     * @param    {[Array]}                 values [用来最为键值]
+     * @return   {[type]}                        [返回组织好的对象]
+     */
+    _.object = function(list, values){
+        var result = {};
+        for(var i=0, length=list&&list.length; i<length; i++){
+            if(values){
+                // list: []  values:[]
+                result[list[i]] = values[i];
+            }else{
+                // list: [['moe', 30], ['larry', 40], ['curly', 50]] 是有格式限制的
+                result[list[i][0]] = list[i][1];
+            }
+        }
+        return result;
+    };
+
+    /**
      * [indexOf 返回value在该 array 中的索引值]
      * @author wq
      * @DateTime 2018-07-19T14:00:09+0800
@@ -569,6 +591,7 @@
             // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接从0开始算
             i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
         } else if (isSorted && length) {
+            // 这里用二分法进行查找，[个人感觉这里的用处不大，第三个参数有无都行，]
             i = _.sortedIndex(array, item);
             return array[i] === item ? i : -1;
         }
@@ -577,6 +600,27 @@
             return _.findIndex(slice.call(array, i), _.isNaN);
         }
         for (; i < length; i++) if (array[i] === item) return i;
+        return -1;
+    };
+
+    /**
+     * [lastIndexOf 返回value在该 array 中的索引值 和 _.indexOf查询顺序相反 ]
+     * @author wq
+     * @DateTime 2018-10-18T11:38:17+0800
+     * @param    {[type]}                 array [description]
+     * @param    {[type]}                 item  [description]
+     * @param    {[type]}                 from  [description]
+     * @return   {[type]}                       [description]
+     */
+    _.lastIndexOf = function (array, item, from) {
+        var idx = array ? array.length : 0;
+        if (typeof from == 'number') {
+            idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
+        }
+        if (item !== item) {
+            return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
+        }
+        while (--idx >= 0) if (array[idx] === item) return idx;
         return -1;
     };
 
