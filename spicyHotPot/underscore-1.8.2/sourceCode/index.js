@@ -44,3 +44,21 @@ console.log("====== _.max ======");
     console.log(firstNum,"firstNum");
 })();
 
+console.log("===bind===");
+(function(){
+      this.x = 9;
+      var model = {
+        x: 8,
+        getX: function(){
+          // console.log(this.x);
+          console.log(Array.prototype.slice.apply(arguments));
+        },
+      };
+      model.getX();
+      var retriverX = model.getX;
+      retriverX();
+
+      _.bind(model.getX, model,"首个参数")(1,2,4,5);
+})();
+(function(){
+})();

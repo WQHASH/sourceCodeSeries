@@ -13,6 +13,9 @@
       nativeKeys = Object.keys, // Object.keys()方法会返回( 引用类型的键名 )一个所有元素为字符串的数组
       nativeBind = FuncProto.bind,
       nativeCreate = Object.create;
+
+    var Ctor = function(){};
+
     var _ = function (obj) {
         if (obj instanceof _) return obj;
         if (!(this instanceof _)) return new _(obj);
@@ -82,6 +85,19 @@
             }
             return obj;
         };
+    };
+
+    //两种创建对象
+    var baseCreate = function(prototype){
+        is(!_.isObject(prototype)){ return {}; };
+        
+        if(nativeCreate){
+            return nativeCreate(prototype);
+        };
+        Ctor.prototype = prototype;
+        var result = new Ctor();
+        Ctor.prototype = null;
+        return result; 
     };
 
     // pow(x, y) 方法可返回 x 的 y 次幂的值。
@@ -685,6 +701,70 @@
     };
 
 
+    //======================================== 函数(Function) ========================================
+    //只是看了对象的穿件部分
+    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args){
+        if(!(callingContext instanceof boundFunc)){
+            return sourceFunc.apply(context, args);
+        };
+        var self = baseCreate(sourceFunc.prototype);
+        var result = sourceFunc.apply(self, args);
+        if (_.isObject(result)) return result;
+        return self;
+    };
+
+    /**
+     * [bind 绑定函数 function 到对象 object 上, 也就是无论何时调用函数, 函数里的 this 都指向这个 object.任意可选参数 ]
+     * @author wq
+     * @DateTime 2018-10-19T13:43:55+0800
+     * @param    {[Function]}                 func    [需要使用的函数]
+     * @param    {[Object]}                 context [被this指向的对象]
+     * @return   {[type]}                         [description]
+     */
+    _.bind = function(func, context){
+        if(nativeBind && func.bind === nativeBind){
+            return nativeBind.apply(func, slice(arguments, 1));
+        };
+        if(!_isFunction(func)){
+            throw new TypeError("Bind must be called on a function");
+        };
+        var args = slice.call(arguments, 2);
+        var bound = function(){
+            return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
+        };
+        return bound;
+    };
+
+    // 同时给多个方法绑定this 但是这种操作会受到该定义方法体的限制 [只能按定义好的规则使用]
+    _.bindAll = function(obj){
+        var i, length = arguments.length, key;
+        if(length<=1){
+            throw new Error("bindAll must be passed function names");
+        };
+        for(i=0;i<length;i++){
+            key = arguments[i];
+            obj[key] = _.bind(obj[key], obj);
+        };
+        return obj;
+    };
+
+    /**
+     * [delay 类似setTimeout，等待wait毫秒后调用function]
+     * @author wq
+     * @DateTime 2018-10-19T15:06:14+0800
+     * @param    {[Function]}                 func [回调函数]
+     * @param    {[Number]}                 wait [延迟时间]
+     * @return   {[type]}                      [description]
+     */
+    _.delay = function(func, wait){
+        var args = slice.call(arguments, 2);
+        return setTimeout(function(){
+            return func.apply(null, args);
+        }, wait);
+    };
+
+    // _.defer = _.partial(_.delay, _, 1);
+    
     /**
     *  将参数返回 只取对象的键名 Object.keys
     */
