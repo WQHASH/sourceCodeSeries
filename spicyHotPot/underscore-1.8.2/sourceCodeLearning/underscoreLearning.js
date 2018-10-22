@@ -89,7 +89,7 @@
 
     //两种创建对象
     var baseCreate = function(prototype){
-        is(!_.isObject(prototype)){ return {}; };
+        if( !_.isObject(prototype)){return {}};
         
         if(nativeCreate){
             return nativeCreate(prototype);
@@ -766,6 +766,61 @@
     // _.defer = _.partial(_.delay, _, 1);
     
     /**
+     * [throttle 函数节流 ，多少秒之内执行一次]
+     * @author wq
+     * @DateTime 2018-10-22T09:34:17+0800
+     * @param    {[type]}                 func    [description]
+     * @param    {[type]}                 wait    [description]
+     * @param    {[type]}                 options [description]
+     * @return   {[type]}                         [description]
+     *           temp： https://blog.csdn.net/wangfengqingyang/article/details/39519609 临时加上!!!
+     */
+    // 用这个时间差来计算，而不是直接用wait 说明，开始的计算点是从第一次触发函数时，到第二次触发这段时间是包含wait 之内的。
+            // 不在wait的计算 ,就直接重新计算，把上次的时间改为当前时间
+            //在wait范围内的计算
+
+    _.throttle = function(func, wait, options){
+        var context, args, result;
+        var timeout = null;
+        var previous = 0;
+        if(!options){ options = {} };
+        var later = function(){
+            previous = options.leading === false ? 0 : _.now();
+            timeout = null;
+            result = func.apply(context, args);
+            //清空优化
+            if(!timeout){ context = args = null};
+        };
+
+        return function(){ 
+            var now = _.now();
+            if(!previous && options.leading === false){
+                previous = now;    
+            }; 
+            var remaining = wait - (now-previous);   
+            context = this;
+            args = arguments;
+            if(remaining<=0 || remaining>wait){
+                if(timeout){
+                    clearTimeout(timeout);
+                    timeout = null;    
+                }
+                previous = now;
+                result = func.apply(context,args);
+                //清空优化
+                if(!timeout){ context = args = null};    
+                // 关于 == 的理解， 当左右两边不是同类型时，会将两边转成Number类型在进行比较 [犀牛书==的理解， 配合上边写的网址]
+            }else if(!timeout && options.trailing !== false){
+                // console.log(options.trailing !== false,"options")
+                timeout = setTimeout(later, remaining);
+            };
+
+            return result;
+        };
+
+    };
+    
+    /**
     *  将参数返回 只取对象的键名 Object.keys
     */
     _.keys = function (obj) {
@@ -888,6 +943,16 @@
            return _.isMatch(obj, attrs);
        };
    };
+
+   /**
+    * [description 将当前时间转为毫秒值]
+    * @author wq
+    * @DateTime 2018-10-22T09:29:57+0800
+    * @return   {[type]}                 [description]
+    */
+   _.now = Date.now || function(){
+        return new Date().getTime();
+   }
 
     /**
     *  处理属性的方法

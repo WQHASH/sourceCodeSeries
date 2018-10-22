@@ -483,3 +483,14 @@ console.log("======= _.object =======");
     var deleRepe = _.indexOf(arr,78,"ss");
     console.log(deleRepe, "deleRepe++")
 })();
+
+
+console.log("====== _.throttle ======");
+(function(){
+    var tempBtn = document.getElementsByClassName("temp-btn")[0];
+
+    var callBack = function(){console.log("ccccccccc")};
+
+    var throttle = _.throttle(callBack, 500);
+    tempBtn.onclick = throttle;
+})();
