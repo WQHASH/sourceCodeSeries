@@ -702,7 +702,7 @@
 
 
     //======================================== 函数(Function) ========================================
-    //只是看了对象的穿件部分
+    //只是看了对象的创建部分
     var executeBound = function(sourceFunc, boundFunc, context, callingContext, args){
         if(!(callingContext instanceof boundFunc)){
             return sourceFunc.apply(context, args);
@@ -723,6 +723,7 @@
      */
     _.bind = function(func, context){
         if(nativeBind && func.bind === nativeBind){
+            // return func(){}.bind(this [, ...args]);
             return nativeBind.apply(func, slice(arguments, 1));
         };
         if(!_isFunction(func)){
@@ -800,6 +801,7 @@
             var remaining = wait - (now-previous);   
             context = this;
             args = arguments;
+            //点击在wait时间之外（点击太慢）
             if(remaining<=0 || remaining>wait){
                 if(timeout){
                     clearTimeout(timeout);
@@ -809,7 +811,11 @@
                 result = func.apply(context,args);
                 //清空优化
                 if(!timeout){ context = args = null};    
-                // 关于 == 的理解， 当左右两边不是同类型时，会将两边转成Number类型在进行比较 [犀牛书==的理解， 配合上边写的网址]
+                // 关于 == 的理解， (Boolean,Number,String前提下)当左右两边不是同类型时，会将两边转成Number类型在进行比较 [犀牛书==的理解， 配合上边写的网址]
+                // JS中简单类型与引用类型进行 == 引用类型会调用 toString，返回一个值比较，没有的话再找valueOf返回一个值比较
+                // =====隐式转换的特殊规则：======
+                //  !!!很重要 =>  [要比较相等性之前，不能将 null 和 undefined 转换成其他任何值。说明null,undefined和其他类型比较都为false]
+                 //点击在wait时间之内（点击太快）
             }else if(!timeout && options.trailing !== false){
                 // console.log(options.trailing !== false,"options")
                 timeout = setTimeout(later, remaining);
@@ -820,6 +826,53 @@
 
     };
     
+    /**
+     * [bebounce 返回 function 函数的防反跳版本, 将延迟函数的执行(真正的执行)在函数最后一次调用时刻的 wait 毫秒之后. ]
+     *  AS: 游览器窗口的 [resize事件] 改变时，只会执行指定wait时间之后的一次  [默认没有第三个参数前提下]
+     * @author wq
+     * @DateTime 2018-10-24T16:05:39+0800
+     * @param    {[type]}                 func      [description]
+     * @param    {[type]}                 wait      [description]
+     * @param    {[type]}                 immediate [description]
+     * @return   {[type]}                           [description]
+     */
+    _.bebounce = function(func, wait, immediate){
+        var timeout, args, context, timestamp, result;
+
+        var later = function(){
+            var last = _.now() - timestamp;
+
+            if(last<wait && last >=0){
+                timeout = setTimeout(later, wait - last);
+            }else{
+                timeout = null;
+                if(!immediate){
+                    result = func.apply(context, args);
+                    if(!timeout){
+                        context = args = null;
+                    }
+                }
+            }
+        };
+
+        return function(){
+            context = this;
+            args = arguments;
+            timestamp = _.now();
+            var callNow = immediate && !timeout;
+            if(!timeout){ timeout = setTimeout(later, wait)};
+            if(callNow){
+                result = func.apply(context, args);
+                context = args = null;
+            };
+
+            return result;
+        };
+    };
+
+
+
+
     /**
     *  将参数返回 只取对象的键名 Object.keys
     */

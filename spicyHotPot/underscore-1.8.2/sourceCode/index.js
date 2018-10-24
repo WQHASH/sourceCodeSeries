@@ -46,6 +46,9 @@ console.log("====== _.max ======");
 
 console.log("===bind===");
 (function(){
+      // 偏函数[和柯里化]理解 => https://blog.csdn.net/neweastsun/article/details/75947785
+      // 理解: 我们创建一个新函数， 让现有的一些参数值固定。作为默认参数使用
+      // 好处: 默认参数不用写
       this.x = 9;
       var model = {
         x: 8,
@@ -60,5 +63,12 @@ console.log("===bind===");
 
       _.bind(model.getX, model,"首个参数")(1,2,4,5);
 })();
+
+console.log("===debounce===");
 (function(){
+  var cb = function(){
+    console.log(111,"xxxxxxxxx");
+  };
+  var lazyLayOut = _.debounce(cb, 300);
+  window.onresize = lazyLayOut;
 })();

@@ -41,11 +41,27 @@ console.log("==js-克隆==");
 
 
 (function(){
+   var arr = [3,4,5];
 	var hitch = function(socpe, method){
-		return function(){
-			return method.apply(socpe, arguments || [])
+		return function(){ // 注意如果希望在这里传递参数，找return 后的调用体 [之前写这注释，目的配合理解偏函数，它和偏函数不同]
+      console.log(arr,"传递的参数");
+			return method.apply(socpe, arguments||[]);
 		};
 	};
+
+  window.sname = "wq";
+  var obj = {
+    sname:"wangqi",
+    say: function(){
+      return hitch(this, function(s){
+        // return this.sname;
+        console.log(this.sname);
+      })
+    }
+  };
+  var tempSay = obj.say()(arr);
+
+  // console.log(tempSay,"tempSay");
 
 
 })();
@@ -55,6 +71,9 @@ console.log("==js-bing方法理解==");
   // 1. 创建绑定函数 [留住this] 
   // 2. 偏函数, 个人对这个的理解是 bind可以使一个函数拥有预设的初始参数，该参数被用在使用bind的函数第一位置
   //            如果在调用的时候任需参数，则其他的参数从第二个开始传入
+  // 3. 偏函数[和柯里化]理解 => https://blog.csdn.net/neweastsun/article/details/75947785
+  // 理解: 我们创建一个新函数， 让现有的一些参数值固定。作为默认参数使用
+  // 好处: 默认参数不用写
   this.x = 9;
   var model = {
     x: 8,
