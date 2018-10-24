@@ -13,6 +13,9 @@
       nativeKeys = Object.keys, // Object.keys()方法会返回( 引用类型的键名 )一个所有元素为字符串的数组
       nativeBind = FuncProto.bind,
       nativeCreate = Object.create;
+
+    var Ctor = function(){};
+
     var _ = function (obj) {
         if (obj instanceof _) return obj;
         if (!(this instanceof _)) return new _(obj);
@@ -84,6 +87,19 @@
         };
     };
 
+    //两种创建对象
+    var baseCreate = function(prototype){
+        if( !_.isObject(prototype)){return {}};
+        
+        if(nativeCreate){
+            return nativeCreate(prototype);
+        };
+        Ctor.prototype = prototype;
+        var result = new Ctor();
+        Ctor.prototype = null;
+        return result; 
+    };
+
     // pow(x, y) 方法可返回 x 的 y 次幂的值。
     var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
     var isArrayLike = function (collection) {
@@ -119,7 +135,7 @@
     };
     _.map = _.collect = function (obj, iteratee, context) {
         iteratee = cb(iteratee, context);
-        var keys = !isArrayLike(obj) && _.keys(obj),
+        var keys = !isArrayLike(obj) && _.keys(obj), 
             length = (keys || obj).length,
             //https://zhuanlan.zhihu.com/p/34772374
             //构造函数 一般需要 new Array()才能创建实例 ，但是javascript语言规范的制定者也加了可以不用new的写法
@@ -431,7 +447,7 @@
                 //wq 无strict的处理 （递归处理，value的中每个元素都不在是数组）
                 if (!shallow) value = flatten(value, shallow, strict);
 
-                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,知道for循环结束
+                // 这里取到迭代中的每个元素中的长度，然后每次对每个元素进行处理,直到for循环结束
                 var j = 0, len = value.length;
                 output.length += len;
                 while (j < len) {
@@ -555,6 +571,28 @@
     };
 
     /**
+     * [object 将数组转换为对象的形式]
+     * @author wq
+     * @DateTime 2018-10-18T10:44:25+0800
+     * @param    {[Array]}                 list   [用来最为键名]
+     * @param    {[Array]}                 values [用来最为键值]
+     * @return   {[type]}                        [返回组织好的对象]
+     */
+    _.object = function(list, values){
+        var result = {};
+        for(var i=0, length=list&&list.length; i<length; i++){
+            if(values){
+                // list: []  values:[]
+                result[list[i]] = values[i];
+            }else{
+                // list: [['moe', 30], ['larry', 40], ['curly', 50]] 是有格式限制的
+                result[list[i][0]] = list[i][1];
+            }
+        }
+        return result;
+    };
+
+    /**
      * [indexOf 返回value在该 array 中的索引值]
      * @author wq
      * @DateTime 2018-07-19T14:00:09+0800
@@ -569,6 +607,7 @@
             // 这里用Math.max() =>实现和巧妙， 当 Math.abs(isSorted)的 长度大于length时，直接从0开始算
             i = isSorted < 0 ? Math.max(0, length + isSorted) : isSorted;
         } else if (isSorted && length) {
+            // 这里用二分法进行查找，[个人感觉这里的用处不大，第三个参数有无都行，]
             i = _.sortedIndex(array, item);
             return array[i] === item ? i : -1;
         }
@@ -577,6 +616,27 @@
             return _.findIndex(slice.call(array, i), _.isNaN);
         }
         for (; i < length; i++) if (array[i] === item) return i;
+        return -1;
+    };
+
+    /**
+     * [lastIndexOf 返回value在该 array 中的索引值 和 _.indexOf查询顺序相反 ]
+     * @author wq
+     * @DateTime 2018-10-18T11:38:17+0800
+     * @param    {[type]}                 array [description]
+     * @param    {[type]}                 item  [description]
+     * @param    {[type]}                 from  [description]
+     * @return   {[type]}                       [description]
+     */
+    _.lastIndexOf = function (array, item, from) {
+        var idx = array ? array.length : 0;
+        if (typeof from == 'number') {
+            idx = from < 0 ? idx + from + 1 : Math.min(idx, from + 1);
+        }
+        if (item !== item) {
+            return _.findLastIndex(slice.call(array, 0, idx), _.isNaN);
+        }
+        while (--idx >= 0) if (array[idx] === item) return idx;
         return -1;
     };
 
@@ -639,6 +699,178 @@
         }
         return low;
     };
+
+
+    //======================================== 函数(Function) ========================================
+    //只是看了对象的创建部分
+    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args){
+        if(!(callingContext instanceof boundFunc)){
+            return sourceFunc.apply(context, args);
+        };
+        var self = baseCreate(sourceFunc.prototype);
+        var result = sourceFunc.apply(self, args);
+        if (_.isObject(result)) return result;
+        return self;
+    };
+
+    /**
+     * [bind 绑定函数 function 到对象 object 上, 也就是无论何时调用函数, 函数里的 this 都指向这个 object.任意可选参数 ]
+     * @author wq
+     * @DateTime 2018-10-19T13:43:55+0800
+     * @param    {[Function]}                 func    [需要使用的函数]
+     * @param    {[Object]}                 context [被this指向的对象]
+     * @return   {[type]}                         [description]
+     */
+    _.bind = function(func, context){
+        if(nativeBind && func.bind === nativeBind){
+            // return func(){}.bind(this [, ...args]);
+            return nativeBind.apply(func, slice(arguments, 1));
+        };
+        if(!_isFunction(func)){
+            throw new TypeError("Bind must be called on a function");
+        };
+        var args = slice.call(arguments, 2);
+        var bound = function(){
+            return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
+        };
+        return bound;
+    };
+
+    // 同时给多个方法绑定this 但是这种操作会受到该定义方法体的限制 [只能按定义好的规则使用]
+    _.bindAll = function(obj){
+        var i, length = arguments.length, key;
+        if(length<=1){
+            throw new Error("bindAll must be passed function names");
+        };
+        for(i=0;i<length;i++){
+            key = arguments[i];
+            obj[key] = _.bind(obj[key], obj);
+        };
+        return obj;
+    };
+
+    /**
+     * [delay 类似setTimeout，等待wait毫秒后调用function]
+     * @author wq
+     * @DateTime 2018-10-19T15:06:14+0800
+     * @param    {[Function]}                 func [回调函数]
+     * @param    {[Number]}                 wait [延迟时间]
+     * @return   {[type]}                      [description]
+     */
+    _.delay = function(func, wait){
+        var args = slice.call(arguments, 2);
+        return setTimeout(function(){
+            return func.apply(null, args);
+        }, wait);
+    };
+
+    // _.defer = _.partial(_.delay, _, 1);
+    
+    /**
+     * [throttle 函数节流 ，多少秒之内执行一次]
+     * @author wq
+     * @DateTime 2018-10-22T09:34:17+0800
+     * @param    {[type]}                 func    [description]
+     * @param    {[type]}                 wait    [description]
+     * @param    {[type]}                 options [description]
+     * @return   {[type]}                         [description]
+     *           temp： https://blog.csdn.net/wangfengqingyang/article/details/39519609 临时加上!!!
+     */
+    // 用这个时间差来计算，而不是直接用wait 说明，开始的计算点是从第一次触发函数时，到第二次触发这段时间是包含wait 之内的。
+            // 不在wait的计算 ,就直接重新计算，把上次的时间改为当前时间
+            //在wait范围内的计算
+
+    _.throttle = function(func, wait, options){
+        var context, args, result;
+        var timeout = null;
+        var previous = 0;
+        if(!options){ options = {} };
+        var later = function(){
+            previous = options.leading === false ? 0 : _.now();
+            timeout = null;
+            result = func.apply(context, args);
+            //清空优化
+            if(!timeout){ context = args = null};
+        };
+
+        return function(){ 
+            var now = _.now();
+            if(!previous && options.leading === false){
+                previous = now;    
+            }; 
+            var remaining = wait - (now-previous);   
+            context = this;
+            args = arguments;
+            //点击在wait时间之外（点击太慢）
+            if(remaining<=0 || remaining>wait){
+                if(timeout){
+                    clearTimeout(timeout);
+                    timeout = null;    
+                }
+                previous = now;
+                result = func.apply(context,args);
+                //清空优化
+                if(!timeout){ context = args = null};    
+                // 关于 == 的理解， (Boolean,Number,String前提下)当左右两边不是同类型时，会将两边转成Number类型在进行比较 [犀牛书==的理解， 配合上边写的网址]
+                // JS中简单类型与引用类型进行 == 引用类型会调用 toString，返回一个值比较，没有的话再找valueOf返回一个值比较
+                // =====隐式转换的特殊规则：======
+                //  !!!很重要 =>  [要比较相等性之前，不能将 null 和 undefined 转换成其他任何值。说明null,undefined和其他类型比较都为false]
+                 //点击在wait时间之内（点击太快）
+            }else if(!timeout && options.trailing !== false){
+                // console.log(options.trailing !== false,"options")
+                timeout = setTimeout(later, remaining);
+            };
+
+            return result;
+        };
+
+    };
+    
+    /**
+     * [bebounce 返回 function 函数的防反跳版本, 将延迟函数的执行(真正的执行)在函数最后一次调用时刻的 wait 毫秒之后. ]
+     *  AS: 游览器窗口的 [resize事件] 改变时，只会执行指定wait时间之后的一次  [默认没有第三个参数前提下]
+     * @author wq
+     * @DateTime 2018-10-24T16:05:39+0800
+     * @param    {[type]}                 func      [description]
+     * @param    {[type]}                 wait      [description]
+     * @param    {[type]}                 immediate [description]
+     * @return   {[type]}                           [description]
+     */
+    _.bebounce = function(func, wait, immediate){
+        var timeout, args, context, timestamp, result;
+
+        var later = function(){
+            var last = _.now() - timestamp;
+
+            if(last<wait && last >=0){
+                timeout = setTimeout(later, wait - last);
+            }else{
+                timeout = null;
+                if(!immediate){
+                    result = func.apply(context, args);
+                    if(!timeout){
+                        context = args = null;
+                    }
+                }
+            }
+        };
+
+        return function(){
+            context = this;
+            args = arguments;
+            timestamp = _.now();
+            var callNow = immediate && !timeout;
+            if(!timeout){ timeout = setTimeout(later, wait)};
+            if(callNow){
+                result = func.apply(context, args);
+                context = args = null;
+            };
+
+            return result;
+        };
+    };
+
+
 
 
     /**
@@ -764,6 +996,16 @@
            return _.isMatch(obj, attrs);
        };
    };
+
+   /**
+    * [description 将当前时间转为毫秒值]
+    * @author wq
+    * @DateTime 2018-10-22T09:29:57+0800
+    * @return   {[type]}                 [description]
+    */
+   _.now = Date.now || function(){
+        return new Date().getTime();
+   }
 
     /**
     *  处理属性的方法

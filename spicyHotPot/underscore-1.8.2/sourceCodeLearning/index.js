@@ -2,7 +2,7 @@
 console.log("\n====== _.each ======");
 (function() {
     /**
-     * _.each 遍历 
+     * _.each 遍历 xxx
      *
      */
     //console.log(_());
@@ -461,14 +461,36 @@ console.log("======= _.without ======");
 
 })();
 
+console.log("======= _.object =======");
 /**
- * [返回数组去重后的副本，这里只是去重]
+ * [把数组转为对象，]
  * @author wq
  * @DateTime 2018-08-06T11:13:24+0800
+ * @_.object(list, values)
+ * @ list[Array] values[Array]
  * @return   {[type]}                 [description]
  */
 (function(){
     var arr = [22,33,22,6,7,89,6,7];
-   var deleRepe = _.indexOf(arr,7,5);
-   console.log(deleRepe, "deleRepe++")
+    var deleRepe = _.object([['moe', 30], ['larry', 40], ['curly', 50]]);
+    console.log(deleRepe, "deleRepe++")
+})();
+
+
+
+(function(){
+    var arr = [22,33,45,78,90];
+    var deleRepe = _.indexOf(arr,78,"ss");
+    console.log(deleRepe, "deleRepe++")
+})();
+
+
+console.log("====== _.throttle ======");
+(function(){
+    var tempBtn = document.getElementsByClassName("temp-btn")[0];
+
+    var callBack = function(){console.log("ccccccccc")};
+
+    var throttle = _.throttle(callBack, 500);
+    tempBtn.onclick = throttle;
 })();
