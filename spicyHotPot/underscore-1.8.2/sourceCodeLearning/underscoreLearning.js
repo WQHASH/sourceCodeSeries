@@ -870,6 +870,90 @@
         };
     };
 
+    /**
+     * [after 创建一个函数, 只有在运行了 count [times] 次之后才有效果]
+     * @author wq
+     * @DateTime 2018-10-25T14:39:40+0800
+     * @param    {[Number]}                 times [需要运行的次数]
+     * @param    {[Fuction]}                 func  [运行的方法]
+     * @return   {[type]}                       [description]
+     * 注意点： ①：var a = --n 和 ②：n-- 的区别 
+     * 计算过程： ①中先算 var a = n-1;  n = n-1;
+     *         ②中先算 var a = n; n = n-1;
+     *         这里的举例是等号，对于下面的 大小于号 也是同样的计算道理[计算优先级];
+     *
+     *  配合理解点： 这里也形成了闭包，虽然times这个参数是从外部传递过来的
+     *              但是这对于 _.after中的匿名函数来说他向上找，是在他的上一层找到的，
+     *              且每次的调用 var after = _.after()都只是在调用匿名函数，且times的值被保留了，_.after只存在第一次的压栈
+     */
+    _.after = function(times, func){
+        return function(){
+            if(--times<1){
+                return func.apply(this, arguments);    
+            }
+        };
+    };
+
+    /**
+     * [before 创建一个函数,调用不超过count 次。 当count已经达到时，最后一次的调用可以为我们自身规定的方法]
+     * @author wq
+     * @DateTime 2018-10-25T15:17:08+0800
+     * @param    {[Number]}                 times [能被调用的次数]
+     * @param    {[Function]}                 func  [调用的方法]
+     * @return   {[type]}                       [description]
+     */
+    _.before = function(times, func){
+        var memo;
+        return function(){
+            if(--times > 0){
+                memo = func.apply(this, arguments);
+            }
+            if(times<=1){ func = null};
+            return memo;
+        };
+    };
+
+    /**
+     * [negate 返回一个新的predicate函数的否定版本]
+     * @author wq
+     * @DateTime 2018-10-25T15:39:10+0800
+     * @param    {[Function]}                 predicate [指定一个函数]
+     * @return   {[type]}                           [description]
+     */
+    _.negate = function(predicate){
+        return function(){
+            return !predicate.apply(this, arguments);
+        }
+    };
+
+    /**
+     * [compose 组合函数 =>这里需要多看看 函数组合与柯里化 ]
+     * @author wq
+     * @DateTime 2018-10-25T16:44:40+0800
+     * @return   {[type]}                 [description]
+     */
+    _.compose = function(){
+        var args = arguments;
+        var start = args.length -1;
+        return function(){
+            var i = start;
+            var result = args[start].apply(this, arguments);
+            // 网上介绍的这里一般用reduceRight这种方法去做
+            while (i--) {
+                result = args[i].call(this, result);
+            }
+            return result;
+        };
+
+        // === 网上的版本 ===
+        // var args = Array.prototype.slice.call(arguments);
+        // var len = args.length - 1
+        // return function (x) {
+        //     return args.reduceRight(function (res, cb) {
+        //         return cb(res)
+        //     }, x)
+        // }
+    };
 
 
 
