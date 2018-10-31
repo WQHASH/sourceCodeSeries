@@ -938,7 +938,7 @@
         return function(){
             var i = start;
             var result = args[start].apply(this, arguments);
-            // 网上介绍的这里一般用reduceRight这种方法去做
+            // 网上介绍的这里一般用reduceRight这种方法去做   [这里可以配合犀牛书理解 ++i 和 i++ 的区别]
             while (i--) {
                 result = args[i].call(this, result);
             }
@@ -954,7 +954,6 @@
         //     }, x)
         // }
     };
-
 
 
     /**
@@ -1019,16 +1018,78 @@
     };
 
 
-    //工具方法
-    // -----------------
-    //start
-    _.noConflict = function () {    //1270
-        root._ = previousUnderscore;
-        return this;
-    };
+    //======================================== 实用功能(Utility) ========================================
+    // _.noConflict = function () {    
+    //     root._ = previousUnderscore;
+    //     return this;
+    // };
     _.identity = function (value) {
         return value;
     };
+
+    /**
+     * [constant 创建一个函数，这个函数 返回相同的值 用来作为_.constant的参数。]
+     *     *这里是一个闭包很好的例子  As: var a=1; var b= _.constant(a); a=2; b();b()这里的传入的参数已经形成闭包了，
+     *     *整体也形成了闭包，当在改变a的值，和函数内部的没有关系了
+     * @author wq
+     * @DateTime 2018-10-31T15:36:54+0800
+     * @param    {[类型不定]}                 value [需要保存的值]
+     * @return   {[类型不定]}                       [返回和传入的全等]
+     */
+    _.constant = function (value) {
+        return function () {
+            return value;
+        }
+    };
+
+    /**
+     * [noop 返回undefined，不论传递给它的是什么参数。 可以用作默认可选的回调参数。]
+     * @author wq
+     * @DateTime 2018-10-31T15:41:17+0800
+     * @return   {[type]}                 [description]
+     */
+    _.noop = function () { };
+
+     /**    
+      * [times 调用给定的迭代函数n次,每一次调用iteratee传递index参数。生成一个返回值的数组。 ]
+      * @author wq
+      * @DateTime 2018-10-31T15:58:54+0800
+      * @param    {[Number]}                 n        [调用的次数]
+      * @param    {[Function]}                 iteratee [执行的函数]
+      * @param    {[Object]}                 context  [上线文环境]
+      * @return   {[Array]}                          [函数返回的值，形成一个数组]
+      */
+    _.times = function(n, iteratee, context){
+        var accum = Array(Math.max(0, n));
+        iteratee = optimizeCb(iteratee, context, 1);
+        for(var i=0; i<n; i++){
+            //   iteratee(i) 如果这里的而第一个参数加上，那么在方法体里就需要用定义了,暂时没明白这个参数何用
+            accum[i] = iteratee(i);
+        }
+        return accum;
+    };
+
+    /**
+     * [random 生成一个随机数]
+     * Math.random()的范围： [1,10)  是取不到最大值的所以需要 +1
+     * @author wq
+     * @DateTime 2018-10-31T16:02:14+0800
+     * @param    {[Number]}                 min [最小值]
+     * @param    {[Number]}                 max [最大值]
+     * @return   {[Number]}                     [生成的随机数]
+     */
+    _.random = function(min, max){
+        if(max == null){
+            max = min;
+            min = 0;
+        }; 
+        return min + Math.floor(Math.random() * (max-min+1));
+     };
+
+    _.now = Date.now || function () {
+        return new Date().getTime();
+    };
+
 
     /**
     * 判断是不是一个函数

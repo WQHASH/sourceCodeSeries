@@ -494,3 +494,36 @@ console.log("====== _.throttle ======");
     var throttle = _.throttle(callBack, 500);
     tempBtn.onclick = throttle;
 })();
+
+
+
+
+
+console.log("======= 实用功能(Utility) ======");
+console.log("====== _.noConflict ======");
+(function(){
+    // var noConflict = _.noConflict();
+    // console.log(noConflict(),"noConflict")
+})();
+
+
+console.log("====== _.constant ======");
+(function(){
+    var value = 1;
+    var getValue = _.constant(value);
+    value = 2;
+    console.log(getValue());
+    console.log(getValue());
+
+})();
+
+console.log("====== _.times ======");
+(function(){
+    var value = "xx";
+    var getValue = _.times(2, function(value){
+        console.log(value,"value")
+        return 12
+    });
+    console.log(getValue);
+
+})();
