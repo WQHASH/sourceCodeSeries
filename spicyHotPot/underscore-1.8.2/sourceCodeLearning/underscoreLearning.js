@@ -1019,10 +1019,10 @@
 
 
     //======================================== 实用功能(Utility) ========================================
-    // _.noConflict = function () {    
-    //     root._ = previousUnderscore;
-    //     return this;
-    // };
+    _.noConflict = function () {    
+        root._ = previousUnderscore;
+        return this;
+    };
     _.identity = function (value) {
         return value;
     };
