@@ -870,7 +870,90 @@
         };
     };
 
+    /**
+     * [after 创建一个函数, 只有在运行了 count [times] 次之后才有效果]
+     * @author wq
+     * @DateTime 2018-10-25T14:39:40+0800
+     * @param    {[Number]}                 times [需要运行的次数]
+     * @param    {[Fuction]}                 func  [运行的方法]
+     * @return   {[type]}                       [description]
+     * 注意点： ①：var a = --n 和 ②：n-- 的区别 
+     * 计算过程： ①中先算 var a = n-1;  n = n-1;
+     *         ②中先算 var a = n; n = n-1;
+     *         这里的举例是等号，对于下面的 大小于号 也是同样的计算道理[计算优先级];
+     *
+     *  配合理解点： 这里也形成了闭包，虽然times这个参数是从外部传递过来的
+     *              但是这对于 _.after中的匿名函数来说他向上找，是在他的上一层找到的，
+     *              且每次的调用 var after = _.after()都只是在调用匿名函数，且times的值被保留了，_.after只存在第一次的压栈
+     */
+    _.after = function(times, func){
+        return function(){
+            if(--times<1){
+                return func.apply(this, arguments);    
+            }
+        };
+    };
 
+    /**
+     * [before 创建一个函数,调用不超过count 次。 当count已经达到时，最后一次的调用可以为我们自身规定的方法]
+     * @author wq
+     * @DateTime 2018-10-25T15:17:08+0800
+     * @param    {[Number]}                 times [能被调用的次数]
+     * @param    {[Function]}                 func  [调用的方法]
+     * @return   {[type]}                       [description]
+     */
+    _.before = function(times, func){
+        var memo;
+        return function(){
+            if(--times > 0){
+                memo = func.apply(this, arguments);
+            }
+            if(times<=1){ func = null};
+            return memo;
+        };
+    };
+
+    /**
+     * [negate 返回一个新的predicate函数的否定版本]
+     * @author wq
+     * @DateTime 2018-10-25T15:39:10+0800
+     * @param    {[Function]}                 predicate [指定一个函数]
+     * @return   {[type]}                           [description]
+     */
+    _.negate = function(predicate){
+        return function(){
+            return !predicate.apply(this, arguments);
+        }
+    };
+
+    /**
+     * [compose 组合函数 =>这里需要多看看 函数组合与柯里化 ]
+     * @author wq
+     * @DateTime 2018-10-25T16:44:40+0800
+     * @return   {[type]}                 [description]
+     */
+    _.compose = function(){
+        var args = arguments;
+        var start = args.length -1;
+        return function(){
+            var i = start;
+            var result = args[start].apply(this, arguments);
+            // 网上介绍的这里一般用reduceRight这种方法去做   [这里可以配合犀牛书理解 ++i 和 i++ 的区别]
+            while (i--) {
+                result = args[i].call(this, result);
+            }
+            return result;
+        };
+
+        // === 网上的版本 ===
+        // var args = Array.prototype.slice.call(arguments);
+        // var len = args.length - 1
+        // return function (x) {
+        //     return args.reduceRight(function (res, cb) {
+        //         return cb(res)
+        //     }, x)
+        // }
+    };
 
 
     /**
@@ -935,16 +1018,78 @@
     };
 
 
-    //工具方法
-    // -----------------
-    //start
-    _.noConflict = function () {    //1270
+    //======================================== 实用功能(Utility) ========================================
+    _.noConflict = function () {    
         root._ = previousUnderscore;
         return this;
     };
     _.identity = function (value) {
         return value;
     };
+
+    /**
+     * [constant 创建一个函数，这个函数 返回相同的值 用来作为_.constant的参数。]
+     *     *这里是一个闭包很好的例子  As: var a=1; var b= _.constant(a); a=2; b();b()这里的传入的参数已经形成闭包了，
+     *     *整体也形成了闭包，当在改变a的值，和函数内部的没有关系了
+     * @author wq
+     * @DateTime 2018-10-31T15:36:54+0800
+     * @param    {[类型不定]}                 value [需要保存的值]
+     * @return   {[类型不定]}                       [返回和传入的全等]
+     */
+    _.constant = function (value) {
+        return function () {
+            return value;
+        }
+    };
+
+    /**
+     * [noop 返回undefined，不论传递给它的是什么参数。 可以用作默认可选的回调参数。]
+     * @author wq
+     * @DateTime 2018-10-31T15:41:17+0800
+     * @return   {[type]}                 [description]
+     */
+    _.noop = function () { };
+
+     /**    
+      * [times 调用给定的迭代函数n次,每一次调用iteratee传递index参数。生成一个返回值的数组。 ]
+      * @author wq
+      * @DateTime 2018-10-31T15:58:54+0800
+      * @param    {[Number]}                 n        [调用的次数]
+      * @param    {[Function]}                 iteratee [执行的函数]
+      * @param    {[Object]}                 context  [上线文环境]
+      * @return   {[Array]}                          [函数返回的值，形成一个数组]
+      */
+    _.times = function(n, iteratee, context){
+        var accum = Array(Math.max(0, n));
+        iteratee = optimizeCb(iteratee, context, 1);
+        for(var i=0; i<n; i++){
+            //   iteratee(i) 如果这里的而第一个参数加上，那么在方法体里就需要用定义了,暂时没明白这个参数何用
+            accum[i] = iteratee(i);
+        }
+        return accum;
+    };
+
+    /**
+     * [random 生成一个随机数]
+     * Math.random()的范围： [1,10)  是取不到最大值的所以需要 +1
+     * @author wq
+     * @DateTime 2018-10-31T16:02:14+0800
+     * @param    {[Number]}                 min [最小值]
+     * @param    {[Number]}                 max [最大值]
+     * @return   {[Number]}                     [生成的随机数]
+     */
+    _.random = function(min, max){
+        if(max == null){
+            max = min;
+            min = 0;
+        }; 
+        return min + Math.floor(Math.random() * (max-min+1));
+     };
+
+    _.now = Date.now || function () {
+        return new Date().getTime();
+    };
+
 
     /**
     * 判断是不是一个函数

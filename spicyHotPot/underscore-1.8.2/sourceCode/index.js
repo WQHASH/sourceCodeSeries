@@ -72,3 +72,19 @@ console.log("===debounce===");
   var lazyLayOut = _.debounce(cb, 300);
   window.onresize = lazyLayOut;
 })();
+
+console.log("=== _.after ===");
+(function(){
+   var cb = function(){console.log(" _.after")};
+   var after = _.before(3,cb);
+   document.getElementsByClassName("btn")[0].onclick = after;
+})();
+
+console.log("=== _.compose ===");
+(function(){
+   var greet    = function(name){ return "hi: " + name; };
+  var exclaim  = function(statement){ return statement.toUpperCase() + "!"; };
+  var welcome = _.compose(greet, exclaim);
+  console.log(welcome('moe'),"compse");
+})();
+
