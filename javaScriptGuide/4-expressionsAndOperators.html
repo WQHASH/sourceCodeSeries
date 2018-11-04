@@ -6,13 +6,13 @@
 		function func(){
 			var x=10;
 			// 调用了局部变量
-			console.log(eval("x"));
+			// console.log(eval("x"));
 			//申明了一个局部变量
 			eval("var y=88;");
-			console.log(y);
+			// console.log(y);
 			//申明一个局部函数
 			eval("function fn(){return 33};");
-			console.log(fn());
+			// console.log(fn());
 
 		};
 		func();
@@ -21,8 +21,11 @@
 
 
 
-	(function(){})();
-	(function(){})();
+	
+
+	
+
+
 	(function(){})();
 
 </script>
