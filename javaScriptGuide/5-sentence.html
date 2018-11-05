@@ -58,7 +58,7 @@
 	//设置不可枚举属性方法
 	Object.defineProperty(obj, "sname", { value: "wq", enumerable: false});
 	for(var key in obj){
-		obj["sjob"] = "code";
+		obj["sjob"] = "code";		
 		// console.log(obj)
 		// console.log(key)
 	}
@@ -90,8 +90,15 @@
 	var obj = {"sname":"www","sage":"12"};
 	Object.defineProperty(obj, "sage", { value: "12", enumerable: false});
 	for(var key in obj){
-		obj["sjob"] = "code";
-		Object.defineProperty(obj, "sjob", { value: "code", enumerable: true});
+		// obj["sjob"] = "code";
+		//最原生的为对象增加属性
+		Object.defineProperties(obj,{"sjob":{
+			value:"code",
+			configurable: false,
+			writable: true,
+			enumerable: true
+		}})
+		// Object.defineProperty(obj, "sjob", { value: "code", enumerable: true});
 		console.log(key);  // sname ?? 为什么新增的 sage不能打印出来呢
 	}
 	console.log(obj);  // {sname, sjob, sage}  

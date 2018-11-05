@@ -2,22 +2,67 @@
 	(function(){
 		/**
 		 *  1. 创建了一个新对象，  var fun = {}
-		 *  2. 将构造函数的作用域赋给新值(因此this就指向了这个新对象)  obj.__proto__=Fun.prototype
+		 *  2. 将构造函数的作用域赋给新值(因此this就指向了这个新对象)  fun.__proto__=Fun.prototype
 		 *     因为每个对象都从原型继承属性, 这里把fun空对象的__proto__指向Fun.prototyep	 如果直接var声明的那么他将继承 Object.prototype
-		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了obj  Fun.call(fun)
+		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了fun  Fun.call(fun)
 		 *  4. 返回新对象   
 		 */
 		function Fun(){}
 		var fun = new Fun();
 
 
+		//======== ******************************============
+		//======== ******************************============
+		// 关于Object.create() 方法剖析:
+		// Object.defineProperties 和 Object.defineProperties 的理解： https://segmentfault.com/a/1190000011294519
+		// defineProperties[用来设置是否可枚举属性] defineProperties[最原生的增加属性方法]
+		// 											***new实现方法剖析:  http://www.php.cn/js-tutorial-379371.html 
+		//  Object.getPrototypeOf(obj) => 通锅obj.__proto__属性找到obj的上一级也就是其原型对象											
+		//======== ******************************============
+		//======== ******************************============
+		// Object.create = function(prototype, properties){
+		// 	if(typeof prototype !== "object"){
+		// 		throw new Error();
+		// 	}
+		// 	var obj = {};
+		// 	obj.__proto__ = prototype;
+		// 	if(typeof properties !== "undefined"){
+		// 		//这里和new 的过程不同的是: new 的要构造函数，然后在新对象调用时借用构造里边的方法，
+		// 		//而Object.create的方法是通过第二个参数来手动设置的。
+		// 		Object.defineProperties(obj, properties);
+		// 	}
+		// 	return obj; 
+		// };
 
-	}();
 
-	(function(){}();
-	(function(){}();
-	(function(){}();
-	(function(){}();
+	})();
+
+
+	/**
+	 * ?? 对象创建遗留问题，需画图
+	 * 手写bind: https://blog.csdn.net/qq_40479190/article/details/78324282
+	 */
+
+	(function(){
+		function Ctor(){};
+		var baseCreate = function(prototype){
+	        Ctor.prototype = prototype;
+	        var result = new Ctor();
+
+	        // console.log(Ctor.prototype,"xx");
+	        Ctor.prototype = null;
+	        // console.log(result.__proto__,"yy");
+	        return result; 
+	    };
+	    var obj = baseCreate({"sname":"21"});
+		// console.log(obj);
+		// console.log(Object.getPrototypeOf(obj));
+
+
+
+
+
+	})();
 
 
 </script>
