@@ -1,4 +1,7 @@
 <script type="text/javascript">
+	/**
+	 * 6.1.2通过new创建对象
+	 */
 	(function(){
 		/**
 		 *  1. 创建了一个新对象，  var fun = {}
@@ -49,18 +52,54 @@
 	        Ctor.prototype = prototype;
 	        var result = new Ctor();
 
-	        // console.log(Ctor.prototype,"xx");
+	        console.log(Ctor.prototype,"xx"); // {"sname":21}
 	        Ctor.prototype = null;
-	        // console.log(result.__proto__,"yy");
+	        console.log(result.__proto__,"yy");  // {{"sname":21}}
 	        return result; 
 	    };
 	    var obj = baseCreate({"sname":"21"});
-		// console.log(obj);
-		// console.log(Object.getPrototypeOf(obj));
+	    // 两次打印的值为什么还相等呢？
+	    // 不太明白，为什么 Ctor.prototype = null; 赋值为null后 
+	    // 实例result。__proto__还能找到 Ctor.prototype这个值，难道 result.__proto__指向的是另一份对象？
+	    // 已解决： 记住赋值的关系是把后边赋值给前边 ====>var a=[1];var b=a; a =[2]; b // [1]
+
+	})();
 
 
+	/**
+	 * 6.2.2继承
+	 */
 
+	(function(){
+		function inherit(p){
+			if(p == null){ throw TypeError()};
+			if(Object.create){
+				return Object.create(p);
+			};
+			var t = typeof p;
+			if(t !== "object" && t!=="function"){ throw TypeError() };
+			function f(){};
+			f.prototype = p;
+			return new f();
+		};
 
+		// var o = {};
+		function O(){
+			this.x =1;
+		};
+		var o = new O();
+
+		// 理解: 这里的参数，其实就是传递一个对象，来找熟悉 (别说传原型，因为传原型，原型又会指向构造函数，这样属性就没法用了)
+		// o.x = 1;
+		var p = inherit(o);
+		p.y = 2;
+		var q = inherit(p);
+		q.z = 3;
+		var s = q.toString();
+		q.x=2;
+		var num = q.x + q.y;
+		console.log(q,"q");
+		console.log(num,"num");
 
 	})();
 
