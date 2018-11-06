@@ -58,6 +58,8 @@
 	        return result; 
 	    };
 	    var obj = baseCreate({"sname":"21"});
+
+	    console.log(new Ctor(),"xxx");
 	    // 两次打印的值为什么还相等呢？
 	    // 不太明白，为什么 Ctor.prototype = null; 赋值为null后 
 	    // 实例result。__proto__还能找到 Ctor.prototype这个值，难道 result.__proto__指向的是另一份对象？
@@ -98,8 +100,8 @@
 		var s = q.toString();
 		q.x=2;
 		var num = q.x + q.y;
-		console.log(q,"q");
-		console.log(num,"num");
+		// console.log(q,"q");
+		// console.log(num,"num");
 
 	})();
 
