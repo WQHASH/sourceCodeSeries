@@ -49,21 +49,21 @@
 	(function(){
 		function Ctor(){};
 		var baseCreate = function(prototype){
-	        Ctor.prototype = prototype;
-	        var result = new Ctor();
+			Ctor.prototype = prototype;
+			var result = new Ctor();
 
-	        console.log(Ctor.prototype,"xx"); // {"sname":21}
-	        Ctor.prototype = null;
-	        console.log(result.__proto__,"yy");  // {{"sname":21}}
-	        return result; 
-	    };
-	    var obj = baseCreate({"sname":"21"});
+			// console.log(Ctor.prototype,"xx"); // {"sname":21}
+			Ctor.prototype = null;
+			// console.log(result.__proto__,"yy");  // {{"sname":21}}
+			return result; 
+		};
+		var obj = baseCreate({"sname":"21"});
 
-	    console.log(new Ctor(),"xxx");
-	    // 两次打印的值为什么还相等呢？
-	    // 不太明白，为什么 Ctor.prototype = null; 赋值为null后 
-	    // 实例result。__proto__还能找到 Ctor.prototype这个值，难道 result.__proto__指向的是另一份对象？
-	    // 已解决： 记住赋值的关系是把后边赋值给前边 ====>var a=[1];var b=a; a =[2]; b // [1]
+		// console.log(new Ctor(),"xxx");
+		// 两次打印的值为什么还相等呢？
+		// 不太明白，为什么 Ctor.prototype = null; 赋值为null后 
+		// 实例result。__proto__还能找到 Ctor.prototype这个值，难道 result.__proto__指向的是另一份对象？
+		// 已解决： 记住赋值的关系是把后边赋值给前边 ====>var a=[1];var b=a; a =[2]; b // [1]
 
 	})();
 
@@ -105,5 +105,77 @@
 
 	})();
 
+	/**
+	 * uc面试题
+	 */
+	(function(){
+		function Foo(){
+			window.getName = function(){ console.log(1) };
+			console.log(this,"this+q")
+			return this;
+		};
+		Foo.getName = function(){ console.log(2)};
+		Foo.prototype.getName = function(){ console.log(3)};
+		var getName = function(){ console.log(4)};
+		function getName(){console.log(5)};
+
+		//Foo.getName();		// 2
+		// getName();			// 4	// 变量 函数算都会声明提前，但最后是变量进行赋值的
+		// Foo().getName();	// 1
+		// getName();			// 4
+		// new Foo.getName();	// 2  	new (Foo.getname)() =>点的优先级高于new 的
+		// new Foo().getName(); // 3 	注意优先级关系 :括号高于new  (new Foo()).getName() =>Foo函数里的this正是new的当前对象,所以getName找的是原型中的
+		// new new Foo().getName(); //3   new ((new Foo()).getName())
+	})();
+
+	/**
+	 * 6.3 删除属性 [delete删除特性]
+	 */
+	(function(){
+		// delete只是断开属性和宿主对象的联系，而不会去操作属性中的属性
+		// So: 需要注意，由于这种不严谨的代码可能会造成内存泄漏( 属性没删干净)，所以在销毁对象时，要遍历属性中的属性依次删除
+		a = {p:{x:1},m:"m"};
+		b=a.p;
+		delete a.p;
+		// console.log(a,"a");
+		// console.log(b,"b.x");
+
+		// delete删除数组元素后length长度不变, 只是位置为undefined,或者理解成为empty
+		var arr = [3,4,5];
+		delete arr[1];
+		// console.log(arr,arr.length,"arr");
+	})();
+
+	/**
+	 * continue 和 break的区别
+	 * continue: 只是跳出当前执行环境，但并不停止而是继续执行。
+	 * break： 跳出当前的执行环境，并停止[下面的操作不在执行]。
+	 */
+	(function(){
+		for(var i=0; i<5;i++){
+			// break;  // 0
+			//continue; // 0-4  
+			if(i==2){
+				// console.log(i,"111");
+				continue;
+			}
+			// console.log(i);
+		}
+	})();
+
+	/**
+	 * 6.6属性getter 和 setter
+	 */
+	(function(){
+		var o = {
+			_Name: "wq",
+			set accessor_prop(name){ this._Name = name},
+			get accessor_prop(){ return this._Name},
+		};
+		console.log(o,"o");
+		o.accessor_prop = "xx";
+		console.log(o,"o");
+	})();
+	
 
 </script>
