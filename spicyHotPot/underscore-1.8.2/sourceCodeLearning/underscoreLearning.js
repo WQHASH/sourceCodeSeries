@@ -827,7 +827,7 @@
     };
     
     /**
-     * [bebounce 返回 function 函数的防反跳版本, 将延迟函数的执行(真正的执行)在函数最后一次调用时刻的 wait 毫秒之后. ]
+     * [debounce 返回 function 函数的防反跳版本, 将延迟函数的执行(真正的执行)在函数最后一次调用时刻的 wait 毫秒之后. ]
      *  AS: 游览器窗口的 [resize事件] 改变时，只会执行指定wait时间之后的一次  [默认没有第三个参数前提下]
      * @author wq
      * @DateTime 2018-10-24T16:05:39+0800
@@ -836,7 +836,7 @@
      * @param    {[type]}                 immediate [description]
      * @return   {[type]}                           [description]
      */
-    _.bebounce = function(func, wait, immediate){
+    _.debounce = function(func, wait, immediate){
         var timeout, args, context, timestamp, result;
 
         var later = function(){
