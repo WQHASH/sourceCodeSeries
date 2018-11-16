@@ -7,10 +7,13 @@
 		 *  1. 创建了一个新对象，  var fun = {}  
 		 *  2. 将构造函数的作用域赋给新值(因此this就指向了这个新对象)  fun.__proto__=Fun.prototype
 		 *     因为每个对象都从原型继承属性, 这里把fun空对象的__proto__指向Fun.prototyep	 如果直接var声明的那么他将继承 Object.prototype
-		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了fun  Fun.call(fun)
+		 *     								-> fun的proto指向Fun.prototyep这就能集成到Object.prototyep 形成一个链结构
+		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了fun  Fun.call(fun) 
+		 *  								->因为最开始生成了一个fun空对象，这里 fun对象借用了Fun函数的属性 
 		 *  4. 返回新对象   
 		 *
 		 *  1.1  如果是 var obj={}不是new的这种，那么obj.__proto__ = Object.prototype 指向的是这个Object原型
+		 *  								->所以new创建对象的方式本质上就是完成继承 【自身属性】 和 【原型属性】的过程
 		 */
 		function Fun(){}
 		var fun = new Fun();

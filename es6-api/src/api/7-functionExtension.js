@@ -27,7 +27,7 @@ let functionExtension = "函数扩展";
 }
 /**
  * 下面2个例子都体现了，当函数参数有默认值时候，
- * 	参数部分会单独形成以个作用域，方法体又是一个作用域，函数外又是一个全局作用域
+ * 	参数部分会单独形成一个作用域，方法体又是一个作用域，函数外又是一个全局作用域
  *  还是遵守爬树原则，方法体 -> 参数部分 -> 函数外(全局)
  * 
  */
@@ -53,9 +53,13 @@ let functionExtension = "函数扩展";
 	//console.log(x,"x") //1
 }
 
-
-
-
+// 箭头后边部分如果被解析成代码块 注意需要加()处理
+{
+	let foo = () => { a: 1 };
+	console.log(foo(),"foo()") // undefined
+	let foo1 = () => ({a:22});
+	console.log(foo1(), "foo1");
+}
 
 
 export {functionExtension};
