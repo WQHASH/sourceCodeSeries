@@ -4,11 +4,13 @@
 	 */
 	(function(){
 		/**
-		 *  1. 创建了一个新对象，  var fun = {}
+		 *  1. 创建了一个新对象，  var fun = {}  
 		 *  2. 将构造函数的作用域赋给新值(因此this就指向了这个新对象)  fun.__proto__=Fun.prototype
 		 *     因为每个对象都从原型继承属性, 这里把fun空对象的__proto__指向Fun.prototyep	 如果直接var声明的那么他将继承 Object.prototype
 		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了fun  Fun.call(fun)
 		 *  4. 返回新对象   
+		 *
+		 *  1.1  如果是 var obj={}不是new的这种，那么obj.__proto__ = Object.prototype 指向的是这个Object原型
 		 */
 		function Fun(){}
 		var fun = new Fun();
@@ -164,7 +166,7 @@
 	})();
 
 	/**
-	 * 6.6属性getter 和 setter
+	 * 6.6属性getter 和 setter [理解????]
 	 */
 	(function(){
 		var o = {
@@ -172,9 +174,19 @@
 			set accessor_prop(name){ this._Name = name},
 			get accessor_prop(){ return this._Name},
 		};
-		console.log(o,"o");
+		// console.log(o,"o");
 		o.accessor_prop = "xx";
-		console.log(o,"o");
+		// console.log(o,"o");
+	})();
+
+
+	(function(){
+
+		function Fun(){}
+		var fun = new Fun();
+
+		console.log(fun,"fun");
+
 	})();
 	
 
