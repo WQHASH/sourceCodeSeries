@@ -116,7 +116,7 @@
 	(function(){
 		function Foo(){
 			window.getName = function(){ console.log(1) };
-			console.log(this,"this+q")
+			console.log(this,"this+q");
 			return this;
 		};
 		Foo.getName = function(){ console.log(2)};
@@ -124,13 +124,14 @@
 		var getName = function(){ console.log(4)};
 		function getName(){console.log(5)};
 
-		//Foo.getName();		// 2
-		// getName();			// 4	// 变量 函数算都会声明提前，但最后是变量进行赋值的
-		// Foo().getName();	// 1
-		// getName();			// 4
-		// new Foo.getName();	// 2  	new (Foo.getname)() =>点的优先级高于new 的
-		// new Foo().getName(); // 3 	注意优先级关系 :括号高于new  (new Foo()).getName() =>Foo函数里的this正是new的当前对象,所以getName找的是原型中的
-		// new new Foo().getName(); //3   new ((new Foo()).getName())
+		Foo.getName();		// 2
+		getName();			// 4	// 变量 函数算都会声明提前，但最后是变量进行赋值的
+		Foo().getName();	// 1
+		getName();			// 4
+		// 通过调用 函数静态方法 和原型中的方法可以体现出,静态方法的优先级会高于原型中的
+		new Foo.getName();	// 2  	new (Foo.getname)() =>点的优先级高于new的
+		new Foo().getName(); // 3 	注意优先级关系 :括号高于new  (new Foo()).getName() =>Foo函数里的this正是new的当前对象,所以getName找的是原型中的
+		new new Foo().getName(); //3   new ((new Foo()).getName())
 	})();
 
 	/**
@@ -188,7 +189,7 @@
 		function Fun(){}
 		var fun = new Fun();
 
-		console.log(fun,"fun");
+		// console.log(fun,"fun");
 
 	})();
 	

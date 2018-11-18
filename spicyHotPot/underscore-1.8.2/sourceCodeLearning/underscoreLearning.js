@@ -812,7 +812,7 @@
                 //清空优化
                 if(!timeout){ context = args = null};    
                 // 关于 == 的理解， (Boolean,Number,String前提下)当左右两边不是同类型时，会将两边转成Number类型在进行比较 [犀牛书==的理解， 配合上边写的网址]
-                // JS中简单类型与引用类型进行 == 引用类型会调用 toString，返回一个值比较，没有的话再找valueOf返回一个值比较
+                // JS中简单类型与引用类型进行 == 引用类型会调用 valueOf，返回一个值比较，没有的话再找 toString 返回一个值比较
                 // =====隐式转换的特殊规则：======
                 //  !!!很重要 =>  [要比较相等性之前，不能将 null 和 undefined 转换成其他任何值。说明null,undefined和其他类型比较都为false]
                  //点击在wait时间之内（点击太快）

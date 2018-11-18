@@ -1,0 +1,111 @@
+<script type="text/javascript">
+	
+	(function(){
+		function func(){};
+		func.sname= "wq";
+		// console.log(func.__proto__,"func");
+		// console.log(func.prototype,"func"); //可在func.prototype.constructor中找到定义的属性
+
+	})();
+
+	/**
+	 * 关于留住this的函数，可配合理解bind的写法，
+	 */
+	(function(){
+		var obj = {
+			hitch: function(scope, method){
+				return function(){
+					return method.apply(scope, arguments);
+				}
+			},
+		}
+
+		var test = {
+			say: function(){
+				// setTimeout(function(){
+				// 	console.log(this,"this++")
+				// },0)
+				setTimeout(obj.hitch(this,function(){
+					// console.log(this,"this++")
+				}),0)
+			}
+		}
+		test.say()
+
+	})();
+
+	/**
+	 * 8.6: 闭包
+	 */
+
+	(function(){
+		//闭包存储器
+		function addPrivateProprety(name,val){
+			var o ={};
+			return {
+				set: function(name){
+					o[name] = val;
+				},
+				get: function(){
+					return o[name];
+				},
+			}
+		};
+
+		var obj = addPrivateProprety("sname","wq");
+		obj.set("sname");
+		// console.log(obj.get(),"get");
+
+	})();
+
+	/**
+	 * 这两个闭包例子
+	 * 注意点： ①闭包中共享变量   ②比保重不希望被共享的变量
+	 */
+
+	(function(){
+		function constfuncs(v){
+			return function(){ return v}
+		};
+
+		var funcs = [];
+		for(var i=0;i<10;i++){
+			// funcs[i] = constfuncs(i)
+			var index = i;
+			funcs[i] = (function(i){
+				//这里i和index在这打印的值虽然一样但是, 用i是作为闭包的局部变量来使用的
+				//而index,还是外部的，所以当 funcs[5]()执行时，循环已经都执行完毕了 index= i=9了
+				//原理同下面的例子
+				return function(){ return aaa}
+			})(i);
+		}
+		// console.log(funcs[5](),"funcs");
+
+	})();
+
+	(function(){
+		//闭包虽然都有，但是闭包中的变量是在 constfuncs() 返回时有变量，所以10个闭包中的变量都一起改变了
+		function constfuncs(v){
+			var arr = [];
+			for(var i=0;i<10;i++){
+				arr[i] = function (){ return i}
+			}
+			return arr;
+		};
+		// console.log(constfuncs(),"xx")
+
+	})();
+
+
+	(function(){
+		function fun(sname){
+			console.log(this.sname,"sss")
+			this.sname=sname;
+		};
+		var obj = {"sname":"wq"}
+		var f = fun.bind(obj);
+		console.log(f(),"ff");
+
+	})();
+
+</script>
