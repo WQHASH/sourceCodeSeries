@@ -17,7 +17,10 @@
     var Ctor = function(){};
 
     var _ = function (obj) {
+        //如果参数是自己的实例，那就返回参数。
         if (obj instanceof _) return obj;
+        //如果你调用_，不是用new的，函数内部自动会给你new
+        //      => 这里第一次this为window，生成一个新对象后，直接return 但是此时if判断就起到了作用，防止了后边的递归调用
         if (!(this instanceof _)) return new _(obj);
         this._wrapped = obj;
     };
