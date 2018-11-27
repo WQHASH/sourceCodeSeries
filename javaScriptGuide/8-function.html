@@ -128,11 +128,11 @@
 							results[i] = f.call(null, a[i], i, a);
 						}
 					}
-					return results
-				};
+				return results
+		};
 
 
-		//reduce
+		//reduce =>注意 使用reduce是遍历的数组长度必须大于1
 		var _reduce = Array.prototype._reduce
 					?function(a,f,initial){
 						if(arguments.length>2){
@@ -152,7 +152,8 @@
 									}
 									while(i<len){
 										if(i in a){
-											//这里的本意就是当没有初始化值，把数组中第一个值作为初始化值使用
+											// break 起到很重要作用，只处理第一个i
+											//这里的本意就是当没有初始化值，把数组中第一个值作为初始化值使用 
 											accumulator = a[i++];
 											break;
 										}else{
@@ -176,18 +177,84 @@
 					var data = [2,2,2];
 					var sum = function(x,y){return x+y};
 					var square = function(x){ return x*x};
-					var mean = _reduce(data, sum)/data.length;
+					var mean = _reduce(data, sum);
 					// console.log(mean,"mean");
 					_map(data, function(x){
 						// console.log(arguments,"xx")
-					});
+		});
+
+
+
+
+		//这么写本质上相当于 new一个匿名函数，本身也没什么错，但是 我们要实现的是bind方法功能，
+		//所以需要继承调用bind的函数属性，级原型			
+		//===========================
+		// Function.prototype._bind = function(context){
+		// 	var args = Array.prototype.slice.call(arguments, 1);
+		// 	var self = this;
+		// 	return function(){
+		// 		this.name="232";
+		// 		return self.apply(context, args.concat(Array.prototype.slice.call(arguments)));、
+		// 	}			 
+		// }
+
+		// var obj = {"sname":"wq"};					
+		// function fun(sname){
+		// 	this.sname = sname;
+		// }			
+		// var Bind = fun._bind(obj);
+		// console.log(Bind("wangqi11"),"Bind");
+		
+		// var test = new Bind("wangqi")
+		// console.log(test,"test");		
+
+						
+		Function.prototype._bind = function(context){
+			if(typeof this != "function"){ return };
+			var self = this;
+			var args = Array.prototype.slice.call(arguments, 1);
+			function fuBuild(){};
+			var Func = function(){
+				//处理是否new的逻辑
+				var that = this instanceof self ?this: context;
+				return self.apply(that, args.concat(Array.prototype.slice.call(arguments)))
+
+			};  
+			if(self.prototype){
+				fuBuild.prototype = self.prototype
+			}
+			Func.prototype = new fuBuild();
+			return Func;
+		};
+
+
+		var obj = {"sname":"wq"};					
+		function fun(){
+			return this.sname
+		}			
+		var Bind = fun._bind(obj);
+		// console.log(new Bind("wangqi"),"Bind");	
+
 	})();
 
+
+			
+
+		
 
 	(function(){
 		// map:	 data.map(function(val, index, list){});
 		// reduce:  data.reduce(function(firstAdd, val, index, list){}, init)  
 		// bind: 	var val= obj.bind(newObj, arg1, agr2); => 返回一个函数需要再次调用 val();
+	})();
+
+
+	
+
+	(function(){
+
+
+
 	})();
 
 </script>
