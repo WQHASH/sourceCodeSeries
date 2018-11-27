@@ -169,6 +169,59 @@
 		}
 	})();
 
+	console.log("==========for循环删除数组元素==========");
+	/**
+	 * [continue 使用，使用一个新数组来承接，不在同一个数组上操作，省去下标处理]
+	 */
+	(function(){
+	  var arr = [3,4,5,5,5,5,6,7,8,9,10];
+	  var newArr = [];
+	  for(var i=0, len=arr.length; i<len; i++){
+	    if(arr[i]==5){
+	      continue;
+	    }else{
+	      newArr.push(arr[i])
+	    }
+	  }
+	  // console.log(newArr,"arr");
+	})();	
+
+	/**
+	 * 只一个数组处理
+	 */
+	(function(){
+		 var arr = [3,4,5,5,5,5,6,7,8,9,10];
+		 for(var i=0,len=arr.length; i<len; i++){
+		 	if(arr[i]==5){
+		 		//理解一点用递增或递减自身值肯定会改变，但取得是返回值[返回值需自行依据情况判断]
+		 		arr.splice(i--, 1);
+		 	}
+		 }
+		 // console.log(arr,"arr");
+	})();				
+
+	(function(){
+		var arr = [3,4,5,5,5,5,6,7,8,9,10];
+		var index = arr.length;
+		//从后边开始删除，那么由右边的数据来填充删除的数，而后下标递减的数在左边，这样删除下标和数字都能对上。
+		while(index--){
+			if(arr[index] == 5){
+				arr.splice(index, 1);
+			}
+		}
+		// console.log(arr,"arr-while");
+
+	})();
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * 6.6属性getter 和 setter [理解????]
 	 */

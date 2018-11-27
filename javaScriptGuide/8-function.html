@@ -96,16 +96,98 @@
 
 	})();
 
+	/**
+	 * 8.7.6: 构造函数
+	 */
+	(function(){
+
+		scope = "global";
+		function constructor(){
+			var scope = "local";
+			function fun(){}
+			return new Function("return this");
+		};	
+		// console.log(constructor(),"constructor");
+
+
+		var test = new Function();
+		// console.log(test,"test");
+	})();
+
+	/**
+	 * 8.8,1: 函数式编程
+	 */
+	(function(){
+		//map
+		var _map = Array.prototype._map
+				? function(a,f){return a.map(f)}
+				: function(a, f){
+					var results = [];
+					for(var i=0,len=a.length; i<len; i++){
+						if(i in a){
+							results[i] = f.call(null, a[i], i, a);
+						}
+					}
+					return results
+				};
+
+
+		//reduce
+		var _reduce = Array.prototype._reduce
+					?function(a,f,initial){
+						if(arguments.length>2){
+							return a.reduce(f, initial);
+						}else{
+							return a.reduce(f);
+						}
+					}
+					:
+					function(a,f,initial){
+								var i=0, len=a.length, accumulator;
+								if(arguments.length>2){
+									accumulator = initial;
+								}else{
+									if(len == 0){
+										throw TypeError();
+									}
+									while(i<len){
+										if(i in a){
+											//这里的本意就是当没有初始化值，把数组中第一个值作为初始化值使用
+											accumulator = a[i++];
+											break;
+										}else{
+											i++
+										}
+									}
+									if(i == len){
+										throw TypeError();
+									}
+								}
+								while(i<len){
+									if(i in a){
+										// accumulator:
+										// 	accumulator是reduce函数的初始值，会被每一次成功调用iteratee函数的返回值所取代
+										accumulator = f.call(undefined, accumulator, a[i], i, a);
+									}
+									i++;
+								};
+								return accumulator;
+						};
+					var data = [2,2,2];
+					var sum = function(x,y){return x+y};
+					var square = function(x){ return x*x};
+					var mean = _reduce(data, sum)/data.length;
+					// console.log(mean,"mean");
+					_map(data, function(x){
+						// console.log(arguments,"xx")
+					});
+	})();
+
 
 	(function(){
-		function fun(sname){
-			console.log(this.sname,"sss")
-			this.sname=sname;
-		};
-		var obj = {"sname":"wq"}
-		var f = fun.bind(obj);
-		console.log(f(),"ff");
-
+		// map:	 data.map(function(val, index, list){});
+		// reduce:  data.reduce(function(firstAdd, val, index, list){}, init)  
+		// bind: 	var val= obj.bind(newObj, arg1, agr2); => 返回一个函数需要再次调用 val();
 	})();
 
 </script>
