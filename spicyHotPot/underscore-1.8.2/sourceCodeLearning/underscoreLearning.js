@@ -615,7 +615,7 @@
             return array[i] === item ? i : -1;
         }
         if (item !== item) {
-            // slice.call(array, i) 这里可能是为了确保得到的一定是数组
+            // slice.call(array, i) 这里可能是为了确保得到的一定是数组,并且还要对数组进行截取，然后在重新计算
             return _.findIndex(slice.call(array, i), _.isNaN);
         }
         for (; i < length; i++) if (array[i] === item) return i;
