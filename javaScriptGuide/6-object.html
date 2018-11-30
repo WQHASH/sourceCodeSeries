@@ -154,18 +154,15 @@
 
 	/**
 	 * continue 和 break的区别
-	 * continue: 只是跳出当前执行环境，但并不停止而是继续执行。
-	 * break： 跳出当前的执行环境，并停止[下面的操作不在执行]。
+	 * continue: 中断本次 continue之后的语句，但并不停止而是继续执行下次循环。
+	 * break：   直接在不满足的条件中跳出，并停止[之后的操作不在执行]。
 	 */
 	(function(){
-		for(var i=0; i<5;i++){
-			// break;  // 0
-			//continue; // 0-4  
-			if(i==2){
-				// console.log(i,"111");
-				continue;
-			}
-			// console.log(i);
+		//  break;=> 0123
+		//  continue;=>0123456
+		for(var i=0;i<7;i++){
+			if(i==3){ continue;}
+			// console.log(i)  
 		}
 	})();
 
