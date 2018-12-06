@@ -1,0 +1,25 @@
+<script type="text/javascript">
+	//  eval的用法
+	(function(){
+		// 它使用了调用它的变量作用域环境 => 分开理解，使用的它所在上下文的作用域里的变量  
+		// 											[如果是全局的那么创建的将是全局的]
+		function func(){
+			var x=10;
+			// 调用了局部变量
+			// console.log(eval("x"));
+			//申明了一个局部变量
+			eval("var y=88;");
+			// console.log(y);
+			//申明一个局部函数
+			eval("function fn(){return 33};");
+			// console.log(fn());
+
+		};
+		func();
+
+	})();
+
+	
+	(function(){})();
+
+</script>

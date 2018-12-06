@@ -2,7 +2,7 @@
 console.log("\n====== _.each ======");
 (function() {
     /**
-     * _.each 遍历
+     * _.each 遍历 xxx
      *
      */
     //console.log(_());
@@ -27,7 +27,7 @@ console.log("\n====== _.each ======");
 console.log("====== _.map ======");
 (function() {
     /**
-     * _.map 迭代
+     * _.map 迭代   
      *   _.map(list, iteratee, [context]) 
      *       iteratee： 1.为空    =>返回原list
      *                  2.为函数  =>则返回 iteratee内部逻辑的处理
@@ -65,14 +65,14 @@ console.log("====== _.map ======");
 console.log("====== _.reduce ======");
 (function() {
     /**
-     * _.retuce 遍历
+     * _.retuce 遍历  
      *  该方法需要返回值： 个人认为这个方法很适合用于数字的 Math.ads(叠加)
-     *  retuce(obj, iteratee, [memo,] [context]) 
+     *  retuce(obj, iteratee, [Memo,] [context]) 
      *   obj: 需要遍历的数组||对象    
      *   iteratee: 回调函数
      *           iteratee(memo, value, index, list)
-     *                   memo: 初始值 value: 迭代下一个的值  index: 迭代的index list:需要遍历的数组||对象 
-     *   memo: reduce函数的初始值
+     *                   memo: 初始值[会受Memo值存在的影响，存在则为它，否则是list[0] ] value: 迭代下一个的值  index: 迭代的index[也就是value的index] list:需要遍历的数组||对象 
+     *   Memo: reduce函数的初始值
      *   context:  上下文对象，可以理解成this
      *       
      */
@@ -269,6 +269,15 @@ console.log("====== _.min ======");
     //console.log(elem, "elem111");
 })();
 
+console.log("====== _.toArray ======");
+(function(){
+     var obj = { "sname": "wq", "sage": "12", "city": "bj", "sex": "man" };
+     var arr = ["x","rt","f"]
+     var newObj = _.toArray(arr);
+     // console.log(newObj,"newObj");
+
+})();
+
 console.log("====== _.size ======");
 (function() {
     /**
@@ -452,14 +461,69 @@ console.log("======= _.without ======");
 
 })();
 
+console.log("======= _.object =======");
 /**
- * [返回数组去重后的副本，这里只是去重]
+ * [把数组转为对象，]
  * @author wq
  * @DateTime 2018-08-06T11:13:24+0800
+ * @_.object(list, values)
+ * @ list[Array] values[Array]
  * @return   {[type]}                 [description]
  */
 (function(){
     var arr = [22,33,22,6,7,89,6,7];
-   var deleRepe = _.indexOf(arr,7,5);
-   console.log(deleRepe, "deleRepe++")
+    var deleRepe = _.object([['moe', 30], ['larry', 40], ['curly', 50]]);
+    console.log(deleRepe, "deleRepe++")
+})();
+
+
+
+(function(){
+    var arr = [22,33,45,78,90];
+    var deleRepe = _.indexOf(arr,78,"ss");
+    console.log(deleRepe, "deleRepe++")
+})();
+
+
+console.log("====== _.throttle ======");
+(function(){
+    var tempBtn = document.getElementsByClassName("temp-btn")[0];
+
+    var callBack = function(){console.log("ccccccccc")};
+
+    var throttle = _.throttle(callBack, 500);
+    tempBtn.onclick = throttle;
+})();
+
+
+
+
+
+console.log("======= 实用功能(Utility) ======");
+console.log("====== _.noConflict ======");
+(function(){
+    // var noConflict = _.noConflict();
+    // console.log(noConflict(),"noConflict")
+})();
+
+
+console.log("====== _.constant ======");
+(function(){
+    var value = 1;
+    var getValue = _.constant(value);
+    value = 2;
+    console.log(getValue());
+    console.log(getValue());
+
+})();
+
+console.log("====== _.times ======");
+(function(){
+    var value = "xx";
+    var getValue = _.times(2, function(value){
+        console.log(value,"value")
+        return 12
+    });
+    console.log(getValue);
+
 })();

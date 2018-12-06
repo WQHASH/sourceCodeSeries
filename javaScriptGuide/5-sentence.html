@@ -1,0 +1,111 @@
+<script>
+	/**
+ * 5.2： 空语句
+ */
+(function(){
+	var a = [];
+	for(var i=0;i<a.length;a[i++]=0) ;
+		// console.log(a,"a");
+})();
+
+/**
+ * 5.4.3: switch语句
+ * Ecmascript标准允许每个case关键字跟随任意的表达式
+ *   **由于每次执行switch是,并不是每个case都能执行到，
+*   因此应当避免使用带有副作用的case 表达式，[如下面的] 尽量使用一些常量表达式
+ */
+(function(){
+	function fn1(){return 1};
+	function fn2(){return 2};
+	function fn3(){return 3};
+
+	switch(2){
+		case fn1():
+			console.log("fn1");
+			break;
+		case fn2():
+			// console.log("fn2");
+			break;
+		case fn3():
+			console.log("fn3");
+			break;
+		case "4":
+			return "fn2";
+		default:
+			return "xxx";		
+	}
+})();
+
+/**
+ * 5.5.4 for in
+ *  for in并不会遍历所有的属性，只有 可枚举属性才会便来，js内置对象都是不可枚举属性
+ *   As:  代码中定义的对象都是可枚举的 （有 enumerable属性 设置让可枚举的变成不可被枚举的）
+ *   Object.defineProperty("枚举对象","设置不可枚举的键名"， {value:"键值"，enumerable: false})
+ *
+ * 是否可遍历带来的影响：
+ * 		Object.key() =>只能找到自身的属性，原型上找不到
+ * 	 	JSON.string() =>同上
+ * 	 	for(in) => 可以找到原型上的
+ * 	 	
+ * 枚举属性的详细介绍:  https://www.cnblogs.com/moqiutao/p/7389146.html
+ */
+
+(function(){
+	var obj = {"sname":"wq","sage":"12"};
+	//为甚，num同样是对象但是他不能被遍历，因为Number的方法都是内置属性 不可枚举的，所以 for in访问不到
+	var num = new Number(12); 
+	var str = new String("x"); //他们虽然都是对象，他Number这种还比较特殊，貌似没有键名的
+	//设置不可枚举属性方法
+	Object.defineProperty(obj, "sname", { value: "wq", enumerable: false});
+	for(var key in obj){
+		obj["sjob"] = "code";		
+		// console.log(obj)
+		// console.log(key)
+	}
+	// console.log(obj,"obj");
+
+})();
+
+(function(){
+	function func(x){
+		// if(x<0){ throw new Error("小于0了")};
+		try{
+			// var xx = pa(x);
+			var xx = parseFloat(x);
+			// console.log(xx);
+		}catch(e){
+			throw new Error(e);
+		}
+	};
+	func("x");
+
+})();
+
+
+(function(){})();
+
+(function(){
+
+	//1. ???枚举留下的问题 
+	var obj = {"sname":"www","sage":"12"};
+	Object.defineProperty(obj, "sage", { value: "12", enumerable: false});
+	for(var key in obj){
+		// obj["sjob"] = "code";
+		//最原生的为对象增加属性
+		Object.defineProperties(obj,{"sjob":{
+			value:"code",
+			configurable: false,
+			writable: true,
+			enumerable: true
+		}})
+		// Object.defineProperty(obj, "sjob", { value: "code", enumerable: true});
+		console.log(key);  // sname ?? 为什么新增的 sage不能打印出来呢
+	}
+	console.log(obj);  // {sname, sjob, sage}  
+})();
+
+(function(){
+
+})();
+
+</script>	

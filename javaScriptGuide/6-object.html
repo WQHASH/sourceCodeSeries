@@ -1,0 +1,247 @@
+<script type="text/javascript">
+	/**
+	 * 6.1.2通过new创建对象
+	 */
+	(function(){
+		/**
+		 *  1. 创建了一个新对象，  var fun = {}  
+		 *  2. 将构造函数的作用域赋给新值(因此this就指向了这个新对象)  fun.__proto__=Fun.prototype
+		 *     因为每个对象都从原型继承属性, 这里把fun空对象的__proto__指向Fun.prototyep	 如果直接var声明的那么他将继承 Object.prototype
+		 *     								-> fun的proto指向Fun.prototyep这就能集成到Object.prototyep 形成一个链结构
+		 *  3. 执行构造函数中的代码（为这个新对象添加属性）call的用法把Fun的this指向了fun  Fun.call(fun) 
+		 *  								->因为最开始生成了一个fun空对象，这里 fun对象借用了Fun函数的属性 
+		 *  4. 返回新对象   
+		 *
+		 *  1.1  如果是 var obj={}不是new的这种，那么obj.__proto__ = Object.prototype 指向的是这个Object原型
+		 *  								->所以new创建对象的方式本质上就是完成继承 【自身属性】 和 【原型属性】的过程
+		 */
+		function Fun(){}
+		var fun = new Fun();
+
+
+		//======== ******************************============
+		//======== ******************************============
+		// 关于Object.create() 方法剖析:
+		// Object.defineProperties 和 Object.defineProperties 的理解： https://segmentfault.com/a/1190000011294519
+		// defineProperties[用来设置是否可枚举属性] defineProperties[最原生的增加属性方法]
+		// 											***new实现方法剖析:  http://www.php.cn/js-tutorial-379371.html 
+		//  Object.getPrototypeOf(obj) => 通锅obj.__proto__属性找到obj的上一级也就是其原型对象											
+		//======== ******************************============
+		//======== ******************************============
+		// Object.create = function(prototype, properties){
+		// 	if(typeof prototype !== "object"){
+		// 		throw new Error();
+		// 	}
+		// 	var obj = {};
+		// 	obj.__proto__ = prototype;
+		// 	if(typeof properties !== "undefined"){
+		// 		//这里和new 的过程不同的是: new 的要构造函数，然后在新对象调用时借用构造里边的方法，
+		// 		//而Object.create的方法是通过第二个参数来手动设置的。
+		// 		Object.defineProperties(obj, properties);
+		// 	}
+		// 	return obj; 
+		// };
+
+
+	})();
+
+
+	/**
+	 * ?? 对象创建遗留问题，需画图
+	 * 手写bind: https://blog.csdn.net/qq_40479190/article/details/78324282
+	 */
+
+	(function(){
+		function Ctor(){};
+		var baseCreate = function(prototype){
+			Ctor.prototype = prototype;
+			var result = new Ctor();
+
+			// console.log(Ctor.prototype,"xx"); // {"sname":21}
+			Ctor.prototype = null;
+			// console.log(result.__proto__,"yy");  // {{"sname":21}}
+			return result; 
+		};
+		var obj = baseCreate({"sname":"21"});
+
+		// console.log(new Ctor(),"xxx");
+		// 两次打印的值为什么还相等呢？
+		// 不太明白，为什么 Ctor.prototype = null; 赋值为null后 
+		// 实例result。__proto__还能找到 Ctor.prototype这个值，难道 result.__proto__指向的是另一份对象？
+		// 已解决： 记住赋值的关系是把后边赋值给前边 ====>var a=[1];var b=a; a =[2]; b // [1]
+
+	})();
+
+
+	/**
+	 * 6.2.2继承
+	 */
+
+	(function(){
+		function inherit(p){
+			if(p == null){ throw TypeError()};
+			if(Object.create){
+				return Object.create(p);
+			};
+			var t = typeof p;
+			if(t !== "object" && t!=="function"){ throw TypeError() };
+			function f(){};
+			f.prototype = p;
+			return new f();
+		};
+
+		// var o = {};
+		function O(){
+			this.x =1;
+		};
+		var o = new O();
+
+		// 理解: 这里的参数，其实就是传递一个对象，来找熟悉 (别说传原型，因为传原型，原型又会指向构造函数，这样属性就没法用了)
+		// o.x = 1;
+		var p = inherit(o);
+		p.y = 2;
+		var q = inherit(p);
+		q.z = 3;
+		var s = q.toString();
+		q.x=2;
+		var num = q.x + q.y;
+		// console.log(q,"q");
+		// console.log(num,"num");
+
+	})();
+
+	/**
+	 * uc面试题
+	 */
+	(function(){
+		function Foo(){
+			window.getName = function(){ console.log(1) };
+			console.log(this,"this+q");
+			return this;
+		};
+		Foo.getName = function(){ console.log(2)};
+		Foo.prototype.getName = function(){ console.log(3)};
+		var getName = function(){ console.log(4)};
+		function getName(){console.log(5)};
+
+		Foo.getName();		// 2
+		getName();			// 4	// 变量 函数算都会声明提前，但最后是变量进行赋值的
+		Foo().getName();	// 1
+		getName();			// 4
+		// 通过调用 函数静态方法 和原型中的方法可以体现出,静态方法的优先级会高于原型中的
+		new Foo.getName();	// 2  	new (Foo.getname)() =>点的优先级高于new的
+		new Foo().getName(); // 3 	注意优先级关系 :括号高于new  (new Foo()).getName() =>Foo函数里的this正是new的当前对象,所以getName找的是原型中的
+		new new Foo().getName(); //3   new ((new Foo()).getName())
+	})();
+
+	/**
+	 * 6.3 删除属性 [delete删除特性]
+	 */
+	(function(){
+		// delete只是断开属性和宿主对象的联系，而不会去操作属性中的属性
+		// So: 需要注意，由于这种不严谨的代码可能会造成内存泄漏( 属性没删干净)，所以在销毁对象时，要遍历属性中的属性依次删除
+		a = {p:{x:1},m:"m"};
+		b=a.p;
+		delete a.p;
+		// console.log(a,"a");
+		// console.log(b,"b.x");
+
+		// delete删除数组元素后length长度不变, 只是位置为undefined,或者理解成为empty
+		var arr = [3,4,5];
+		delete arr[1];
+		// console.log(arr,arr.length,"arr");
+	})();
+
+	/**
+	 * continue 和 break的区别
+	 * continue: 中断本次 continue之后的语句，但并不停止而是继续执行下次循环。
+	 * break：   直接在不满足的条件中跳出，并停止[之后的操作不在执行]。
+	 */
+	(function(){
+		//  break;=> 0123
+		//  continue;=>0123456
+		for(var i=0;i<7;i++){
+			if(i==3){ continue;}
+			// console.log(i)  
+		}
+	})();
+
+	console.log("==========for循环删除数组元素==========");
+	/**
+	 * [continue 使用，使用一个新数组来承接，不在同一个数组上操作，省去下标处理]
+	 */
+	(function(){
+	  var arr = [3,4,5,5,5,5,6,7,8,9,10];
+	  var newArr = [];
+	  for(var i=0, len=arr.length; i<len; i++){
+	    if(arr[i]==5){
+	      continue;
+	    }else{
+	      newArr.push(arr[i])
+	    }
+	  }
+	  // console.log(newArr,"arr");
+	})();	
+
+	/**
+	 * 只一个数组处理
+	 */
+	(function(){
+		 var arr = [3,4,5,5,5,5,6,7,8,9,10];
+		 for(var i=0,len=arr.length; i<len; i++){
+		 	if(arr[i]==5){
+		 		//理解一点用递增或递减自身值肯定会改变，但取得是返回值[返回值需自行依据情况判断]
+		 		arr.splice(i--, 1);
+		 	}
+		 }
+		 // console.log(arr,"arr");
+	})();				
+
+	(function(){
+		var arr = [3,4,5,5,5,5,6,7,8,9,10];
+		var index = arr.length;
+		//从后边开始删除，那么由右边的数据来填充删除的数，而后下标递减的数在左边，这样删除下标和数字都能对上。
+		while(index--){
+			if(arr[index] == 5){
+				arr.splice(index, 1);
+			}
+		}
+		// console.log(arr,"arr-while");
+
+	})();
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * 6.6属性getter 和 setter [理解????]
+	 */
+	(function(){
+		var o = {
+			_Name: "wq",
+			set accessor_prop(name){ this._Name = name},
+			get accessor_prop(){ return this._Name},
+		};
+		// console.log(o,"o");
+		o.accessor_prop = "xx";
+		// console.log(o,"o");
+	})();
+
+
+	(function(){
+
+		function Fun(){}
+		var fun = new Fun();
+
+		// console.log(fun,"fun");
+
+	})();
+	
+
+</script>

@@ -3,7 +3,10 @@
     <title>underscore.js-v1.8.2</title>
 </head>
 <body>
+    <button class="btn">测试</button>
+
     <script src="underscore.js-v1.8.2.js"></script>
+    <script src="index.js"></script>  
 
     <script >
         //console.log(this, "this");
@@ -24,10 +27,10 @@
 
         //需要用新值进行承接
         var sum = _.reduce(arrNum, function (memo, num, index, list) {
-            console.log(arguments);
+            // console.log(arguments);
             return memo + num;
         }, 0);
-        console.log(sum)
+        // console.log(sum)
 
     </script>
 </body>

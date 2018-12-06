@@ -3,8 +3,10 @@
 <head>
     <title>underscoreLearning</title>
 </head>
-
 <body>
+    <div style="height: 1000px; width: 100%;" >
+        <button class="temp-btn">函数节流</button>
+    </div>
     <script src="underscoreLearning.js"></script>
     <!-- <script src="codeReview.js"></script> -->
     <script src="index.js"></script>
@@ -24,16 +26,18 @@
      *
      */
 
-    var arr = ["sname11", "sage", "city"];
-    var each = _.each(arr, function() {
-        //console.log(arguments, "argu")
-    });
+    (function(){
+        var arr = ["sname11", "sage", "city"];
+        var each = _.each(arr, function() {
+            //console.log(arguments, "argu")
+        });
 
-    var map = _.map(arr, function() {
-        return arguments
-    });
-    // console.log(map, "map");
-
+        var map = _.map(arr, function() {
+            return arguments
+        });
+        // console.log(map, "map");
+        // 
+    })();
 
     (function() {
 
