@@ -1,0 +1,33 @@
+<script type="text/javascript">
+		
+	/**
+	 * [description: 2.2欺骗词法]
+	 *  eval用法: eval()函数接受一个字符串为参数，并将其中的内容视为好像在书写时就存在于程序中这个位置的代码
+	 *  		  在执行eval()之后的代码时，引擎并不知道或在意前面的代码是以动态形式插入进来的，
+	 *  		  并对词法作用域的环境进行修改。引擎只会如往常的进行词法作用域查询。	
+	 */
+	(function(){
+		function foo(str, a){
+			eval(str);
+			// console.log(a, b);
+		}	
+		var b = 2;
+		var ev=b+3;
+		foo("var b = "+ ev, 1);
+	})();
+
+	/**
+	 * [description new Function()]
+	 * 最后一个参数最为函数体，前面的为参数，
+	 * 相比较eval略微安全些，但都避免使用，因为它们所带来的好处无法抵消性能上的损失。
+	 */
+	(function(){
+		var fun = new Function("a","return a");
+		// console.log(fun(2), "fun");
+	})();
+
+
+	
+
+
+</script>
