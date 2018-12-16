@@ -1,0 +1,76 @@
+<script type="text/javascript">
+	
+	/**
+	 * 3.3 函数作用域
+	 * [理解只执行函数] https://blog.csdn.net/a736889661/article/details/79899105
+	 * (funciton foo(){}()) => 根据理解可看成是一个函数表达式而后再执行
+	 */
+
+	(function(){
+		var a = 2;
+		(function foo(){
+			var a = 3;
+			// console.log(a,"a");
+			// console.log(foo,"foo");
+		})();
+		// console.log(a,"a");
+
+
+	})();
+
+	/**
+	 * 3.3.2 立即执行函数表达式
+	 */
+	(function(){
+		window.a = 2;
+		function fun(global){ 
+			var a = 3;
+			console.log(a,"fun-a");
+			console.log(global.a,"fun-win-a")
+		};
+
+		(function iife(fun){
+			// console.log("iife");
+			// fun(window);
+		})(fun);
+
+	})();
+
+	/**
+	 * 3.3.4 let
+	 */
+	(function(){
+		if(true){
+			// 注意es6的写法，定义了块级作用域
+			// let关键字将变量绑定在所在的块级作用域（这种行为是隐式的）
+			var bar = 2;
+			// let bar = 2;
+			// console.log(bar,"inner");
+		};
+		// console.log(bar,"outer");
+
+		try{
+			undefined();
+		}catch(err){
+			// console.log(err,"err");
+		}
+		// console.log(err,"outter-err");   //err is not defined说明catch是一个块作用域
+	}());
+	//1.垃圾收集
+	(function(){
+		//疑问?  es6中这种显式的块作用域代码执行完后会被销毁??
+		{
+
+			let aa = 23;
+			// console.log(aa,"aa");  			 // 23
+		}
+		// console.log(aa,"aa");      	 		 // aa is not defined  (体现块级作用域)
+		for(let i=0;i<5;i++){
+			// console.log(i);       			 //0 1 2 3 4
+		}
+		// console.log(i);          			 //  i is not defined
+
+
+	})();
+
+</script>

@@ -1,0 +1,44 @@
+<script type="text/javascript">
+	/**
+	 * 4.2 编译器再度来袭
+	 * 		提前声明： 这里想说的是变量能在 if for这种代码块中声明提前
+	 * 					函数的提前却只能在该代码块的内部进行
+	 */
+
+	(function(){
+		// console.log(c,"ccc");	// undefined
+		//foo();
+		var a = true;
+		if(a){
+			// foo();
+			var c = "ccc";
+			function foo(){console.log("a")};
+		}else{
+			function foo(){console.log("b")};
+		}
+		// foo();
+
+	})();	
+
+	/**
+	 * 4.3 函数优先
+	 */
+
+	(function(){
+		foo();
+		var foo = 1;
+		var foo = function(){console.log("foo")};
+		function foo(){console.log("foo1")};
+		var foo = 2;
+
+	})();
+
+
+	/**
+	 * 小结：
+	 * 		1. 函数声明式的提前高于变量的
+	 * 		2.  注意避免重复声明 	
+	 */
+
+
+</script>
