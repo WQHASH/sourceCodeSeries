@@ -1,0 +1,72 @@
+<script type="text/javascript">
+	
+	/**
+	 * 5.2 实质问题
+	 *  理解闭包
+	 * 	①. 闭包是基于词法作用域书写代码时所长生的自然结果。
+	 * 	②. 当函数可以记住并访问所在的词法作用域时，就产生了闭包，即便函数式在当前词法作用域之外执行。
+	 * 	
+	 */
+	 // **这个例子体现闭包并不明显，重要的是说明了词法作用域，体现作用域在词法阶段已定义好，然后可以通过就近原则访问
+	(function(){
+		var b = 123;
+		function foo(){
+			var a = 2;
+			function bar(){
+				// console.log(a,b, "bar");
+			};
+			bar();
+		};
+		foo();
+	})();
+
+	//体现闭包，bar() 声明的位置涵盖了foo()内部作用域的闭包 [引用]，	
+	//理解:这种保存下来的引用关系就成为闭包
+	(function(){
+		function foo(){
+			var a = 2;
+			function bar(){
+				console.log(a);
+			};
+			return bar;
+		};
+		var baz = foo();
+		//baz();	// 2
+	})();	
+
+	// 体现在 baz()被当做参数fn 传入 bar(fn)  在bar内部直接调用，
+	// 	由于词法作用域的原因 , 这个函数能记住之前的作用域，那么这种引用就可以成为闭包
+	(function(){
+		function foo(){
+			var a = 2;
+			function baz(){
+				console.log(a);
+			};
+			bar(baz);
+		};
+		function bar(fn){
+			fn(); // 这里形成了闭包
+		};
+		// foo();
+	})();
+
+	// 无论通过何种手段将内部函数传递到所在的【**词法作用域之外**】，它都会持有对原始定义作用域的引用，
+	// 无论在何处执行这个函数都会使用 闭包 [**闭包可以理解为引用**]
+	(function(){
+		var fn;
+		function foo(){
+			var a = 2;
+			function baz(){
+				console.log(a);
+			};
+			fn = baz;
+		};
+		function bar(){
+			fn();
+		};
+		// foo();
+		// bar();
+	})();
+
+
+</script>
