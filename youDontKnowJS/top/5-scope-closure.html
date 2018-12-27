@@ -155,4 +155,66 @@
 			},i*1000);
 		}
 	})();
+
+
+	/**
+	 * 5.5.1 现代的模块机制
+	 */
+	(function(){
+		var MyModules = (function(){
+			var modules = {};
+			function define(name, deps, impl){
+				for(var i=0; i<deps.length; i++){
+					deps[i] = modules[deps[i]];
+				}
+				//apply把数组打散了，导致方法体中，接收到的是一个个的参数，而不是整个函数体
+				modules[name] = impl.apply(impl, deps);
+			};
+			function get(name){
+				return modules[name];
+			};
+			return {
+				define: define,
+				get: get, 
+			};
+		})();
+
+		MyModules.define("bar", [], function(){
+			function hello(who){
+				return "来自define:" + who;
+			};
+			return {
+				hello: hello,
+			};
+		});
+
+		MyModules.define("ba", [], function(){
+			function ho(){
+				return "xx:" + "gg";
+			};
+			return {
+				ho: ho,
+			};
+		});
+
+		MyModules.define("foo", ["bar","ba"], function(bar){
+			console.log(arguments,"arguments");
+			var test = "test";
+			function awesome(){
+				return "来自添加依赖:"+ bar.hello(test);
+			};
+			return {
+				awesome: awesome,
+			}
+		})
+
+		var bar = MyModules.get("bar");
+		var foo = MyModules.get("foo");
+		console.log(bar.hello("bar"), "bar");
+		console.log(foo.awesome(), "foo");
+
+
+
+
+	})();
 </script>
