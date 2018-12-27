@@ -198,7 +198,7 @@
 		});
 
 		MyModules.define("foo", ["bar","ba"], function(bar){
-			console.log(arguments,"arguments");
+			// console.log(arguments,"arguments");
 			var test = "test";
 			function awesome(){
 				return "来自添加依赖:"+ bar.hello(test);
@@ -210,11 +210,24 @@
 
 		var bar = MyModules.get("bar");
 		var foo = MyModules.get("foo");
-		console.log(bar.hello("bar"), "bar");
-		console.log(foo.awesome(), "foo");
+		// console.log(bar.hello("bar"), "bar");
+		// console.log(foo.awesome(), "foo");
 
 
 
+
+	})();
+
+	(function(){
+		/**
+		 * AMD（Asynchromous Module Definition（异步模块定义） RequireJS ）
+		 * 		//全部依赖加载完后在执行回调函数
+		 *  define(["jquery","b","c", function($,b,c){}]) 
+		 *  
+		 * CMD: (Common Module Definition（公共模块定义） SeaJS 国内)  
+		 * 		//按需加载, 而这些依赖都来自主入口
+		 * define(function(require,exports,module){ var jquery = require('jquery'); }) 
+		 */
 
 	})();
 </script>
