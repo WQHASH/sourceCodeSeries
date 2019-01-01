@@ -1,0 +1,126 @@
+<script type="text/javascript">
+
+	/**
+	 * 2.1 调用位置
+	 */
+	(function(){
+		/**
+		 * 理解 游览器调试调用栈方法
+		 */
+
+		var obj = {sname:"wq"};
+		function baz(){
+			console.log("baz");
+			bar();
+		};
+		function bar(){
+			console.log("bar");
+			foo();
+		};
+
+		function foo(){
+			console.log("foo");
+		};
+		// baz();
+
+
+	})();
+
+	/**
+	 * 2.2.2  隐式绑定， this隐式丢失问题
+	 * 隐式绑定: 理解什么是隐式绑定，存在对象调用方法 此时this则会指向当前调用方法的对象
+	 */
+	(function(){
+		function foo(){
+			console.log(this.a);
+		};
+		var obj = {
+			a: 2,
+			foo: foo,
+		};
+		// obj.foo();
+
+	})();
+
+
+
+	/**
+	 * 2.2.2  隐式绑定， this隐式丢失问题
+	 */
+
+	(function(){
+
+		var obj = {
+			sname:"wq",
+			say:function(){
+				return this.sname;
+			}
+		};
+		window.sname = "wangqi";
+		var say = obj.say;
+		// console.log(say());
+
+	})();
+
+	/**
+	 *  隐式丢失问题  (参数传递[回调函数] 就是一种隐式赋值)
+	 */
+
+	(function(){
+
+		function foo(){
+			console.log(this.a);
+		};
+
+		function doFoo(fn){
+			fn();
+		};
+		var obj = {
+			a:2,
+			foo: foo,
+		};
+		window.a = "gloabl";
+		// doFoo(obj.foo);
+	})();
+
+	/**
+	 * 2.2.3 显示绑定
+	 *  显示绑定: 手动的修改绑定  可使用 apply call bind  实现
+	 *  注意apply call的参数传递： 
+	 *  	第一个参数是一个对象，如果传入一个原始值，这个原始值会被隐式转换（new String）成对象。
+	 */
+	(function(){
+		function foo(){
+			console.log(this);
+		}
+		var obj = {
+			c: 2,
+		};
+		// foo.call(23);  // Number {23}
+	})();
+
+	/**
+	 * 2.3 优先级
+	 * this绑定机制的方式以及他们的优先级:
+	 * 		new > 显示绑定 > 隐式绑定 >  默认绑定
+	 *   	new: new的通过构造函数创建一个新对象方式， 配合理解bind方法中 处理是否new的机制。
+	 *    	显示绑定:  bind方法系列，如直接修改当前绑定的对象 apply  call。
+	 *     	隐式绑定:  其实就是对象中存在方法属性，然后直接调用。 注意的是 this可能存在丢失的情况!!
+	 *      默认绑定:  函数中的this默认会指向window。
+	 */
+
+	(function(){
+		function foo(something){
+			this.a = something;
+		};
+		var obj1 = {
+			foo: foo,
+		};
+		var obj2 = {};
+		obj1.foo(2);
+		// console.log(obj1.a);
+
+	})();
+
+
+</script>
