@@ -88,6 +88,7 @@
 	 *  显示绑定: 手动的修改绑定  可使用 apply call bind  实现
 	 *  注意apply call的参数传递： 
 	 *  	第一个参数是一个对象，如果传入一个原始值，这个原始值会被隐式转换（new String）成对象。
+	 *  	此时的this则就是隐=隐式转换的对象值，如果是 null,undefined则会采用默认绑定规则 => 指向window
 	 */
 	(function(){
 		function foo(){
@@ -119,6 +120,55 @@
 		var obj2 = {};
 		obj1.foo(2);
 		// console.log(obj1.a);
+
+	})();
+
+	/**
+	 * 2.4.1  被忽略的this
+	 */
+
+	(function(){
+		// Object.create() 和  {}  new OBj() 的区别
+
+		/**
+		 * new的过程：
+		 *  function Fun(){};
+		 *  var f = new Fun();
+		 *
+		 *	1. var f = {};
+		 *	2. f.__proto__ = Fun.prototype;
+		 *	3. Fun.apply(f);
+		 * 
+		 */
+
+		 /**
+		  * Object.create() 的过程:
+		  */
+
+		function create(PROTOTYPE){
+			function fun(){};
+			fun.prototype = PROTOTYPE;
+			return new fun();
+		};
+
+
+		// 理解绑定参数的区别:
+		// 	总是用null来忽略this可能会产生副作用，
+		function foo(arg){
+			// console.log(this, arg+"==foo-this");
+		};
+		var obj = {
+			foo: foo,
+			sname:"Wq"
+		}
+
+		obj.foo(this,"foo");						// obj
+		obj.foo.call(null,"call-null"); 			// window	
+		obj.foo.call(undefined,"call-undefined"); 	// window
+		obj.foo.call({},"{}");						// {}
+		// {}  同{}参数比较不同的是，这个创建空对象不会创建 Object.prototype这个委托，所以比 {} 更空
+		obj.foo.call(Object.create(null),"{}");		
+
 
 	})();
 
