@@ -1,24 +1,27 @@
 <script type="text/javascript">
-
 	/**
 	 * 2.1 调用位置
 	 */
-	(function(){
+	(function () {
 		/**
 		 * 理解 游览器调试调用栈方法
 		 */
 
-		var obj = {sname:"wq"};
-		function baz(){
+		var obj = {
+			sname: "wq"
+		};
+
+		function baz() {
 			console.log("baz");
 			bar();
 		};
-		function bar(){
+
+		function bar() {
 			console.log("bar");
 			foo();
 		};
 
-		function foo(){
+		function foo() {
 			console.log("foo");
 		};
 		// baz();
@@ -30,8 +33,8 @@
 	 * 2.2.2  隐式绑定， this隐式丢失问题
 	 * 隐式绑定: 理解什么是隐式绑定，存在对象调用方法 此时this则会指向当前调用方法的对象
 	 */
-	(function(){
-		function foo(){
+	(function () {
+		function foo() {
 			console.log(this.a);
 		};
 		var obj = {
@@ -48,11 +51,11 @@
 	 * 2.2.2  隐式绑定， this隐式丢失问题
 	 */
 
-	(function(){
+	(function () {
 
 		var obj = {
-			sname:"wq",
-			say:function(){
+			sname: "wq",
+			say: function () {
 				return this.sname;
 			}
 		};
@@ -66,17 +69,17 @@
 	 *  隐式丢失问题  (参数传递[回调函数] 就是一种隐式赋值)
 	 */
 
-	(function(){
+	(function () {
 
-		function foo(){
+		function foo() {
 			console.log(this.a);
 		};
 
-		function doFoo(fn){
+		function doFoo(fn) {
 			fn();
 		};
 		var obj = {
-			a:2,
+			a: 2,
 			foo: foo,
 		};
 		window.a = "gloabl";
@@ -90,8 +93,8 @@
 	 *  	第一个参数是一个对象，如果传入一个原始值，这个原始值会被隐式转换（new String）成对象。
 	 *  	此时的this则就是隐=隐式转换的对象值，如果是 null,undefined则会采用默认绑定规则 => 指向window
 	 */
-	(function(){
-		function foo(){
+	(function () {
+		function foo() {
 			console.log(this);
 		}
 		var obj = {
@@ -110,8 +113,8 @@
 	 *      默认绑定:  函数中的this默认会指向window。
 	 */
 
-	(function(){
-		function foo(something){
+	(function () {
+		function foo(something) {
 			this.a = something;
 		};
 		var obj1 = {
@@ -127,7 +130,7 @@
 	 * 2.4.1  被忽略的this
 	 */
 
-	(function(){
+	(function () {
 		// Object.create() 和  {}  new OBj() 的区别
 
 		/**
@@ -141,12 +144,12 @@
 		 * 
 		 */
 
-		 /**
-		  * Object.create() 的过程:
-		  */
+		/**
+		 * Object.create() 的过程:
+		 */
 
-		function create(PROTOTYPE){
-			function fun(){};
+		function create(PROTOTYPE) {
+			function fun() {};
 			fun.prototype = PROTOTYPE;
 			return new fun();
 		};
@@ -154,31 +157,25 @@
 
 		// 理解绑定参数的区别:
 		// 	总是用null来忽略this可能会产生副作用，
-		function foo(arg){
+		function foo(arg) {
 			// console.log(this, arg+"==foo-this");
 		};
 		var obj = {
 			foo: foo,
-			sname:"Wq"
+			sname: "Wq"
 		}
 
-		obj.foo(this,"foo");						// obj
-		obj.foo.call(null,"call-null"); 			// window	
-		obj.foo.call(undefined,"call-undefined"); 	// window
-		obj.foo.call({},"{}");						// {}
+		obj.foo(this, "foo"); // obj
+		obj.foo.call(null, "call-null"); // window	
+		obj.foo.call(undefined, "call-undefined"); // window
+		obj.foo.call({}, "{}"); // {}
 		// {}  同{}参数比较不同的是，这个创建空对象不会创建 Object.prototype这个委托，所以比 {} 更空
-		obj.foo.call(Object.create(null),"{}");		
+		obj.foo.call(Object.create(null), "{}");
 
 	})();
 
+	
+	(function () {
 
-	/******=================*******/
-	(function(){
-
-		/**
-		 * 这里是用来作为测试代码哦~~~
-		 */
 	})();
-
-
 </script>
