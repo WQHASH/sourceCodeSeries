@@ -1,0 +1,19 @@
+<script>
+    /***
+     * 3.2 类型： =>明白 js 中 类型 和 内置对象的区别  
+     *   也是这种 var a = "qwe"; a.lenth 字符串不是对象为啥他有有属性可以访问??
+     *      因为： js会将字符串通过调用 new String("qwe")的方式转换成对象。
+     * */
+
+    (function(){
+
+        var isBool = new Boolean(0) === false;
+        // console.log(isBool,"isBool");           // false
+        // console.log(Boolean(0),"isBool");       // false => 作为显示类型转换使用，转成Boolean类型 
+        // console.log(new Boolean(0),"isBool");   // Boolean对象 包装对象的方式
+
+    })();
+
+
+
+</script>
