@@ -14,6 +14,40 @@
 
     })();
 
+    //配合理解为什么 字符串可以有属性??
+    (function(){
+        var str = "wq";
+        str.len = 45;        // 在这个过程中就已经通过 new String("wq")方式创建了一个临时对象
+                             //，但赋值完后又随即吧这个对象销毁了，所以这个属性为undefined
+        // console.log(str.len) // undefined
+
+        var strNew = new String("wangqi");  //这种显示的创建对象，则会一直存在，所以能取到值
+        strNew.len = 43;
+        // console.log(strNew.len);
+    })();
+
+    /**
+    *   3.3 内容
+    *   对象访问属性2种方式区别：
+    *   ①：  myobject.idx  => 属性访问
+    *   ②：  myobject[idx] => 键访问
+    *       区别：  属性访问属性不能 "烤串命名" myobject.id-x,  键访问可以 myobject["id-x"]
+    *               键访问可以动态生成属性,(不赋值，只是访问), 属性访问不行。
+    *                    =>[==由于[".."]语法使用字符串来访问，所以可以在程序中构造这个字符串==]
+    */
+
+    (function(){
+        var myobject = {
+            a:2,
+        };
+        var idx = "a";
+        // console.log(myobject[idx],"[idx]"); //2 =>这里为2是因为，对象的键名为String形式，该变量刚好满足条件
+        // console.log(myobject.idx, idx);     //undefined
+        
+    })();
+
+    (function(){})();
+
 
 
 </script>
