@@ -46,8 +46,125 @@
         
     })();
 
-    (function(){})();
+    /**
+    *   3.3.3 数组
+    *       改例子体现的是，属性访问 键访问对于数组来说虽然都能赋值取值，
+    *       但注意的是，数组的键名最好是能够自动转成Number类型，否则类型对象的话数组的leng不会自动追加
+    **/ 
+
+    (function(){
+        var myArray = ["foo", 42, "bar"];
+        myArray.baz = "baz";
+        // console.log(myArray.length);
+        // console.log(myArray.baz);
+        myArray["3"] = "sname"; 
+        myArray["sage"] = "sage";   
+        // console.log(myArray, "myArray");   
+        
+    })();
 
 
+    /***
+    *   3.3.4 复制对象:
+    *      理解深拷贝和浅拷贝理解
+    *           如何区分深拷贝与浅拷贝，简单点来说，就是假设B复制了A，当修改A时，看B是否会发生变化，如果B也跟着变了，说明这是浅拷贝。
+    *           如果B没变，那就是深拷贝  
+    *       浅拷贝：As：基本数据类型的赋值都属于浅拷贝范围，    
+    *       深拷贝：深拷贝本身只针对较为复杂的object类型数据
+    *
+    *      es6中的 Object.assign() 方法实现浅拷贝 
+    **/
 
+    (function(){
+        //浅拷贝：
+        var num = 123;
+        var obj = {sname:"wq"};
+
+        var numNew = num;
+        var objNew = obj;
+
+        num = 456;
+        obj = {sage:"12"};
+       
+        // console.log(obj,objNew) // sage:12,  sname:"wq"
+        // console.log(num,numNew) // 456,      123 
+
+        //深拷贝：
+        function isType(obj){
+            return Object.prototype.toString.call(obj).slice(8, -1);
+        }
+        function deepCopy(obj){
+            var data;
+            if(obj =="null") {return}
+            var type = isType(obj);
+            if(type == "Array"){
+                data = [];
+                for(var i=0,len=obj.length; i<len; i++){
+                   data.push(deepCopy(obj[i]));
+                }
+                return data;
+            }else if(type == "Object"){
+                data = {};
+                for(var key in obj){
+                    data[key] = deepCopy(obj[key]); 
+                }
+                return data;
+            }else{
+                return data = obj;
+            }
+        };
+
+        var obj = {"sname":"wq","say":[1,2,3],fun:function(){console.log(12)}};
+        var cloneData = deepCopy(obj);
+        obj = {"sname":"wq111","say":[1,2,3]};
+        // console.log(cloneData, "cloneData");
+        // console.log(obj, "obj");
+
+        //Es6中的 Object.assign() => 实现合并对象
+        var target = {};
+        var a = {a:"a"};
+        var b = {b:"b"};
+        var c = {c:"c"};
+        var d = {dd:[12]};
+        var newObj = Object.assign(target,a,b,c,d);
+        target = {};
+        // console.log(newObj,"newObj");
+
+    })();
+
+    
+    /***
+     * 3.3.5 属性描述
+     * 
+     * */  
+    
+    (function(){
+        var myObject = {
+            a: 2,
+        };
+        // console.log(Object.getOwnPropertyDescriptor(myObject, "a"));
+        //  值， 可否配置， 可否配置， 可否读写
+        // {value:2, configurable: true, enumerable: true, writable: true};
+        //**** 注意的是 configurable 针对的是属性的键名来说的，不能再重新修改 ****
+
+        var myObject = {};
+        Object.defineProperty(myObject, "a", {
+            value:"333",
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+        myObject.a = 3; //  严格模式下会报错！ TypeError
+        // console.log(myObject,"myObject"); // 非严格模式中这里无法修改 value:333;
+        Object.defineProperty(myObject, "a", {
+            value:"333",
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+        myObject.a = 33333;
+        // console.log(myObject)   //不论是否在严格模式下，前面的configurable:false然后就不能再修改其属性了
+
+        
+    })();
 </script>
