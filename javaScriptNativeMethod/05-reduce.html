@@ -1,0 +1,20 @@
+<script>
+	Array.prototype.myReduce
+		? Array.prototype.myReduce
+		: Array.prototype.myReduce= function(fn, initVal){
+			initVal = initVal?initVal:0;
+			for(var i=0,len=this.length; i<len; i++){
+				initVal = fn.call(window, initVal, this[i], i, this);
+			}
+			return initVal;
+		};
+
+
+	var arr = [2,3,4,5];
+	var newArr = arr.myReduce(function(total, val, index, list){
+		console.log(arguments)
+		return total + val;
+	});
+	console.log(newArr,"newArr");
+
+</script>
