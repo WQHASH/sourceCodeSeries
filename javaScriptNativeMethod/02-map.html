@@ -1,0 +1,22 @@
+<script>
+	/**
+	 * 注意的是该方法是有返回值的，所以使用的时候最好加上返回值，并用变量承接使用!!
+	 */
+
+	Array.prototype.myMap
+		? Array.prototype.myMap
+		: Array.prototype.myMap = function(fn){
+			var map = [];
+			for(var i=0,len=this.length; i<len; i++){
+				map.push(fn.call(this, this[i], i, this));
+			}
+			return map;
+		};
+
+	var arr = [2,3,4];
+	var mapV = arr.myMap(function(val, index, list){
+		return val*val;
+	})
+	console.log(mapV, "myMap");
+
+</script>

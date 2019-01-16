@@ -1,0 +1,17 @@
+<script>
+	
+	Array.prototype.myForEach 
+		? Array.prototype.myForEach
+		: Array.prototype.myForEach = function(fn){
+			for(var i=0,len=this.length; i<len; i++){
+				fn.call(this, this[i], i, this);
+			}
+	};
+
+	var arr = [2,3,4];
+	arr.myForEach(function(val,index,list){
+		console.log(arguments,"myForEach-arguments");
+	})
+
+
+</script>

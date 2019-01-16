@@ -1,0 +1,55 @@
+<script>
+	
+	Function.prototype.myBind
+		? Function.prototype.myBind
+		: Function.prototype.myBind = function(thisObj){
+			if(typeof thisObj !== "Function"){ return;}
+
+			var fn = this; 
+			var args = Array.prototype.slice.call(arguments,1);
+			var funExcessive = function(){};
+			var funBuild = function(){
+				//处理new判断
+				var _this = this instanceof  fn ? this :thisObj
+				// return fn.call(this, args.concat.apply(args, arguments)
+				return fn.apply(_this, args.concat(Array.prototype.slice.call(arguments)))
+			};
+			funExcessive.prototype = fn.prototype;
+			funBuild.prototype = new funExcessive();
+
+			// funBuild.prototype = Object.create(fn.prototype);
+			return funBuild;
+
+		};
+
+
+
+		//简易版 => var self = this;
+		(function(){
+
+			var obj = {
+				hitch: function(scope, callBack){
+					return function(){
+						callBack.apply(scope, arguments || []);
+					}
+				}
+			};
+
+			window.sname = "wq";
+			var o = {
+				sname:"wangqi",
+				get:function(){
+					var self = this;
+					setTimeout(obj.hitch(self, function(){
+						console.log(this, "o.get");
+					}))
+				}
+			};
+			o.get();
+
+
+		})();
+
+
+
+</script>
