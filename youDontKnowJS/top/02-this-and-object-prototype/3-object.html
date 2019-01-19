@@ -167,4 +167,107 @@
 
         
     })();
+
+
+    /***
+     * 3.3.10 存在性 => 判断对象中的属性名是不是存在，
+     * (当属性值undefined的，或者根本不存在该值的时候，用这两个属性可区分开。但该属性还是用区别的!!)
+     *     in: 该方法一般用在能够 new的对象中，因为它处理的包括 prototype中属性
+                ***in方法检测的属性名是否存在，碰到数组它只能检测下标***
+     *     hasOwnproperty:  该方法一般直接用在普通对象中就可以，它不检测 prototype中属性
+     *  *****注意的是如果对象是通过 Object.create(null) 需要注意, ❤❤解决方法如下:❤❤******    
+     * */
+    (function(){
+        var myoBject  = function(){};
+        myoBject.prototype = {
+            "c":undefined
+        };
+
+        var obj = new myoBject();
+        obj.a = undefined;
+        // console.log("a" in obj,"in");    // true
+        // console.log("c" in obj,"in");       // true
+        // console.log(obj.hasOwnProperty("a"), "hasOwnproperty"); // true
+        // console.log(obj.hasOwnProperty("c"), "hasOwnproperty"); //false
+
+        var createObj = Object.create(null);    //原型为null创建的对象，没有方法可继承
+        // console.log(createObj,"createObj");
+        // 可以利用强绑定来借用方法
+        // Object.prototype.hashOwnproperty.call(createObj,"需要检测的参数")
+
+
+    })();
+
+    (function(){
+        /**
+        *   枚举：
+        *       propertyIsEnumerable(obj) => 返回布尔值 枚举对象本身，不含原型
+        *       Object.keys(obj) => 返回一个数组 ，枚举对象本身，不含原型
+        *
+        *       in hasOwnProperty它们检测可能会查找原型，而枚举一般都不会去查找原型属性(除非手动修改参数)
+        ***/
+
+        var myObject = {};
+        Object.defineProperty(
+            myObject,
+            "a",
+            {enumerable:true, value:2},
+        );
+        Object.defineProperty(
+            myObject,
+            "b",
+            {enumerable:false, value:3},
+        );
+        myObject.__proto__.wq= "wqwqwqw";
+        
+
+        Object.defineProperty(
+            myObject,
+            "hasOwnProperty",
+            {enumerable:true, value:2},
+        );
+        
+        // console.log(myObject)
+        // console.log(myObject.propertyIsEnumerable("wq"),"myObject");
+        // console.log(Object.keys(myObject),"keys")
+
+    })();
+
+
+      /***
+     * 3.4 遍历
+     *  for in 循环遍历下标
+     *  for of 遍历属性值    
+     *   for of 原理：    
+     *          数组中有内置的@@iterator所以可以直接遍历
+     *          对象中没有所以无法直接采用 for of 遍历但是可以手动添加
+     *          Object.definedProperty()配置    Symbol.iteratord对象[=>来自Es6属性参考下：] 
+     *
+     * */
+
+    (function(){
+        //这里是直接在定义对象时进行声明的，
+        //如果采用Object.definedProperty方式定义 (**主要是为了它不可枚举**)
+        var myArray = [11,22,33,44];
+        var myObj = {sname:"wq",sage:"12",[Symbol.iterator]: function(){
+            var o = this;
+            var idx = 0;
+            var ks = Object.keys(o);
+            return {
+                next: function(){
+                    return {
+                        value: o[ks[idx++]],
+                        done: (idx>ks.length)
+                    };
+                }
+            }
+        }};
+        
+        for(var val of myObj){
+            // console.log(val,"val");
+        }
+
+    })();
+
+    
 </script>
