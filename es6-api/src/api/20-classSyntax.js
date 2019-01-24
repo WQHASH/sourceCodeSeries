@@ -135,7 +135,7 @@ let useClass = "class的基本语法"; {
     FooEs6.prop="staticProp";  //=> 【规定】 目前，只有这种写法可行，因为 ES6 明确规定，Class 内部只有静态方法，没有静态属性。
     FooEs6.staticMethod = function(){console.log(this)};
     //原型中的属性
-    Object.assign({
+    Object.assign(FooEs6.prototype, {
         addPro:"可以添加值",
         addCommonMethond(){},
     });
