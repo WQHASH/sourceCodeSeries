@@ -1,0 +1,66 @@
+<script>
+    
+    /***5.1 Prototype****/
+    (function(){
+        /**
+        *   for...in => 遍历的是所有可枚举(可配置的)的属性(也包括原型中的)
+        *   in => 该操作符检测属性对象是否存在，检测的是当前对象所有的属性包括原型中的(不论是否可枚举的)
+        *   
+        */
+        function fun(){
+            this.sname="wq";
+        };
+        fun.prototype = {
+            say:function(){},
+            song:function(){}
+        };
+
+        var f = new fun();
+
+        for(var i in f){ 
+            // console.log(i,"i");
+        }
+        // console.log("toString" in f);
+
+    })();     
+
+
+     /***5.1.2 属性设置和屏蔽****/
+    (function(){
+        /**
+         *  书中提到 屏蔽还有另外两种情况，需要配合 Object.defineProperty()来设置
+         * */
+
+        var anotherObject = {
+            a:2
+        };
+        var myObject = Object.create(anotherObject);
+        
+        // console.log(anotherObject.hasOwnProperty("a"));  // true
+        // console.log(myObject.hasOwnProperty("a"));       // false
+        myObject.a++;   //隐式屏蔽 => myObject.a = myObject.a + 1;
+                        //这个过程首先 myObject.a会找原型中a+1然后myObject会生成自己内部的属性a并赋值为myObject.a
+        // console.log(anotherObject); // {a:2}
+        // console.log(myObject);      // {a:3, "__proto__:{a:2}"}
+        
+    })();
+
+    (function(){
+        function Foo(){};
+        Foo.prototype.say ="";  //原来默认的prototype属性，该属性没被修改，
+                                //所以Foo.prototype的.constructor属性还能获取到,则下面判断成立
+        var a = new Foo();
+        // console.log(a.constructor === Foo);              // true
+        // console.log(a.__proto__.constructor === Object); //false
+
+        function Test(){};
+        Test.prototype={};      //默认的Test.prototype已被修改，
+                                //新的prototype对象中也将不存在.constructor属性,但是它会继续向上找
+                                //找到Object.prototype能找到.constructor属性，怎指向的将是Object函数
+        var a1 = new Test();
+        // console.log(a1.constructor === Test);        // false
+        // console.log(a1.constructor === Object);      // true
+    
+    })();
+
+</script>
