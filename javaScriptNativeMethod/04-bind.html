@@ -3,15 +3,17 @@
 	Function.prototype.myBind
 		? Function.prototype.myBind
 		: Function.prototype.myBind = function(thisObj){
-			if(typeof thisObj !== "Function"){ return;}
+			if(typeof this !== "function"){ return;}
 
 			var fn = this; 
 			var args = Array.prototype.slice.call(arguments,1);
 			var funExcessive = function(){};
 			var funBuild = function(){
 				//处理new判断
-				var _this = this instanceof  fn ? this :thisObj
-				// return fn.call(this, args.concat.apply(args, arguments)
+				var _this = this instanceof  fn ? this : thisObj
+				// return fn.call(_this, args.concat.apply(args, arguments)) =>自行理解函数将函数参数打散
+				//以上方法貌似有问题？？？
+				// return fn.apply(_this, args.concat.apply(args, arguments)) 
 				return fn.apply(_this, args.concat(Array.prototype.slice.call(arguments)))
 			};
 			funExcessive.prototype = fn.prototype;

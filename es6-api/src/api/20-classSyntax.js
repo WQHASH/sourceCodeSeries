@@ -55,8 +55,8 @@ let useClass = "class的基本语法";
 
 
 {
-
-
+// 1.Generator 方法？
+// 2.Proxy 代理？
   
 }
 
