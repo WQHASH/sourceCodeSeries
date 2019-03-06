@@ -21,6 +21,14 @@ exports.cssLoaders = function (options) {
       sourceMap: options.sourceMap
     }
   }
+  //移动适配，何在vue-loader.conf.js中一样
+  const px2remLoader = {
+    loader: 'px2rem-loader',
+    options: {
+      remUnit: 100 //默认换算为1rem为75px，可根据你的原型图修改
+    }
+
+  }
 
   const postcssLoader = {
     loader: 'postcss-loader',
@@ -31,7 +39,8 @@ exports.cssLoaders = function (options) {
 
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    const loaders = options.usePostCSS ? [cssLoader, postcssLoader,px2remLoader] : [cssLoader,px2remLoader]
+    // const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
 
     if (loader) {
       loaders.push({

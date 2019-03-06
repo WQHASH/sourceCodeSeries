@@ -1,52 +1,65 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="文件列表" name="fileList"></el-tab-pane>
-      <el-tab-pane label="问题列表" name="problemList"></el-tab-pane>
-      <el-tab-pane label="其他待选" name="otherList"></el-tab-pane>
-      <el-tab-pane label="后续补充" name="supplementList"></el-tab-pane>
-    </el-tabs>
+    <!-- <mt-navbar v-model="selected">
+      <mt-tab-item id="1">
+        <span @click="handleClick('fileList')" class="file-list">文件列表</span>
+      </mt-tab-item>
+      <mt-tab-item id="2">
+        <span @click="handleClick('problemList')" class="problem-list">问题列表</span>
+      </mt-tab-item>
+    </mt-navbar> -->
+    <tab>
+      <tab-item selected @on-item-click="handleClick('fileList')">文件列表</tab-item>
+      <tab-item @on-item-click="handleClick('problemList')">问题列表</tab-item>
+    </tab>
+   
+
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import fileList from "@/components/fileList";
+// import { Navbar, TabItem } from "mint-ui"
+import Vue from 'vue'
+import { mapGetters } from 'vuex'
+import { TabItem } from 'vux'
+import fileList from "@/components/fileList"
+
 export default {
   name: "layout",
   data() {
     return {
-      activeName: "second"
+      // mintUI自带属性
+      selected: 1,
+      //文件列表数据
+      fileListData: [],
+      demo01: 0
     };
   },
-  computed() {
-    this.$router.push({ name: "fileList" });
-    //通过axion请求数据
+  components: {
+    TabItem
+  },
+  mounted(){ 
+    //当组件挂载是需要跳转到 fileList
+    this.$router.push({ name: "fileList" })
+    this.$store.dispatch('getFileList', { 'name': 'www' });
+  },
+  computed: {
+    ...mapGetters([
+      'fileList',
+      'problemList'
+    ])
+
+  
   },
   methods: {
-    handleClick(tab, event) {
-      switch (tab.name) {
-		case "fileList":
-		  const getfilelistaboutmecount = `http://192.168.12.18:8447/api/documentcoop/file/getfilelistaboutmecount/134217045907607552/62ee0057-92b6-4692-b9dc-f6e20e1265a1`;
+    handleClick(type) {
+      switch (type) {
+        case "fileList":
+          this.$store.dispatch('getFileList',{  })
           this.$router.push({ name: "fileList" });
-          this.axios({
-            method: "post",
-            url: getfilelistaboutmecount,
-            data: {
-             "userid":"134217045907607552",
-            }
-		  })
-		  .then((res)=>{console.log(res)})
-
-          //通过axion请求数据
           break;
         case "problemList":
-          this.$router.push({ name: "problemList" });
-          break;
-        case "otherList":
-          this.$router.push({ name: "problemList" });
-          break;
-        case "supplementList":
           this.$router.push({ name: "problemList" });
           break;
         default:
@@ -56,3 +69,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+	.file-list, .problem-list{
+    font-size: 38px;
+	}
+</style>
