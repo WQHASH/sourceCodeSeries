@@ -20,7 +20,7 @@ export const constantRouterMap = [
       {
         path: '/fileList',
         name: 'fileList',
-        component: fileList
+        component: fileList,
       }
     ]
    

@@ -12,7 +12,6 @@
       <tab-item selected @on-item-click="handleClick('fileList')">文件列表</tab-item>
       <tab-item @on-item-click="handleClick('problemList')">问题列表</tab-item>
     </tab>
-   
 
     <router-view></router-view>
   </div>
@@ -22,7 +21,7 @@
 // import { Navbar, TabItem } from "mint-ui"
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { TabItem } from 'vux'
+import { Tab, TabItem } from 'vux'
 import fileList from "@/components/fileList"
 
 export default {
@@ -37,6 +36,7 @@ export default {
     };
   },
   components: {
+    Tab,
     TabItem
   },
   mounted(){ 
