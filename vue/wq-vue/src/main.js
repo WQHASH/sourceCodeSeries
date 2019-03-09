@@ -19,9 +19,13 @@ Vue.use(ElementUI, {})
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
 
-new Vue({
+let vm = new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
+})
+
+Vue.use({
+  vm
 })

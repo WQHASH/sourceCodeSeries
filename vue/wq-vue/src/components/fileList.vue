@@ -1,7 +1,7 @@
 <template>
   <div class='fileList'>
 		<ul>
-			<li v-for="item in fileListData">
+			<li v-for="(item, index) in fileListData" :key="index">
 				{{item.showname}}
 			</li>
 		</ul>
