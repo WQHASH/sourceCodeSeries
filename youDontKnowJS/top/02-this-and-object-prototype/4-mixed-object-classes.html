@@ -1,0 +1,84 @@
+<script>
+    {
+
+        // var foo = {};
+        // foo.__proto__ = Foo.prototype;
+        // Foo.call(foo);
+
+        function Foo() {
+            this.sname = "wq";
+        };
+        Foo.prototype = {};
+        var foo = new Foo();
+
+
+        class Parent {
+            constructor() {
+                this.sname = "parent";
+            }
+            say() {
+                console.log(this.sname, "Parent-say");
+            }
+        };
+
+        class Child extends Parent {
+            constructor() {
+                super();
+                super.say();
+                this.sname = "Child";
+            }
+            say() {
+                console.log(this.sname, "Child-say");
+            }
+        };
+
+        class Grandson extends Child {
+            constructor() {
+                super();
+                super.say(); // ??? 理解super
+                console.log(this, "ttttt");
+                this.sname = "Grandson";
+                console.log(this, "----");
+                super.say(); // ??? 理解super
+            }
+            say() {
+                console.log(this, "this+")
+                console.log(this.sname, "Grandson-say");
+            }
+        }
+
+        // new Grandson()
+    }
+
+
+    {
+        function Parent(){
+            this.sname= "wq";
+        };
+        Parent.prototype = {
+            say: function(){console.log("is Parent")},
+        };
+
+        function Child(){
+            this.sname= "wangqi";
+        };
+
+        Child.prototype = Object.create(Parent.prototype);
+        Child.prototype.say = function(){console.log("is Child")};
+
+        var parent = new Parent();
+        var child = new Child();
+        
+        // parent.say();
+        // child.say();
+
+    }
+    
+    {
+        function B(){};
+        var b = new B();
+        console.log(b.constructor === B)
+
+
+    }
+</script>
