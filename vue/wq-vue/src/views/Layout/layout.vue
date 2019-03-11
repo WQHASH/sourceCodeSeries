@@ -13,7 +13,9 @@
       <tab-item @on-item-click="handleClick('problemList')">问题列表</tab-item>
     </tab>
 
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
