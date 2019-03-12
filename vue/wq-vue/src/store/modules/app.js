@@ -9,7 +9,7 @@ const app = {
     mutations: {
         'GET_FILELIST': (state) => {
             const getfilelistaboutme =
-                "/api/documentcoop/file/getfilelistaboutme/172165467360727040/4eafc557-b658-44c3-8fff-f393668b5acd";
+                "/api/documentcoop/file/getfilelistaboutme/172165467360727040/48b4ee8a-ad0d-46b1-8aa8-f60a0d21986a";
 
             let postData = {
                 userid: "134217045907607552",

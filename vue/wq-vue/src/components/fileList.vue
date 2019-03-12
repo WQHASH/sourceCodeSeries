@@ -1,20 +1,26 @@
 <template>
   <div class="fileList">
-    <ul>
-      <li v-for="(item, index) in fileList" :key="index">
-        <div class="box">
-          <p class="file-name">{{item.showname}}</p>
-          <p class="file-info">
-            <!-- <x-button mini  action-type="button" style="font-weight:800;">...</x-button> -->
-            <group>
-              <!-- <x-switch :title="fileTip" v-model="show5" @on-click="onSwitchClick(item, index)"></x-switch> -->
-              <input type="button" v-model="show5" @click="onSwitchClick(item, index)">
-            </group>
-          </p>
-        </div>
-        <x-progress :percent="0"></x-progress>
-      </li>
-    </ul>
+    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+      <ul>
+        <li v-for="(item, index) in fileList" :key="index">
+          <div class="box">
+            <p class="file-name">{{item.showname}}</p>
+            <p class="file-info">
+              <!-- <x-button mini  action-type="button" style="font-weight:800;">...</x-button> -->
+              <group>
+                <!-- <x-switch :title="fileTip" v-model="show5" @on-click="onSwitchClick(item, index)"></x-switch> -->
+                <input type="button" v-model="show5" @click="onSwitchClick(item, index)">
+              </group>
+            </p>
+          </div>
+          <x-progress :percent="0"></x-progress>
+        </li>
+      </ul>
+      <!-- <div slot="top" class="mint-loadmore-top">
+        <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
+        <span v-show="topStatus === 'loading'">Loading...</span>
+      </div> -->
+    </mt-loadmore>
 
     <actionsheet
       v-model="show5"
@@ -59,7 +65,9 @@ export default {
           value: "historicalVersion"
         }
       ],
-      currentFile: {}
+      currentFile: {},
+      // mintui使用
+      allLoaded: false,
     };
   },
   components: {
@@ -77,7 +85,7 @@ export default {
     // this.fileListData = this.fileList;
   },
   computed: {
-    ...mapGetters(["fileList","renameText"])
+    ...mapGetters(["fileList", "renameText"])
   },
   methods: {
     onSwitchClick(item, index) {
@@ -89,18 +97,30 @@ export default {
       let [value] = item;
       switch (value) {
         case "rename":
-        //路由中 path 和 params同时存在是 path不生效需换成name, 而query 不会这样
-            this.$router.push({ name: 'rename', params: {index: '0'}}) // 
+          //路由中 path 和 params同时存在是 path不生效需换成name, 而query 不会这样
+          this.$router.push({ name: "rename", params: { index: "0" } }); //
           break;
         case "historicalVersion":
           break;
         default:
           break;
       }
-
-    }
-
-
+    },
+    handleTopChange(status) {
+      this.topStatus = status;
+    },
+    loadBottom(){
+      console.log("loadBottom");
+      this.allLoaded = true;// 若数据已全部获取完毕
+      this.$refs.loadmore.onBottomLoaded();
+    },
+    loadTop(){
+      console.log("loadTop");
+       //模拟axios发送请求
+       setTimeout(()=>{
+         this.$refs.loadmore.onTopLoaded();
+       },1000)
+    },
   }
 };
 </script>
@@ -126,5 +146,11 @@ li {
 }
 .weui-mask {
   // background: rgba(0, 0, 0, 0.05) !important;
+}
+.file-name {
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
 </style>

@@ -3,16 +3,16 @@ import App from './App'
 import router from './router'
 import store from './store/index'
 // import ElementUI from 'element-ui'
-// import Mint from 'mint-ui'
+import Mint from 'mint-ui'
 // import 'vux/src/theme.less'
 
 // import './styles/index.scss' 
-// import 'mint-ui/lib/style.css'
+import 'mint-ui/lib/style.css'
 import axios from 'axios'
 import 'lib-flexible'
 
 // Vue.use(ElementUI, {})
-// Vue.use(Mint);
+Vue.use(Mint);
 
 
 
