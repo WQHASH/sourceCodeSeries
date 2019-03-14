@@ -1,8 +1,14 @@
 <template>
   <div class="fileList">
-    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+    <mescroll-vue
+      ref="mescroll"
+      :down="mescrollDown"
+      :up="mescrollUp"
+      @init="mescrollInit"
+      class="scrollView"
+    >
       <ul>
-        <li v-for="(item, index) in fileList" :key="index">
+        <li v-for="(item, index) in fileListData" :key="index">
           <div class="box">
             <p class="file-name">{{item.showname}}</p>
             <p class="file-info">
@@ -16,11 +22,7 @@
           <x-progress :percent="0"></x-progress>
         </li>
       </ul>
-      <!-- <div slot="top" class="mint-loadmore-top">
-        <span v-show="topStatus !== 'loading'" :class="{ 'rotate': topStatus === 'drop' }">↓</span>
-        <span v-show="topStatus === 'loading'">Loading...</span>
-      </div> -->
-    </mt-loadmore>
+    </mescroll-vue>
 
     <actionsheet
       v-model="show5"
@@ -36,6 +38,8 @@
 import { XButton, XProgress, Box } from "vux";
 import { TransferDom, Actionsheet, Group, XSwitch, Toast } from "vux";
 import { mapGetters } from "vuex";
+import MescrollVue from "mescroll.js/mescroll.vue";
+// import '../../static/index.css';
 export default {
   name: "fileList",
   data() {
@@ -68,9 +72,25 @@ export default {
       currentFile: {},
       // mintui使用
       allLoaded: false,
+
+      mescroll: null, // mescroll实例对象
+      mescrollDown: {}, //下拉刷新的配置. (如果下拉刷新和上拉加载处理的逻辑是一样的,则mescrollDown可不用写了)
+      mescrollUp: {
+        // 上拉加载的配置.
+        callback: this.upCallback, // 上拉回调
+        page: {
+          num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+          size: 10 //每页数据条数,默认10
+        },
+        noMoreSize: 5,
+        dataList: [], // 列表数据
+        limitQuantity: 20, //分页每页显示几条
+        getFileSum: null //总页数
+      }
     };
   },
   components: {
+    MescrollVue,
     XButton,
     XProgress,
     Box,
@@ -85,7 +105,8 @@ export default {
     // this.fileListData = this.fileList;
   },
   computed: {
-    ...mapGetters(["fileList", "renameText"])
+    //这里没采用 vuex中的数据
+    // ...mapGetters(["fileList", "renameText"])
   },
   methods: {
     onSwitchClick(item, index) {
@@ -109,24 +130,75 @@ export default {
     handleTopChange(status) {
       this.topStatus = status;
     },
-    loadBottom(){
-      console.log("loadBottom");
-      this.allLoaded = true;// 若数据已全部获取完毕
-      this.$refs.loadmore.onBottomLoaded();
+    mescrollInit(mescroll) {
+      this.mescroll = mescroll;
     },
-    loadTop(){
-      console.log("loadTop");
-       //模拟axios发送请求
-       setTimeout(()=>{
-         this.$refs.loadmore.onTopLoaded();
-       },1000)
-    },
+    upCallback(page, mescroll) {
+      const tokenId = "9e01f214-e20c-4ef5-9c88-fdb9918e1b13";
+      const getfilelistaboutme =
+        "/api/documentcoop/file/getfilelistaboutme/279094173439365120/" +
+        tokenId;
+
+      let postData = {
+        userid: "279094173439365120",
+        page: page.num,
+        number: 20,
+        appCode: -1,
+        sceneCode: "",
+        modelCode: "",
+        fileCondition: "false",
+        fileCondition: "",
+        themeType: '["DocumentCoopDoc","DocumentCoopMap"]'
+      };
+
+      this.axios
+        .post("/api" + getfilelistaboutme, postData)
+        .then(response => {
+          if (response.data.ErrorCode.Code == 0) {
+            if (page.num === 1) this.dataList = [];
+            this.fileListData = this.dataList = this.dataList.concat(
+              response.data.DataContext
+            );
+            this.$nextTick(() => {
+              mescroll.endSuccess(response.data.DataContext.length);
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error, "getfilelistaboutme");
+        });
+    }
+  },
+
+  beforeRouteEnter(to, from, next) {
+    // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
+    next(vm => {
+      // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+      vm.$refs.mescroll && vm.$refs.mescroll.beforeRouteEnter(); // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
+    // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+    this.$refs.mescroll && this.$refs.mescroll.beforeRouteLeave(); // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
+    next();
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 $color: red;
+
+.fileList {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+ul {
+  // margin-bottom: 80px;
+  // margin-top: 10px;
+  overflow: auto;
+}
 ul,
 li {
   list-style-type: none;
@@ -152,5 +224,12 @@ li {
   -webkit-line-clamp: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+}
+
+.mescroll {
+  position: fixed;
+  top: 100px;
+  bottom: 0;
+  height: auto;
 }
 </style>
