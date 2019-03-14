@@ -20,5 +20,5 @@ module.exports = {
     image: 'xlink:href'
   },
   //移动适配
-  // postcss:[require('postcss-px2rem')({'remUnit':75,'baseDpr':2})]
+  postcss:[require('postcss-px2rem')({'remUnit':20,'baseDpr':2})]
 }
