@@ -130,6 +130,7 @@
             </section>
         </section>
         <foot-guide></foot-guide>
+        <!--wq: 改展示路由是给 profile -> info用的 -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>

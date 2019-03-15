@@ -157,6 +157,7 @@ export default [{
                     }]
                 }]
             },
+             //wq: 注意的是 service组件和 profile，以及外边的一系列组件同级，用app.vue中的view为出口
             {
                 path: 'service', //服务中心
                 component: service,
