@@ -50,7 +50,7 @@ export default {
   },
   mounted() {
     //当组件挂载是需要跳转到 fileList
-    this.$router.push({ name: "fileList" });
+    this.$router.push({ name: "problemList" });
     this.$store.dispatch("getFileList", { name: "www" });
   },
   computed: {
