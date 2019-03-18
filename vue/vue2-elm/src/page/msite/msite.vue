@@ -67,7 +67,7 @@ export default {
 		}else{
 			this.geohash = this.$route.query.geohash
 		}
-		//保存geohash 到vuex
+		//保存geohash 到vuex,     [wq: 为啥这里不用经过Action这一层的处理??]
 		this.SAVE_GEOHASH(this.geohash);
     	//获取位置信息
     	let res = await msiteAddress(this.geohash);
