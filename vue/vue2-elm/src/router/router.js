@@ -72,7 +72,10 @@ export default [{
         {
             path: '/msite',
             component: msite,
-            meta: { keepAlive: true },
+            meta: { 
+                //该属性能够处理缓存问题。  As: miste和search为同级路由，相互切换时该属性能控制组件是否进行缓存。
+                keepAlive: true
+            },
         },
         //特色商铺列表页
         {
@@ -82,7 +85,7 @@ export default [{
         //搜索页
         {
             path: '/search/:geohash',
-            component: search
+            component: search,
         },
         //商铺详情页
         {

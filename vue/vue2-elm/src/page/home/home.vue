@@ -42,6 +42,7 @@
 
 <script>
 import headTop from '../../components/header/head'
+//这里都是返回一个 Promise对象
 import {cityGuess, hotcity, groupcity} from '../../service/getData'
 
 export default {
@@ -77,7 +78,10 @@ export default {
     },
 
     computed:{
-        //将获取的数据按照A-Z字母开头排序
+        //将获取的数据按照A-Z字母开头排序 
+        //wq:  目的就是为了排序  String.fromCharCode(unicode)
+        //      => String.fromCharCode(72) == H
+        //      => "Hello".charCodeAt(0) == 72
         sortgroupcity(){
             let sortobj = {};
             for (let i = 65; i <= 90; i++) {

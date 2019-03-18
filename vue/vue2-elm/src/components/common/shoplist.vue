@@ -67,7 +67,7 @@
 
 import {mapState} from 'vuex'
 import {shopList} from 'src/service/getData'
-import {imgBaseUrl} from 'src/config/env'
+import {imgBaseUrl, tempUrl} from 'src/config/env'
 import {showBack, animate} from 'src/config/mUtils'
 import {loadMore, getImgPath} from './mixin'
 import loading from './loading'
@@ -83,6 +83,7 @@ export default {
 			showLoading: true, //显示加载动画
 			touchend: false, //没有更多数据
 			imgBaseUrl,
+			tempUrl,
 		}
 	},
 	mounted(){
