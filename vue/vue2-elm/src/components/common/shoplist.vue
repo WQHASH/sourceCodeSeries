@@ -94,6 +94,7 @@ export default {
 		ratingStar,
 	},
 	props: ['restaurantCategoryId', 'restaurantCategoryIds', 'sortByType', 'deliveryMode', 'supportIds', 'confirmSelect', 'geohash'],
+	//wq: 关于混入对象的理解:  https://me.csdn.net/przlovecsdn
 	mixins: [loadMore, getImgPath],
 	computed: {
 		...mapState([
@@ -133,7 +134,8 @@ export default {
 			this.offset += 20;
 			let res = await shopList(this.latitude, this.longitude, this.offset, this.restaurantCategoryId);
 			this.hideLoading();
-			this.shopListArr = [...this.shopListArr, ...res];
+			//wq: 自动能够进行数组扁平化
+			this.shopListArr = [...this.shopListArr, ...res];	
 			//当获取数据小于20，说明没有更多数据，不需要再次请求数据
 			if (res.length < 20) {
 				this.touchend = true;
