@@ -1,13 +1,5 @@
 <template>
   <div class="layout">
-    <!-- <mt-navbar v-model="selected">
-      <mt-tab-item id="1">
-        <span @click="handleClick('fileList')" class="file-list">文件列表</span>
-      </mt-tab-item>
-      <mt-tab-item id="2">
-        <span @click="handleClick('problemList')" class="problem-list">问题列表</span>
-      </mt-tab-item>
-    </mt-navbar>-->
     <mt-header fixed title="主页">
       <router-link to="/" slot="left">
         <mt-button icon="back"></mt-button>
@@ -15,10 +7,11 @@
       <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
 
-    <tab>
+    <tab class="layout-tab">
       <tab-item selected @on-item-click="handleClick('fileList')">文件列表</tab-item>
       <tab-item @on-item-click="handleClick('problemList')">问题列表</tab-item>
     </tab>
+    <!-- <div class="box">213123</div> -->
 
     <keep-alive style="width:100%; height:100%; overflow:auto;">
       <router-view></router-view>
@@ -74,15 +67,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .layout {
   position: fixed;
   width: 100%;
   height: 100%;
   margin: 0;
 }
-.file-list,
-.problem-list {
-  font-size: 38px;
+.layout-tab{
+  position: fixed;
+  width: 100%;
+  height: 40px;
+  top:40px;
 }
+
+
+
 </style>
