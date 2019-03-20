@@ -323,7 +323,8 @@ export default {
         status: !this.support_ids[index].status,
         id
       });
-      //重新计算filterNum的个数
+      //重新计算filterNum的个数 
+      //wq: 这里会通过配合上面配送方式的代码来管理，数量，否则这里的数量只增不减
       this.filterNum = this.delivery_mode == null ? 0 : 1;
       this.support_ids.forEach(item => {
         if (item.status) {

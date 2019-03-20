@@ -94,7 +94,8 @@ export default {
 		ratingStar,
 	},
 	props: ['restaurantCategoryId', 'restaurantCategoryIds', 'sortByType', 'deliveryMode', 'supportIds', 'confirmSelect', 'geohash'],
-	//wq: 关于混入对象的理解:  https://me.csdn.net/przlovecsdn
+	//wq: 关于混入对象的理解: 个人理解mixins就是定义一部分公共的方法或者计算属性,然后混入到各个组件中使用,方便管理与统一修改
+	//wq: 一些相关的博客  https://me.csdn.net/przlovecsdn
 	mixins: [loadMore, getImgPath],
 	computed: {
 		...mapState([
