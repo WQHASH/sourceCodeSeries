@@ -79,6 +79,7 @@ export default {
   width: 100%;
   height: 40px;
   top:40px;
+  z-index: 1;
 }
 
 
