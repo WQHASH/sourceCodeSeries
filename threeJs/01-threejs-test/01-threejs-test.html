@@ -6,7 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body>
-    <script src="https://raw.github.com/mrdoob/three.js/master/build/three.js"></script>
+<body >
+    <canvas id="mainCanvas" width="400px" height="300px" ></canvas>
+
+    <script src="../src/three.js"></script>
+    <script>
+        console.log(THREE,"THREE");
+        //创建场景
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.webGLRenderer();
+        renderer.setClearColorHex(0xEEEEEE);
+
+
+    </script>  
 </body>
 </html>
