@@ -2,8 +2,7 @@
   <div id="header">
     <x-header :left-options="{showBack: false}" class="header">
       <i class="iconfont icon-search-1-copy"></i>
-      头部
-      <solt name></solt>
+      <slot name="header-title" ></slot>
     </x-header>
   </div>
 </template> 
@@ -18,7 +17,7 @@ export default {
   },
   components: {
     XHeader
-  },
+  },  
   methods: {}
 };
 </script>
@@ -31,7 +30,10 @@ export default {
   color: #fff;
 }
 .header {
+  height: 40px;
+  line-height: 40px;
   background-color: rgba(49, 144, 232, 1);
+ 
 }
 </style>
 
