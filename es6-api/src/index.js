@@ -7,3 +7,4 @@ import {functionExtension} from "./useApi/7-use-functionExtension.js";
 import {useExtension} from "./useApi/8-use-ArrayExtension.js";
 import {useClass} from "./useApi/20-use-classSyntax";
 import {classExtends} from "./useApi/21-use-classExtends";
+import {usePromise} from "./useApi/15-use-promise";
