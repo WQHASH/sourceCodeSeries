@@ -43,10 +43,10 @@ let getUserInfo = (res, rej) => {
  * 
  */
 new Promise(login).then((val) => {
-    console.log(val, "res");
+    // console.log(val, "res");
     return new Promise(getUserInfo)
 }).then((val) => {
-    console.log(val)
+    // console.log(val)
 }).catch((err) => { console.log(err, "1") })
 
 
