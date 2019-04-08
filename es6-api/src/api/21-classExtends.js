@@ -10,6 +10,20 @@ let classExtends = "class的继承";
 
     function Parent(){};
     Parent.prototype = {};
+    /****
+     * wq: 201904081109
+     *  function Child(){
+     *      Parent.call(this);
+     *  };
+     *  // Child.prototype = Object.create(Parent.prototype);
+     *  function build(obj){
+     *      var f = function(){};
+     *      f.__proto__ = obj.prototype;
+     *      return new f();
+     *  };
+     *  Child.prototype = build(Parent);
+     * 
+     */
     
     function build(){
         //借用Parent构造中属性
@@ -20,7 +34,7 @@ let classExtends = "class的继承";
     // Child.prototype = Object.create(Parent.prototype);
 
     if(Parent.prototype){
-        build.prototype = Parent.prototype;
+        build.prototype = Parent.prototype; //这种暴力赋值原型方法不推荐，父类实例也可以调用子类原型
     }
     Child.prototype = new build();
 
