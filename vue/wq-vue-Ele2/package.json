@@ -12,6 +12,7 @@
   "dependencies": {
     "fastclick": "^1.0.6",
     "lib-flexible": "^0.3.2",
+    "qs": "^6.7.0",
     "swiper": "^4.5.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

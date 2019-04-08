@@ -1,1 +1,0 @@
-export { default as footerBar } from './footerBar' // 顶部bar
