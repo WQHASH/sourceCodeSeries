@@ -1,20 +1,29 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-
-    <side-bar class="sidebar-container" />
-    <!-- <div :class="{hasTagsView:needTagsView}" class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <nav-bar/>
-        <tags-view v-if="needTagsView"/>
-      </div>
-      <app-main/>
-    </div> -->
-    
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <side-bar class="sidebar-container"/>
+        </div>
+      </el-col>
+      <el-col :span="20">
+        <nav-bar></nav-bar>
+        <div class="grid-content bg-purple">
+          <section class="app-main">
+            <transition name="fade-transform" mode="out-in">
+              <keep-alive>
+                <router-view/>
+              </keep-alive>
+            </transition>
+          </section>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
-import {appMain, sideBar, navBar, tagsView} from './components'
+import { appMain, sideBar, navBar, tagsView } from "./components";
 
 export default {
   name: "layout",
@@ -22,7 +31,7 @@ export default {
     appMain,
     sideBar,
     navBar,
-    tagsView,
+    tagsView
   },
   mounted() {},
   computed: {
