@@ -1,10 +1,26 @@
 <template>
-  <div class="navbar">navBarnavBarnavBar</div>
+  <div class="navbar">
+    <el-row>
+      <el-button @click="toggleSideBar">收侧栏</el-button>
+    </el-row>
+  </div>
 </template>
 
 <script>
+import { mapGetters,mapActions } from "vuex";
 export default {
-  name: "navBar"
+  name: "navBar",
+  computed:{
+    ...mapGetters(['sidebar'])
+  },
+  methods: {
+    // 需要注意的是这里通过mapActions不能直接获取到，  ...mapActions(['toggleSideBar']),
+    // 因为层级关系, 还需要研究?
+    toggleSideBar(){
+      this.$store.dispatch('app/toggleSideBar')
+    }
+    
+  }
 };
 </script>
 <style lang="scss" scoped>
