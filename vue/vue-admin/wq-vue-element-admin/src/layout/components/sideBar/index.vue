@@ -104,6 +104,7 @@ export default {
 
     //改变左侧栏的状态
     isCollapse() {
+      this.$emit("getCollapseState",!this.sidebar.opened);
       return !this.sidebar.opened;
     }
   },
@@ -123,9 +124,6 @@ export default {
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
-}
-.el-menu--collapse {
-  //   width: 200px;
 }
 .el-menu-item {
   color: rgb(191, 203, 217);

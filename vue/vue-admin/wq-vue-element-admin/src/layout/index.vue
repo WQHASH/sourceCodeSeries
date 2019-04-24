@@ -1,24 +1,20 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <el-row :gutter="20">
-      <el-col :span="4">
-        <div class="grid-content bg-purple">
-          <side-bar class="sidebar-container"/>
-        </div>
-      </el-col>
-      <el-col :span="20">
-        <nav-bar></nav-bar>
-        <div class="grid-content bg-purple">
-          <section class="app-main">
-            <transition name="fade-transform" mode="out-in">
-              <keep-alive>
-                <router-view/>
-              </keep-alive>
-            </transition>
-          </section>
-        </div>
-      </el-col>
-    </el-row>
+    <div :class="isCollapse?'lf-Content-set':'lf-content'">
+      <side-bar class="sidebar-container" @getCollapseState="getCollapseState"/>
+    </div>
+    <div :class="isCollapse?'rt-Content-set':'rt-content'">
+      <nav-bar></nav-bar>
+      <div class>
+        <section class="app-main">
+          <transition name="fade-transform" mode="out-in">
+            <keep-alive>
+              <router-view/>
+            </keep-alive>
+          </transition>
+        </section>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,6 +23,12 @@ import { appMain, sideBar, navBar, tagsView } from "./components";
 
 export default {
   name: "layout",
+  data() {
+    return {
+      //侧栏缩放是否打开，false:打开,  true:关闭
+      isCollapse: ""
+    };
+  },
   components: {
     appMain,
     sideBar,
@@ -44,7 +46,11 @@ export default {
       };
     }
   },
-  methods: {}
+  methods: {
+    getCollapseState(isCollapse) {
+      this.isCollapse = isCollapse;
+    }
+  }
 };
 </script>
 
@@ -62,32 +68,21 @@ export default {
     position: fixed;
     top: 0;
   }
-}
-
-.drawer-bg {
-  background: #000;
-  opacity: 0.3;
-  width: 100%;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
-}
-
-.fixed-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 9;
-  width: calc(100% - #{$sideBarWidth});
-  transition: width 0.28s;
-}
-
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
-
-.mobile .fixed-header {
-  width: 100%;
+  .lf-content {
+    width: 200px;
+    float: left;
+  }
+  .lf-Content-set {
+    float: left;
+    width: 65px;
+  }
+  .rt-content {
+    width: calc(100% - 200px);
+    float: left;
+  }
+  .rt-content-set {
+    float: left;
+    width: calc(100% - 65px);
+  }
 }
 </style>
