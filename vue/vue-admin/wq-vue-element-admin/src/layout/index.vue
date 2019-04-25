@@ -1,9 +1,9 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div :class="isCollapse?'lf-Content-set':'lf-content'">
+    <div :class="isCollapse?'lf-content-set':'lf-content'">
       <side-bar class="sidebar-container" @getCollapseState="getCollapseState"/>
     </div>
-    <div :class="isCollapse?'rt-Content-set':'rt-content'">
+    <div :class="isCollapse?'rt-content-set':'rt-content'">
       <nav-bar></nav-bar>
       <div class>
         <section class="app-main">
@@ -72,7 +72,7 @@ export default {
     width: 200px;
     float: left;
   }
-  .lf-Content-set {
+  .lf-content-set {
     float: left;
     width: 65px;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="panel-group-container">
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="grid-content bg-purple card-panel">测</div>
@@ -24,11 +24,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard-container {
-  padding: 32px;
-  background-color: #f0f2f5;
+.panel-group-container {
+  padding-bottom: 0;
 }
-
 .el-row {
   margin-bottom: 20px;
   &:last-child {
