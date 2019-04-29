@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import layout from '@/layout/index'
 import dashboard from '@/views/dashboard/index'
 import documentation from '@/views/documentation/index'
-
+import dragtable from '@/views/dragtable/index'
 Vue.use(Router)
 
 export default new Router({
@@ -35,6 +35,15 @@ export default new Router({
         path: "",
         name: "documentation",
         component: documentation,
+      }]
+    },
+    {
+      path: '/dragtable',
+      component: layout,
+      children: [{
+        path: "",
+        name: "dragtable",
+        component: dragtable,
       }]
     }
 

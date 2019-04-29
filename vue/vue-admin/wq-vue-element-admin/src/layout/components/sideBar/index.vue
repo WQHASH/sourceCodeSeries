@@ -44,58 +44,18 @@ export default {
         },
         {
           class: "el-icon-goods",
-          name: "引导页",
+          name: "拖拽表格",
           id: "3",
-          path: "guide"
+          path: "dragtable"
         },
+
         {
           class: "el-icon-menu",
           name: "组件",
           id: "4",
           path: "icon"
         },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        },
-        {
-          class: "el-icon-menu",
-          name: "组件",
-          id: "4",
-          path: "icon"
-        }
+       
       ]
     };
   },
