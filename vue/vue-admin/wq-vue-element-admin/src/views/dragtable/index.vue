@@ -38,6 +38,8 @@ export default {
     };
   },
   created() {
+  //在created()钩子函数执行的时候DOM 其实并未进行任何渲染，而此时进行DOM操作无异于徒劳，
+  //所以此处一定要将DOM操作的js代码放进Vue.nextTick()的回调函数中
     this.$nextTick(() => {
       this.setSort();
     });
