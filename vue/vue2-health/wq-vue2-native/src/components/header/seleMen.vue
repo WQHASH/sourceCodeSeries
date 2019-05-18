@@ -6,7 +6,7 @@
         :class="{active: currentActive == item.classpath}"
         v-for="(item, index) in indexColumn"
         :key="index"
-        @click="activeNav(index)"
+        @click="activeNav(item.classid)"
       >{{item.classname}}</a>
     </div>
 
@@ -81,7 +81,15 @@ export default {
           classname: "美食",
           classpath: "news_food",
           showclass: "0"
-        }
+        },
+        { classid: "10", classname: "6-2", classpath: "6-2", showclass: 0 },
+        { classid: "11", classname: "1-18", classpath: "1-18", showclass: 0 },
+        { classid: "12", classname: "1-16", classpath: "1-16", showclass: 0 },
+        { classid: "13", classname: "3-1", classpath: "3-1", showclass: 0 },
+        { classid: "14", classname: "1-15", classpath: "1-15", showclass: 0 },
+        { classid: "15", classname: "3-4", classpath: "3-4", showclass: 0 },
+        { classid: "16", classname: "6-2", classpath: "6-2", showclass: 0 },
+        { classid: "17", classname: "1-14", classpath: "1-14", showclass: 0 }
       ]
     };
   },
@@ -117,10 +125,8 @@ export default {
       let _currentActiveEle_width = _currentActiveEle.width();
       //容器左滚动的距离
       let _container_left = _container.scrollLeft();
-      console.log(_container_left, "scrollLeft");
       //选中的元素的做偏移量
       let _currentActiveEle_left = _currentActiveEle.position().left;
-      console.log(_currentActiveEle_left, "left");
       let midWidth = (_container_width - _currentActiveEle_width) / 2;
 
       //判断是否存在偏移
@@ -151,8 +157,8 @@ export default {
     a {
       display: table-cell;
       vertical-align: middle;
-      height: 25px;
-      font-size: 17px;
+      height: .333333rem;
+      font-size: .453333rem;
       padding: 5px;
     }
     .active {
