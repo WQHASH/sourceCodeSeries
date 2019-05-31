@@ -104,6 +104,7 @@ export default {
 
         // 获取栏目数据
         async get_indexColumn_data({ commit, state, dispatch }) {
+            let json = await fetch('post', 'classID')
             let res
             const data = JSON.parse(get_local_cache('index_Column'))
             if (data) {
