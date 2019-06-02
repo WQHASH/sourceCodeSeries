@@ -79,7 +79,7 @@ export default {
 
         //获取栏目 
         async get_indexColumn_data({ commit, state, dispatch }) {
-            let res
+            let res;
             const data = JSON.parse(get_local_cache('index_Column'));
             if (data) {
                 res = data
@@ -87,9 +87,10 @@ export default {
                 let json = await fetch('post', 'classID')
                 res = [...state.indexColumn, ...json]
             }
-            dispatch('get_indexPage_cache', res)
-            dispatch('get_indexLocation_cache', res)
-            commit('set_indexColumn', res)
+
+            dispatch('get_indexPage_cache', res);
+            dispatch('get_indexLocation_cache', res);
+            commit('set_indexColumn', res);
             return res
         },
     },
