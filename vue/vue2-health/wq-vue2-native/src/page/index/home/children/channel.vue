@@ -62,7 +62,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("index", ["indexColumn"])
+    ...mapGetters("index", ["indexColumn", "indexPage", "indexLocation"])
   },
   watch: {
     indexColumn() {
@@ -76,7 +76,12 @@ export default {
   },
 
   methods: {
-    ...mapMutations("index", ["set_indexActive", "set_indexColumn"]),
+    ...mapMutations("index", [
+      "set_indexActive",
+      "set_indexColumn",
+      "set_indexPage",
+      "set_indexLocation"
+    ]),
     ...mapActions("index", ["get_channel_data"]),
     //获取未选择的频道
     get_channel() {
@@ -113,6 +118,29 @@ export default {
         let addEle = this.channel.splice(index, 1);
         this.indexColumn.push(...addEle);
       }
+    },
+
+    // 增减栏目后需要同步 page, location
+    sync() {
+      let pageObj = {};
+      let locationObj = {};
+      for (let i = 0; i < this.indexColumn.length; i++) {
+        var className = this.indexColumn[i].classpath;
+        if (this.indexPage[className] > 1) {
+          pageObj[className] = this.indexPage[className];
+        } else {
+          pageObj[className] = 1;
+        }
+
+        if (this.indexLocation[className] > 0) {
+          locationObj[className] = this.indexLocation[className];
+        } else {
+          locationObj[className] = 0;
+        }
+      }
+
+      this.set_indexPage(pageObj);
+      this.set_indexLocation(locationObj);
     }
   },
   mounted() {
@@ -125,7 +153,9 @@ export default {
    *    deactivated：请求完成后的处理
    *        类似于图片懒加载的处理
    */
-  deactivated() {}
+  deactivated() {
+    this.sync()
+  }
 };
 </script>
 <style lang='less'>

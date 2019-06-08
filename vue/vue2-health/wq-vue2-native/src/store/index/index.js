@@ -4,9 +4,9 @@ import { fetch } from '@/config/fetch'
 export default {
     namespaced: true,
     state: {
-        indexActive: 'news_recommend',      // active的栏目
+        indexActive: 'news_recommend',      // active的栏目                => 当前选中的项
         indexPage: { news_recommend: 1 },   // 记录各个栏目page的对象
-        indexLocation: { news_recommend: 0 },  // 各个栏目location的对象
+        indexLocation: { news_recommend: 0 },  // 各个栏目location的对象    => 点击删除一下频道中的数据
         //栏目数据
         indexColumn: [{
             classname: '推荐',

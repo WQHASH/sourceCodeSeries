@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <home-header></home-header>
-    <!-- <swiper-container></swiper-container> -->
+    <swiper-container></swiper-container>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>

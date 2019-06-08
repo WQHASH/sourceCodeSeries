@@ -2,7 +2,7 @@
   <div id="indexHeader">
     <header>
       <div class="top_bar">
-        <div class="logo"></div>
+        <div class="logo" @click="goTop"></div>
         <div class="search">
           <div class="search_wrap">
             <i class="icon-search"></i>

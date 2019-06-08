@@ -17,19 +17,28 @@ import store from './store'
 // import 'lib-flexible/flexible.js'
 import 'amfe-flexible/index.js';
 
+import VueAwesomeSwiper from 'vue-awesome-swiper' // swiper的vue轮子
+import 'swiper/dist/css/swiper.css'
+
 //全局组件
 import myHeader from '@/components/myHeader'
 
 
 
 Vue.config.productionTip = false
+
+Vue.use(VueAwesomeSwiper)
+
 //注册全局组件
 Vue.component('my-header', myHeader)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })
