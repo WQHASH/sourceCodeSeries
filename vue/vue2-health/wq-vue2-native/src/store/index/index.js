@@ -30,10 +30,19 @@ export default {
         indexLocation: state => {
             return state.indexLocation
         },
+        activeIndex: (state) => {
+            return state.indexColumn.findIndex((obj) => {
+                return obj.classpath === state.indexActive;
+            })
+        },
 
     },
 
     mutations: {
+        //设置选中的栏目
+        set_indexActive(state, val) {
+            state.indexActive = val;
+        },
         //设置缓存 indexPage
         set_indexPage(state, obj) {
             state.indexPage = obj;
@@ -92,6 +101,13 @@ export default {
             dispatch('get_indexLocation_cache', res);
             commit('set_indexColumn', res);
             return res
+        },
+
+        //获取未选择的频道
+        async get_channel_data({commit, state, dispatch}){
+            let res = await fetch('post', 'classID', { 'channel': 'channel' })
+            return res;
+    
         },
     },
 };
