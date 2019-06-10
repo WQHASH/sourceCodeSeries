@@ -12,6 +12,10 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+//第三方库
+import MintUI from 'mint-ui'
+
+
 //适配
 // import '@/config/rem.js';
 // import 'lib-flexible/flexible.js'
@@ -22,15 +26,17 @@ import 'swiper/dist/css/swiper.css'
 
 //全局组件
 import myHeader from '@/components/myHeader'
-
+import listItem from '@/components/listItem'
 
 
 Vue.config.productionTip = false
 
+Vue.use(MintUI)
 Vue.use(VueAwesomeSwiper)
 
 //注册全局组件
 Vue.component('my-header', myHeader)
+Vue.component('list-item', listItem)
 
 /* eslint-disable no-new */
 new Vue({

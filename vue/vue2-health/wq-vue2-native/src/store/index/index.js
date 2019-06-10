@@ -5,7 +5,7 @@ export default {
     namespaced: true,
     state: {
         indexActive: 'news_recommend',      // active的栏目                => 当前选中的项
-        indexPage: { news_recommend: 1 },   // 记录各个栏目page的对象
+        indexPage: { news_recommend: 1 },   // 记录所有栏目中的listItem的页码
         indexLocation: { news_recommend: 0 },  // 各个栏目location的对象    => 点击删除一下频道中的数据
         //栏目数据
         indexColumn: [{
@@ -30,12 +30,26 @@ export default {
         indexLocation: state => {
             return state.indexLocation
         },
+        indexSwiper: (state)=>{
+            return state.indexSwiper
+        },
+
+        //当前选中项在栏目中的下标
         activeIndex: (state) => {
             return state.indexColumn.findIndex((obj) => {
                 return obj.classpath === state.indexActive;
             })
         },
-
+        activeClassid: (state, getters)=>{
+            return state.indexColumn[getters.activeIndex].classid
+        },
+        //当前选中项的页码
+        activePage: (state) => {
+            return state.indexPage[state.indexActive]
+        },
+        activeLocation: state => {
+            return state.indexLocation[state.indexActive]
+        }
     },
 
     mutations: {
@@ -55,6 +69,9 @@ export default {
         set_indexColumn(state, arr) {
             state.indexColumn = arr;
             set_local_cache('index_Column', arr);
+        },
+        set_indexSwiper(state, val){
+            state.indexSwiper = val;
         },
     },
 
@@ -86,6 +103,12 @@ export default {
             }
         },
 
+        // 获取列表数据缓存
+        get_listItem_cache(){
+            let data = JSON.parse(getCache(`$(sate.indexActive)_json`));
+            return data;
+        },
+
         //获取栏目 
         async get_indexColumn_data({ commit, state, dispatch }) {
             let res;
@@ -106,9 +129,31 @@ export default {
         //获取未选择的频道
         async get_channel_data({commit, state, dispatch}){
             let res = await fetch('post', 'classID', { 'channel': 'channel' })
-            return res;
-    
+            return res;    
         },
+
+        //获取文章列表
+        async get_listItem_data({rootState, getters}, page){
+            let params = {
+                'classid': getters.activeClassid,
+                'page': page,
+                'userid': rootState.userid,
+                'firsttime': rootState.firsttime,
+                'count': 20,
+                'time': new Date().getTime(),
+            };
+
+            let res = await fetch('post', 'Class', params);
+            return res;
+        },
+
+        //获取banner数据
+        async get_banner_data({commit, getters}){
+            let params = {'classid': getters.activeClassid, 'type':'banner'};
+            let res = await fetch('post', 'Stick', params);
+            return  res;
+        },
+
     },
 };
 
