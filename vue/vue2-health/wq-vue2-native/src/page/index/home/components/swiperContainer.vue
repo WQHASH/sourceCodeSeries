@@ -1,14 +1,13 @@
 <template>
   <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
     <swiper-slide v-for="(item,index) in indexColumn" :key="index">
-      {{item.classname}}
-      <!-- <pull-container :type='item.classpath'></pull-container> -->
+      <pull-container :type="item.classpath"></pull-container>
     </swiper-slide>
   </swiper>
 </template>
 <script>
 import { mapGetters, mapMutations } from "vuex";
-
+import pullContainer from "./pullContainer";
 export default {
   name: "swiperContainer",
   data() {
@@ -29,6 +28,9 @@ export default {
       }
     };
   },
+  components: {
+    pullContainer
+  },
   watch: {
     indexActive() {
       this.slideTo();
@@ -37,9 +39,6 @@ export default {
   computed: {
     // 当前选中的项
     ...mapGetters("index", ["indexActive", "activeIndex", "indexColumn"])
-  },
-  mounted() {
-    //   this.$refs.mySwiper.swiper.slideTo(3, 1000, false)
   },
   methods: {
     ...mapMutations("index", ["set_indexActive"]),
