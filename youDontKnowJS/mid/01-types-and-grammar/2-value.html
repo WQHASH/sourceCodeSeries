@@ -81,21 +81,102 @@
     })();
 
     /**
-    *   2.3.1   数字语法
-    *       数字字面量: 可以用来保存字面量，并可以保存任意字面量; 
-    *       数字变量：  实际上就是一些固定值， 如1,2,3, true, false, null,NaN, "Hello",不可改变的值;
-    *
-    *       注意：当数字遇到点运算符时的优先级顺序：
-    *               数字字面量 >对象属性运算符    => 它会先识别为成数字字面量的一部分, 
-    *                                           => 然后才去识别成对象属性运算
-    **/
-    (function(){
+     *   2.3.1   数字语法
+     *       数字字面量: 可以用来保存字面量，并可以保存任意字面量; 
+     *       数字变量：  实际上就是一些固定值， 如1,2,3, true, false, null,NaN, "Hello",不可改变的值;
+     *
+     *       注意：当数字遇到点运算符时的优先级顺序：
+     *               数字字面量 >对象属性运算符    => 它会先识别为成数字字面量的一部分, 
+     *                                           => 然后才去识别成对象属性运算
+     **/
+    (function () {
 
         // 42.toFixed(3);       SyntaxError
-        (42).toFixed(3)         // "42.000"
-        0.42.toFixed(3)         // "0.420"
-        42..toFixed(3)          // "42.000"
+        (42).toFixed(3) // "42.000"
+        0.42.toFixed(3) // "0.420"
+        42..toFixed(3) // "42.000"
         // 0.4.2.toFixed(3)     SyntaxError
 
+    })();
+
+
+    /**
+     * 
+     *  2.4.2 undefined
+     *      特殊关键字 和 标识符的区别：
+     *          关键字：ECMA描述了一组具有特定用途的关键字;
+     *          标识符：是指变量, 函数, 属性的名字有一定的命名规制
+     *      void运算符 
+     *          ①.  undefined  是一个内置标识符，它的值为undefined通过void运算符即可得到
+     *          ②.  表达式 void *** 没有返回值，因此返回结果是undefined。
+     *              void 并不改变表达式的结果，只是让表达式不返回值
+     * 
+     * 
+     *          注意：void的存在，因为undefined不是关键字, 用void能生成 undefiend值
+     *              还有中生成undefined的方法, 利用通过函数调用, 多余形参的方式造成 undefined;
+     * 
+     * ***/
+
+    (function () {
+        function fun() {
+            var undefined = 'local';
+            var obj = {};
+            //这里也体现了window 不是关键字只是标识符
+            var window = {
+                'undefined': "global"
+            };
+            console.log(undefined) // local
+            console.log(window.undefined) // global
+            console.log(obj.a === undefined) // false
+            console.log(obj.a === void 0) // false
+        };
+        // fun()
+    })();
+
+    /**
+     * 
+     *  2.4.3 特殊的数字 NaN
+     *      NaN 特性：
+     *       ①. 不是数字的数字，任然是数字类型；
+     *       ②. NaN是一个警戒值，用来指出数字类型中的错误情况, 即"执行数学运算没有成功，这是失败后返回的结果"
+     *       ③. 它和自身不相等
+     *  
+     *      判断是否为NaN：
+     *          可通过 全局函数 isNaN来判断, 但是该函数检查方式只是 " 检查参数是否不是NaN, 也不是数字"
+     *          这种检查方式过于死板, 模拟实现Es6的 Number.isNaN
+     * 
+     * 
+     *      无穷数：
+     *          零值 0===-0 在值上它们虽然都相同, 但是在某些场景中不等, 比如动画移动的方向正负是有所差别的
+     *              
+     * **/
+
+    (function () {
+        var a = 2 / 'foo'; // NaN 
+        var b = "foo";
+        typeof a === 'number'; //true
+        a == NaN    //false
+
+
+        window.isNaN(a);    //true
+        window.isNaN(b);    //true -> 其实这里因为false
+    })();
+
+    (function(){
+        var a = Infinity / Infinity;    // NaN
+        var b = 1 / 0;    // Infinity
+        var c = 1 / Infinity;   // 0 
+
+    })();
+
+    (function(){
+        function foo(a){
+            console.log(a,"foo")
+            a = 4;
+            console.log(a,"last")
+        }
+        var a = 3;
+        foo(a);
+        console.log(a,"Aaaa");
     })();
 </script>
