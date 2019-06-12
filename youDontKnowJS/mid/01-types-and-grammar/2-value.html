@@ -155,28 +155,63 @@
         var a = 2 / 'foo'; // NaN 
         var b = "foo";
         typeof a === 'number'; //true
-        a == NaN    //false
+        a == NaN //false
 
 
-        window.isNaN(a);    //true
-        window.isNaN(b);    //true -> 其实这里因为false
+        window.isNaN(a); //true
+        window.isNaN(b); //true -> 其实这里因为false
     })();
 
-    (function(){
-        var a = Infinity / Infinity;    // NaN
-        var b = 1 / 0;    // Infinity
-        var c = 1 / Infinity;   // 0 
+    (function () {
+        var a = Infinity / Infinity; // NaN
+        var b = 1 / 0; // Infinity
+        var c = 1 / Infinity; // 0 
 
     })();
 
-    (function(){
-        function foo(a){
-            console.log(a,"foo")
+    /****
+     * 2.5  值和引用    (可以配合深度克隆加以理解!!!)
+     *  值传递：
+     *      相当于对当前值进行复制了一份, 不论是当变量还是作为参数, 都和之前的没关系了;类似理解为两份数据了;
+     *  引用传递：
+     *       作为参数进行传递的话, 只是将实参的一个复本赋值给了函数使用,
+     *       相当于两个复合变量对一个地址的引用, 如果值改变会影响到这两个变量;
+     * 
+     *  eg:
+     *      foo(obj.slice())  =>这种浅复制对象, 断开引用关系
+     *          (********* 处理复合值引用改变问题 *********)
+     * 
+     *      var obj = {a:2};
+     *      foo(obj); 然后foo函数里对obj.a=2222; 结果会导致实参obj中的a发生改变  
+     *          (********* 这种是处理简单值不改变问题 *********)
+     *  
+     * **/
+
+    (function () {
+        //值传递
+        function foo(a) {
+            console.log(a, "foo") //3
             a = 4;
-            console.log(a,"last")
+            console.log(a, "last") //4
         }
         var a = 3;
-        foo(a);
-        console.log(a,"Aaaa");
+        // foo(a);
+        // console.log(a,"Aaaa");      //3
     })();
+
+
+    (function () {
+        // 引用传递
+        function foo(x) {
+            x.push(4);
+            console.log(x); // [1,2,3,4]
+            x = [4, 5, 6];
+            x.push(7);
+            console.log(x); // [4,5,6,7]
+        };
+        var a = [1, 2, 3];
+        // foo(a); //此时 a => [1,2,3,4]
+        // foo(a.slice()) // 此时  a => [1,2,3]
+    })();
+   
 </script>
