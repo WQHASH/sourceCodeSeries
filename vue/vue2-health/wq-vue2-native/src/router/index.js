@@ -13,6 +13,8 @@ Router.prototype.go = function () {
 const index = () => import('@/page/index/index');
 const home = () => import('@/page/index/home/home');
 const channel = () => import('@/page/index/home/children/channel')
+const detail = () => import('@/page/detail/detail')
+
 const video = () => import('@/page/index/video/video');
 const collect = () => import('@/page/index/collect/collect');
 const user = () => import('@/page/index/user/user');
@@ -57,10 +59,18 @@ export default new Router({
               name: 'user',
               path: 'user',
               component: user,
-            },
-
+            },                        
           ]
         },
+        
+        //详情页
+        {
+          name: 'detail',
+          path: 'detail',
+          component: detail,
+        },
+
+
       ],
 
     }
