@@ -70,8 +70,15 @@ export default {
       "indexSwiper"
     ])
   },
+  watch: {
+    //监听当前选中栏目项的变化, 来重新发送请求
+    indexActive() {
+      this.init();
+    }
+  },
   mounted() {
     this.init();
+    this.lookHereClick();
   },
   methods: {
     ...mapActions("index", [
@@ -128,9 +135,17 @@ export default {
             this.contentJson.unshift(...res);
             this.dataCount = res.length;
             this.classPage++;
-            //这里还缺少方法
+            //头部没有数据的提示
+            $(`.container.${this.type} .dataCount`)
+              .slideDown(200)
+              .delay(1000)
+              .slideUp(200);
           } else {
-            //这里还缺少方法
+            //头部没有数据的提示
+            $(`.container.${this.type} .noNewData`)
+              .slideDown(200)
+              .delay(1000)
+              .slideUp(200);
           }
           this.$refs.loadmore.onTopLoaded();
           this.error = false;
@@ -158,6 +173,15 @@ export default {
     // 组件顶部状态发生变化时的回调函数 drop->loading->pull
     handleTopChange(status) {
       this.topStatus = status;
+    },
+
+    // 点击look元素，发送请求 [属于后续补充功能，第一页和第二间存在个容器：上次看到这里，点击刷新]
+    lookHereClick() {
+      $(`.container.${this.type}`).on("click", "#lookHere", () => {
+        $(`.container.${this.indexActive}`).animate({ scrollTop: 0 }, () => {
+          this.loadTopAjax();
+        });
+      });
     }
   }
 };
