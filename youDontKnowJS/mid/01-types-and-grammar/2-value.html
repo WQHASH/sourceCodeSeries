@@ -23,7 +23,8 @@
      *      var a = new Array(3);
      *      var b = [undefined, undefined, undefined];
      *          var 声明和 new Array的区别:
-     *              数组并没有预设长度的概念，new创建的只是一个空数组或者说 '空单元'
+     *              数组并没有预设长度的概念，new创建的只是一个空数组或者说 '空单元' 
+     *              (这里刚好只有一个参数3, 则作为数组的预设长度，如果new Array(2,3,4) 和var声明的就一样了 )
      *              只不过它的length属性设置了指定值。 也体现主动赋值undefined和稀疏数组的区别!!
      * */
 
