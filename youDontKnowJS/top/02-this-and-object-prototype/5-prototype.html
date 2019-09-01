@@ -1,3 +1,9 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2019-07-28 22:30:35
+ * @LastEditTime: 2019-09-01 10:43:59
+ -->
 <script>
     
     /***5.1 Prototype****/
@@ -26,6 +32,26 @@
 
 
      /***5.1.2 属性设置和屏蔽****/
+
+    (function(){
+        /**
+        * 屏蔽现象：
+        *   myObject原型链上出现say属性，自身没有，
+        *   当我们直接读取say时访问的时原型链上的，但是如果遇到等号赋值操作，他会在自身中创建一个say,不能直接去修改上一层级中的属性
+        **/
+        var myObject = {};
+        // Object.defineProperty(myObject, "say", {
+        //     configurable: true,
+
+        //     writable: false,
+        // })
+        myObject.__proto__.say = "is-say"
+        // console.log(myObject.say, "myObject")    // is-say
+        myObject.say = "no-haha";
+        // console.log(myObject.say, "myObject")       // no-haha
+
+    })();
+
     (function(){
         /**
          *  书中提到 屏蔽还有另外两种情况，需要配合 Object.defineProperty()来设置
@@ -71,6 +97,28 @@
     
     })();
 
+    (function(){
+        /**
+         * 比较改写原型链的方法区别
+        */
+        function foo(){};
+        foo.prototype = {
+            gg:function (param) {  }
+        };
+        
+        function bar(param) {  }
+        bar.prototype = {
+            ss:function(){}
+        };
+        
+        // foo.prototype = Object.create(bar.prototype);
+        // Object.setPrototypeOf(foo.prototype, bar.prototype);
+        foo.prototype.__proto__ = bar.prototype;
+        foo.prototype.constructor = foo;
+        var a = new foo();
+        // console.log( foo.prototype.isPrototypeOf(a))
+
+    })();
 
     (function(){
 
