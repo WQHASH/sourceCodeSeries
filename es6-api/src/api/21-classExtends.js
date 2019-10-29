@@ -1,3 +1,9 @@
+/*
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2019-07-28 22:30:34
+ * @LastEditTime: 2019-09-01 10:43:06
+ */
 let classExtends = "class的继承";
 // 1.*************简介*************
 // es5中的继承和es6中的比较
