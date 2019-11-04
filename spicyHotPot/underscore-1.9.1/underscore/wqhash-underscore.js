@@ -2,7 +2,7 @@
  * @Description: wqhash-inderscore.js
  * @Author: wangqi
  * @Date: 2019-10-20 16:13:33
- * @LastEditTime: 2019-10-27 18:04:30
+ * @LastEditTime: 2019-11-04 23:19:39
  */
 (function () {
     /**
@@ -174,31 +174,6 @@
         return obj !== null && hasOwnProperty.call(obj, path);
     };
 
-
-    /**
-     * @description: 获取对象的所有key值 [提供给_.property使用]
-     * @param obj {Object} 
-     * @return: 
-     */
-    _.keys = function (obj) {
-        if (!_.isObject(obj)) {
-            return [];
-        };
-        // 利用 Object.keys()方法
-        if (nativeKeys) {
-            return nativeKeys(obj)
-        };
-        var keys = [];
-        //处理数组的情况  (这里就不考虑ie<9时不兼容 for in方法的情况了)
-        for (var key in obj) {
-            if (has(obj, key)) {
-                keys.push(key);
-            }
-        }
-        return keys;
-    };
-
-
     /**
      * @description: 获取对象的属性值
      * @param key {String} 
@@ -315,12 +290,247 @@
 
     _.reduceRight = _.foldr = createReduce(-1);
 
-
+    /**
+     * @description: 返回满足回调函数条件的第一个值
+     * @param obj {集合}             数组或者对象
+     * @param predicate {Function}   回调函数
+     * @param context {Object}       上下文对象
+     * @return: 
+     */
     _.find = _.detect = function (obj, predicate, context) {
-
+        var keyFinder = isArrayLike(obj) ? _.findIndex : _.findKey;
+        var key = keyFinder(obj, predicate, context);
+        if (key !== void 0 && key !== -1) {
+            return obj[key];
+        }
     };
 
+    /**
+     * @description: 过滤; 返回满足回调函数条件的所有值
+     * @param obj {集合}             数组或者对象
+     * @param predicate {Function}   回调函数
+     * @param context {Object}       上下文对象
+     * @return: 
+     */
+    _.filter = _.select = function (obj, predicate, context) {
+        var results = [];
+        predicate = cb(predicate, context);
+        _.each(obj, function (value, index, list) {
+            if (predicate(value, index, list)) {
+                results.push(value);
+            }
+        });
+        return results;
+    }
+
+
+    _.where = function (obj, attrs) {
+        return _.filter(obj, _.matcher(attrs));
+    };
+
+    _.findWhere = function (obj, attrs) {
+        return _.find(obj, _.matcher(attrs));
+    };
+
+    /**
+     * @description: 和过滤相反; 返回不满足回调函数条件的所有值
+     * @param obj {集合}             数组或者对象
+     * @param predicate {Function}   回调函数
+     * @param context {Object}       上下文对象
+     * @return: 
+     */
+    _.reject = function (obj, predicate, context) {
+        return _.filter(obj, _.negate(cb(predicate)), context);
+    };
+
+    /**
+     * @description: 集合所有元素都要满足回调函数条件才返回true
+     * @param {type} 
+     * @return: 
+     */
+    _.every = _.all = function (obj, predicate, context) {
+        predicate = cb(predicate, context);
+        var keys = !isArrayLike(obj) && _.keys(obj);
+        length = (keys || obj).length;
+        for (var index = 0; index < length; index++) {
+            var currentKey = keys ? keys[index] : index;
+            if (!predicate(obj[currentKey], currentKey, obj)) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    /**
+     * @description: 只要集合中元素有一个满足回调函数条件就返回true
+     * @param {type} 
+     * @return: 
+     */
+    _.some = _.any = function (obj, predicate, context) {
+        predicate = cb(predicate, context);
+        var keys = !isArrayLike(obj) && _.keys(obj),
+            length = (keys || obj).length;
+        for (var index = 0; index < length; index++) {
+            var currentKey = keys ? keys[index] : index;
+            if (predicate(obj[currentKey], currentKey, obj)) return true;
+        }
+        return false;
+    };
+
+    /**
+     * @description: 类似Es6中的 Array.includes()
+     * @param {type} 
+     * @return: 
+     */
+    _.contains = _.includes = _.include = function (obj, item, fromIndex, guard) {
+        if (!isArrayLike(obj)) {
+            obj = _.values(obj);
+        }
+        if (typeof fromIndex != 'number' || guard) {
+            fromIndex = 0;
+        }
+        return _.indexOf(obj, item, fromIndex) >= 0;
+    };
+
+
+
     // 集合 Functions
+    // ----------------------------------------
+
+
+    // 数组 Functions
+    // ---------------------------------------- 
+    var createPredicateIndexFinder = function (dir) {
+        /**
+         * @description: 返回 predicate[回调函数]逻辑判断中满足条件的key, 不满足则返回undefined
+         * @param array {Array}             检查集合
+         * @param predicate {Function}      回调函数
+         * @param context {Object}          上下文对象
+         * @return: 
+         */
+        return function (array, predicate, context) {
+            predicate = cb(predicate, context);
+            var length = getLength(array);
+            var index = dir > 0 ? 0 : length - 1;
+            for (; index >= 0 && index < length; index += dir) {
+                if (predicate(array[index], index, array)) {
+                    return index;
+                }
+            }
+            return -1;
+        }
+    };
+
+    /**
+     * @description: 满足条件回调返回的第一个数组中的下标
+     * @param {type} 
+     * @return: 返回的索引值
+     */
+    _.findIndex = createPredicateIndexFinder(1);
+    _.findLastIndex = createPredicateIndexFinder(-1);
+
+    _.sortedIndex = function (array, obj, iteratee, context) {
+        iteratee = cb(iteratee, context, 1);
+        var value = iteratee(obj);
+        var low = 0, high = getLength(array);
+        while (low < high) {
+            var mid = Math.floor((low + high) / 2);
+            if (iteratee(array[mid]) < value) low = mid + 1; else high = mid;
+        }
+        return low;
+    };
+
+    var createIndexFinder = function (dir, predicateFind, sortedIndex) {
+        return function (array, item, idx) {
+            var i = 0, length = getLength(array);
+            if (typeof idx == 'number') {
+                if (dir > 0) {
+                    i = idx >= 0 ? idx : Math.max(idx + length, i);
+                } else {
+                    length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
+                }
+            } else if (sortedIndex && idx && length) {
+                idx = sortedIndex(array, item);
+                return array[idx] === item ? idx : -1;
+            }
+            if (item !== item) {
+                idx = predicateFind(slice.call(array, i, length), _.isNaN);
+                return idx >= 0 ? idx + i : -1;
+            }
+            for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
+                if (array[idx] === item) return idx;
+            }
+            return -1;
+        };
+    };
+    _.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
+    _.lastIndexOf = createIndexFinder(-1, _.findLastIndex);
+
+    // 数组 Functions
+    // ----------------------------------------
+
+
+    // 函数 Functions
+    // ----------------------------------------
+    /**
+     * @description: 获取对象的所有key值 [提供给_.property使用]
+     * @param obj {Object} 
+     * @return: 
+     */
+    _.keys = function (obj) {
+        if (!_.isObject(obj)) {
+            return [];
+        };
+        // 利用 Object.keys()方法
+        if (nativeKeys) {
+            return nativeKeys(obj)
+        };
+        var keys = [];
+        //处理数组的情况  (这里就不考虑ie<9时不兼容 for in方法的情况了)
+        for (var key in obj) {
+            if (has(obj, key)) {
+                keys.push(key);
+            }
+        }
+        return keys;
+    };
+
+
+    /**
+     * @description: 返回对象中所有的键值
+     * @param {type} 
+     * @return: 
+     */
+    _.values = function (obj) {
+        var keys = _.keys(obj);
+        var length = keys.length;
+        var values = Array(length);
+        for (var i = 0; i < length; i++) {
+            values[i] = obj[keys[i]];
+        }
+        return values;
+    };
+
+    // 函数 Functions
+    // ----------------------------------------
+
+
+
+    // 对象 Functions
+    // ----------------------------------------
+
+    /**
+     * @description: 返回predicate回调函数相反的值
+     * @param predicate {Function} 
+     * @return: 
+     */
+    _.negate = function (predicate) {
+        return function () {
+            return !predicate.apply(this, arguments);
+        };
+    };
+
+    // 对象 Functions
     // ----------------------------------------
 
 
@@ -360,6 +570,26 @@
      * @return: 
      */
     _.extendOwn = _.assign = createAssigner(_.keys);
+
+
+    /**
+     * @description: 返回 predicate[回调函数]逻辑判断中满足条件的key, 不满足则返回undefined
+     * @param obj {Object || Array}     检查集合
+     * @param predicate {Function}      回调函数
+     * @param context {Object}          上下文对象
+     * @return: 
+     */
+    _.findKey = function (obj, predicate, context) {
+        predicate = cb(predicate, context);
+        var keys = _.keys(obj), key;
+        for (var i = 0, length = keys.length; i < length; i++) {
+            key = keys[i];
+            if (predicate(obj[key], key, obj)) {
+                return key;
+            }
+        }
+    };
+
 
     /**
      * @description: 判断一个数是否为数组
@@ -446,9 +676,6 @@
             return _.isMatch(obj, attrs);
         };
     };
-
-
-
 
 
 })();
