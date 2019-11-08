@@ -2,7 +2,7 @@
  * @Description: wqhash-inderscore.js
  * @Author: wangqi
  * @Date: 2019-10-20 16:13:33
- * @LastEditTime: 2019-11-04 23:19:39
+ * @LastEditTime: 2019-11-08 17:51:26
  */
 (function () {
     /**
@@ -172,17 +172,6 @@
      */
     var has = function (obj, path) {
         return obj !== null && hasOwnProperty.call(obj, path);
-    };
-
-    /**
-     * @description: 获取对象的属性值
-     * @param key {String} 
-     * @return: 
-     */
-    var shallowProperty = function (key) {
-        return function (obj) {
-            return obj == null ? void 0 : obj[key];
-        }
     };
 
     /**
@@ -392,6 +381,221 @@
         return _.indexOf(obj, item, fromIndex) >= 0;
     };
 
+    // ?????????
+    _.invoke = restArguments(function (obj, path, args) {
+        var contextPath, func;
+        if (_.isFunction(path)) {
+            func = path;
+        } else if (_.isArray(path)) {
+            contextPath = path.slice(0, -1);
+            path = path[path.length - 1];
+        }
+        return _.map(obj, function (context) {
+            var method = func;
+            if (!method) {
+                if (contextPath && contextPath.length) {
+                    context = deepGet(context, contextPath);
+                }
+                if (context == null) return void 0;
+                method = context[path];
+            }
+            return method == null ? method : method.apply(context, args);
+        });
+    });
+
+    /**
+     * @description: 萃取数组对象(也只能是这种数据格式)中某属性值，返回一个数组
+     * @param obj {集合 [{key: val}]} 集合对象
+     * @param key {String}  键名
+     * @return: 返回 [val, val, ...] 返回所有键名的val
+     */
+    _.pluck = function (obj, key) {
+        return _.map(obj, _.property(key));
+    };
+
+
+    /**
+     * @description: 找到数组对象中满足回调函数最大的值
+     * @param obj {集合 [{key: val}]} 集合对象
+     * @param iteratee {Function}  回调函数
+     * @return:
+     */
+    _.max = function (obj, iteratee, context) {
+        var result = -Infinity, lastComputed = -Infinity,
+            value, computed;
+        if (iteratee == null || typeof iteratee == 'number' && typeof obj[0] != 'object' && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value != null && value > result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (v, index, list) {
+                computed = iteratee(v, index, list);
+                if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
+                    result = v;
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };
+
+    _.min = function (obj, iteratee, context) {
+        var result = Infinity, lastComputed = Infinity,
+            value, computed;
+        if (iteratee == null || typeof iteratee == 'number' && typeof obj[0] != 'object' && obj != null) {
+            obj = isArrayLike(obj) ? obj : _.values(obj);
+            for (var i = 0, length = obj.length; i < length; i++) {
+                value = obj[i];
+                if (value != null && value < result) {
+                    result = value;
+                }
+            }
+        } else {
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (v, index, list) {
+                computed = iteratee(v, index, list);
+                if (computed < lastComputed || computed === Infinity && result === Infinity) {
+                    result = v;
+                    lastComputed = computed;
+                }
+            });
+        }
+        return result;
+    };
+
+    /**
+     * @description: 给集合排序
+     * @param obj {Object} 数组对象形式
+     * @param iteratee {Function} 必须是函数
+     * @return: 
+     */
+    _.sortBy = function (obj, iteratee, context) {
+        var index = 0;
+        iteratee = cb(iteratee, context);
+        return _.pluck(_.map(obj, function (value, key, list) {
+            return {
+                value: value,
+                index: index++,
+                criteria: iteratee(value, key, list)
+            };
+        }).sort(function (left, right) {
+            var a = left.criteria;
+            var b = right.criteria;
+            if (a !== b) {
+                if (a > b || a === void 0) return 1;
+                if (a < b || b === void 0) return -1;
+            }
+            return left.index - right.index;
+        }), 'value');
+    };
+
+    // ----- 没细看，感觉不常用 -----
+    var group = function (behavior, partition) {
+        return function (obj, iteratee, context) {
+            var result = partition ? [[], []] : {};
+            iteratee = cb(iteratee, context);
+            _.each(obj, function (value, index) {
+                var key = iteratee(value, index, obj);
+                behavior(result, value, key);
+            });
+            return result;
+        };
+    };
+    _.groupBy = group(function (result, value, key) {
+        if (has(result, key)) result[key].push(value); else result[key] = [value];
+    });
+    _.indexBy = group(function (result, value, key) {
+        result[key] = value;
+    });
+    _.countBy = group(function (result, value, key) {
+        if (has(result, key)) result[key]++; else result[key] = 1;
+    });
+    // ----- 没细看，感觉不常用 -----
+
+    /**
+     * @description: 给集合随机排序,生成一个集合副本
+     * @param obj {Object} 集合对象
+     * @return: 
+     */
+    _.shuffle = function (obj) {
+        return _.sample(obj, Infinity);
+    };
+
+    /**
+     * @description: 给集合随机排序，按照参数n来生成集合list的长度, 否则将返回一个单一的随机项
+     * @param obj {Object} 集合对象
+     * @param n {Object} 生成元素的个数 [可选参数]
+     * @param guard {Object} 
+     * @return: 
+     */
+    _.sample = function (obj, n, guard) {
+        if (n == null || guard) {
+            if (!isArrayLike(obj)) {
+                obj = _.values(obj);
+            }
+            return obj[_.random(obj.length - 1)];
+        }
+        var sample = isArrayLike(obj) ? _.clone(obj) : _.values(obj);
+        var length = getLength(sample);
+        n = Math.max(Math.min(n, length), 0);
+        var last = length - 1;
+        for (var index = 0; index < n; index++) {
+            var rand = _.random(index, last);
+            var temp = sample[index];
+            sample[index] = sample[rand];
+            sample[rand] = temp;
+        }
+        return sample.slice(0, n);
+    };
+
+
+    var reStrSymbol = /[^\ud800-\udfff]|[\ud800-\udbff][\udc00-\udfff]|[\ud800-\udfff]/g;
+    /**
+     * @description: 转成数组
+     * @param {type} 
+     * @return: 
+     */
+    _.toArray = function (obj) {
+        if (!obj) {
+            return [];
+        };
+        if (_.isArray(obj)) {
+            return slice.call(obj);
+        };
+        //上面的正则暂时不清楚干嘛？ (实现结果类似于: "abc".split("") => ['a','b','c']);
+        if (_.isString(obj)) {
+            return obj.match(reStrSymbol);
+        };
+        // 类数组转数组的新思路, 遍历类数组取其中的每个值, 放到一个新数组中;
+        if (isArrayLike(Obj)) {
+            return _.map(obj, _.identity);
+        };
+        return _.values(obj);
+    };
+
+    /**
+     * @description: 返回list集合的长度
+     * @param obj{集合} 
+     * @return: 
+     */
+    _.size = function (obj) {
+        if (obj == null) {
+            return 0;
+        };
+        return isArrayLike(obj) ? obj.length : _.keys(obj).length;
+    };
+
+    // ----- 没细看，感觉不常用 -----
+    _.partition = group(function (result, value, pass) {
+        result[pass ? 0 : 1].push(value);
+    }, true);
+    // ----- 没细看，感觉不常用 -----
+
 
 
     // 集合 Functions
@@ -473,6 +677,24 @@
     // 函数 Functions
     // ----------------------------------------
     /**
+     * @description: 返回predicate回调函数相反的值
+     * @param predicate {Function} 
+     * @return: 
+     */
+    _.negate = function (predicate) {
+        return function () {
+            return !predicate.apply(this, arguments);
+        };
+    };
+
+    // 函数 Functions
+    // ----------------------------------------
+
+
+
+    // 对象 Functions
+    // ----------------------------------------
+    /**
      * @description: 获取对象的所有key值 [提供给_.property使用]
      * @param obj {Object} 
      * @return: 
@@ -488,6 +710,7 @@
         var keys = [];
         //处理数组的情况  (这里就不考虑ie<9时不兼容 for in方法的情况了)
         for (var key in obj) {
+            // 这里只考虑私有的，不考虑原型继承过来的
             if (has(obj, key)) {
                 keys.push(key);
             }
@@ -495,6 +718,21 @@
         return keys;
     };
 
+    /**
+     * @description: 获取obj中所有的key (不论是私有的还是继承的)
+     * @param {type} 
+     * @return: 
+     */
+    _.allKeys = function (obj) {
+        if (!_.isObject(obj)) {
+            return [];
+        }
+        var keys = [];
+        for (var key in obj) {
+            keys.push(key);
+        }
+        return keys;
+    };
 
     /**
      * @description: 返回对象中所有的键值
@@ -511,32 +749,8 @@
         return values;
     };
 
-    // 函数 Functions
-    // ----------------------------------------
-
-
-
-    // 对象 Functions
-    // ----------------------------------------
-
     /**
-     * @description: 返回predicate回调函数相反的值
-     * @param predicate {Function} 
-     * @return: 
-     */
-    _.negate = function (predicate) {
-        return function () {
-            return !predicate.apply(this, arguments);
-        };
-    };
-
-    // 对象 Functions
-    // ----------------------------------------
-
-
-
-    /**
-     * @description: 实现浅拷贝的方法
+     * @description: 实现浅拷贝的方法, 
      * @param {type} 
      * @return: 
      */
@@ -565,11 +779,18 @@
     };
 
     /**
-     * @description: 浅拷贝方法调用
+     * @description: 浅拷贝方法调用，只拷贝自身构造函数中的属性，不考虑原型及继承的
      * @param {type} 
      * @return: 
      */
     _.extendOwn = _.assign = createAssigner(_.keys);
+
+    /**
+     * @description: 浅拷贝方法调用，拷贝自身以及原型继承的属性
+     * @param {type} 
+     * @return: 
+     */
+    _.extend = createAssigner(_.allKeys);
 
 
     /**
@@ -610,6 +831,13 @@
         return type === 'function' || type === 'object' && !!obj;
     };
 
+    //类型判断
+    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error', 'Symbol', 'Map', 'WeakMap', 'Set', 'WeakSet'], function (name) {
+        _['is' + name] = function (obj) {
+            return toString.call(obj) === '[object ' + name + ']';
+        };
+    });
+
     // 判断是否为一个函数
     var nodelist = root.document && root.document.childNodes;
     if (typeof /./ != 'function' && typeof Int8Array != 'object' && typeof nodelist != 'function') {
@@ -645,6 +873,18 @@
     }
 
     /**
+     * @description: 对象浅克隆
+     * @param {type} 
+     * @return: 
+     */
+    _.clone = function (obj) {
+        if (!_.isObject(obj)) {
+            return obj;
+        }
+        return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+    };
+
+    /**
      * @description: 两对象键名进行匹配（返回Boolean）
      *                  --> 判断一个对象是否有给定对象的key,有的返回true,没有返回false
      * @param {type} 
@@ -676,6 +916,30 @@
             return _.isMatch(obj, attrs);
         };
     };
+
+    // 对象 Functions
+    // ----------------------------------------
+
+    // 实用功能(Utility Functions)
+    // ----------------------------------------
+
+
+    /**
+     * @description: 生成一个 min~max 之间的随机数
+     * @param {type} 
+     * @return: 
+     */
+    _.random = function (min, max) {
+        if (max == null) {
+            max = min;
+            min = 0;
+        }
+        return min + Math.floor(Math.random() * (max - min + 1));
+    };
+
+
+    // 实用功能(Utility Functions)
+    // ----------------------------------------
 
 
 })();
