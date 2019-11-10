@@ -2,7 +2,7 @@
  * @Description: wqhash-inderscore.js
  * @Author: wangqi
  * @Date: 2019-10-20 16:16:01
- * @LastEditTime: 2019-11-08 17:51:47
+ * @LastEditTime: 2019-11-10 15:10:48
  -->
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +19,33 @@
 </body>
 <script src="../underscore/wqhash-underscore.js"></script>
 <script>
+    let arr = [1, [2],
+        [3, [
+            [4]
+        ]]
+    ];
+    // let obj = _.flatten(arr);
+    // console.log(obj, "obj")
 
+
+
+    function temp(arr, output) {
+        output = output || [];
+        var index = output.length;
+        for (var i = 0; i < arr.length; i++) {
+            if (Array.isArray(arr[i])) {
+                temp(arr[i], output);
+                // index = output.length;
+            } else {
+                output[index] = arr[i];
+                // index++;
+                
+            }
+        }
+        return output
+    }
+
+    console.log(temp(arr) , "temp")
 </script>
 
 </html>

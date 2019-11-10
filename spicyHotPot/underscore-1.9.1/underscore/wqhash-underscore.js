@@ -2,7 +2,7 @@
  * @Description: wqhash-inderscore.js
  * @Author: wangqi
  * @Date: 2019-10-20 16:13:33
- * @LastEditTime: 2019-11-08 17:51:26
+ * @LastEditTime: 2019-11-10 14:57:34
  */
 (function () {
     /**
@@ -604,9 +604,102 @@
 
     // 数组 Functions
     // ---------------------------------------- 
+
+    /**
+     * @description: 依据参数n来截取数组从0-n的元素
+     * @param array {Array}     数组元素
+     * @param n {Number}        需要截取的个数 [可选]
+     * @param guard {} 
+     * @return: 
+     */
+    _.first = _.head = _.take = function (array, n, guard) {
+        if (arr == null || array.length < 1) {
+            return n == null ? void 0 : [];
+        }
+        if (n == null || guard) {
+            return array[0];
+        }
+        return _.initial(array, array.length - n);
+    };
+
+    /**
+     * @description: 返回数组中除了最后n个元素外的其他全部元素 (如果传递参数n的话)
+     *               从 0 -> array.length 开始算
+     *               这里使用Math.max就是为了减少负数情况的处理
+     * @param array {Array} 
+     * @param n {Number} 
+     * @return: 
+     */
+    _.initial = function (array, n, guard) {
+        return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
+    };
+
+
+    /**
+     * @description: 依据参数n来截取数组从array.length -> n 的元素
+     * @param {type} 
+     * @return: 
+     */
+    _.last = function (array, n, guard) {
+        if (array == null || array.length < 1) return n == null ? void 0 : [];
+        if (n == null || guard) return array[array.length - 1];
+        return _.rest(array, Math.max(0, array.length - n));
+    };
+
+    /**
+     * @description: 返回数组中除了第n个元素外的其他全部元素 (如果传递参数n的话)
+     *                  从array.length -> 0 开始算
+     * @param {type} 
+     * @return: 
+     */
+    _.rest = _.tail = _.drop = function (array, n, guard) {
+        return slice.call(array, n == null || guard ? 1 : n);
+    };
+
+    /**
+     * @description: 返回一个除去了所有 falsy(假) 值的 list 副本
+     * @param {type} 
+     * @return: 
+     */
+    _.compact = function (array) {
+        return _.filter(array, Boolean);
+    };
+
+
+    var flatten = function (input, shallow, strict, output) {
+        output = output || [];
+        var idx = output.length;
+        for (var i = 0, length = getLength(input); i < length; i++) {
+            var value = input[i];
+            if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
+                if (shallow) {
+                    var j = 0, len = value.length;
+                    while (j < len) output[idx++] = value[j++];
+                } else {
+                    flatten(value, shallow, strict, output);
+                    idx = output.length;
+                }
+            } else if (!strict) {
+                output[idx++] = value;
+            }
+        }
+        return output;
+    };
+    /**
+     * @description: 数组降维
+     * @param {type} 
+     * @return: 
+     */
+    _.flatten = function (array, shallow) {
+        return flatten(array, shallow, false)
+    };
+
+
+
+
     var createPredicateIndexFinder = function (dir) {
         /**
-         * @description: 返回 predicate[回调函数]逻辑判断中满足条件的key, 不满足则返回undefined
+         * @description: 返回 predicate[回调函数]逻辑判断中满足条件的key, 不满足则返回-1
          * @param array {Array}             检查集合
          * @param predicate {Function}      回调函数
          * @param context {Object}          上下文对象
@@ -633,6 +726,14 @@
     _.findIndex = createPredicateIndexFinder(1);
     _.findLastIndex = createPredicateIndexFinder(-1);
 
+    /**
+     * @description:  依据二分法查找obj, 能在array中排的位置
+     * @param array {Array}             查找的数组
+     * @param obj {简单值，引用值}      需插入的值
+     * @param iteratee {迭代器或者值 [可选]}
+     * @param context {Object}          上下文对象
+     * @return:
+     */
     _.sortedIndex = function (array, obj, iteratee, context) {
         iteratee = cb(iteratee, context, 1);
         var value = iteratee(obj);
@@ -837,6 +938,12 @@
             return toString.call(obj) === '[object ' + name + ']';
         };
     });
+
+    if (!_.isArguments(arguments)) {
+        _.isArguments = function (obj) {
+            return has(obj, 'callee');
+        };
+    };
 
     // 判断是否为一个函数
     var nodelist = root.document && root.document.childNodes;
