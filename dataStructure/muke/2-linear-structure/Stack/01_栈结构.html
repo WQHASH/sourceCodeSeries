@@ -1,0 +1,71 @@
+<!--
+ * @Description: 使用数组来模拟栈结构
+ * @Author: wangqi
+ * @Date: 2019-11-14 21:12:18
+ * @LastEditTime: 2019-11-14 22:09:55
+ -->
+<script>
+    // 栈结构可用数组或者链表来模拟实现
+    var Stack = (function () {
+        function Stack() {
+            this.item = [];
+        };
+        Stack.prototype = {
+            // 进栈
+            push: function (element) {
+                this.item.push(element);
+            },
+
+            // 出栈
+            pop: function () {
+                return this.item.pop();
+            },
+
+            // 查看栈顶元素
+            peek: function () {
+                return this.item[this.item.length - 1];
+            },
+
+            // 获取栈中元素长度
+            size: function () {
+                return this.item.length;
+            },
+
+            // 判断栈是否为空
+            isEmpty: function () {
+                return this.item.length === 0;
+            },
+
+            // 栈的toString方法, 得到一个字符串
+            toString: function () {
+                return this.item.join(",")
+            },
+        };
+
+        // var stack = new Stack();
+
+        return Stack;
+    })();
+
+
+
+    // 十进制转二进制 (js的 Number.toString(number) 就能够实现进制转换)
+    (function () {
+
+        function toBinarySystem(num) {
+            var stack = new Stack();
+            var str = '';
+            while (num > 0) {
+                stack.push(num % 2);
+                num = Math.floor(num / 2);
+            };
+            while (!stack.isEmpty()) {
+                str += stack.pop();
+            }
+            return str;
+        };
+
+        toBinarySystem();
+
+    })();
+</script>
