@@ -2,7 +2,7 @@
  * @Description: 使用数组来模拟栈结构
  * @Author: wangqi
  * @Date: 2019-11-14 21:12:18
- * @LastEditTime: 2019-11-14 22:10:43
+ * @LastEditTime: 2019-11-16 22:34:40
  -->
 <script>
     // 队列结构可用数组或者链表来模拟实现
@@ -45,5 +45,70 @@
         // var queue = new Queue();
 
         return Queue;
+    })();
+
+
+    // 击鼓传花
+    (function () {
+        function passGame(nameList, num) {
+            var q = new Queue();
+            for (var i = 0; i < nameList.length; i++) {
+                q.enqueue(nameList[i]);
+            };
+            while (q.size() > 1) {
+                for (var j = 0; j < num - 1; j++) {
+                    q.enqueue(q.dequeue());
+                }
+                q.dequeue();
+            }
+            var endName = q.front();
+            console.log(endName, nameList.indexOf(endName));
+            return nameList.indexOf(endName);
+        };
+
+        var names = ['小明', '小王', '小华', '李雷', '韩梅梅'];
+
+        // console.log(passGame(names, 5));
+    })();
+
+
+    // 优先级队列
+    (function () {
+        function priorityQueue() {
+            this.item = [];
+            this.QueueElement = function (element, priority) {
+                this.element = element;
+                this.priority = priority;
+            };
+        };
+        priorityQueue.prototype = {
+            // 这里只重写enqueue方法, 其它的都是一样的
+            enqueue: function (element, priority) {
+                var ele = new this.QueueElement(element, priority);
+                if (!this.item.length) {
+                    this.item.push(ele)
+                } else {
+                    var flag = false;
+                    for (var i = 0; i < this.item.length; i++) {
+                        if (ele.priority < this.item[i].priority) {
+                            this.item.splice(i, 0, ele);
+                            flag = true;
+                            break;
+                        }
+                    };
+                    // 如果ele是优先级最小的则直接加到数组最后
+                    if (!flag) {
+                        this.item.push(ele)
+                    }
+                }
+            },
+        };
+        var c = new priorityQueue();
+        c.enqueue("qq", 1);
+        c.enqueue("ww", 30);
+        c.enqueue("ee", 12);
+        c.enqueue("rr", 5);
+        c.enqueue("tt", 3)
+        // console.log(c, "Vvv")
     })();
 </script>

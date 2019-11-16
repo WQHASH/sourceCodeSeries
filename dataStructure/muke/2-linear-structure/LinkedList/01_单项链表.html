@@ -1,0 +1,89 @@
+<!--
+ * @Description: 单项链表结构
+ * @Author: wangqi
+ * @Date: 2019-11-16 22:19:14
+ * @LastEditTime: 2019-11-17 00:12:47
+ -->
+<script>
+    var LinkedList = (function () {
+        function LinkedList() {
+            this.head = null;
+            this.length = 0;
+            this.Node = function (data) {
+                this.data = data;
+                this.next = null;
+            };
+        };
+
+        LinkedList.prototype = {
+            // 插入节点
+            append: function (data) {
+                var newNode = new this.Node(data);
+                //判断是否是第一个节点
+                if (!this.length) {
+                    this.head = newNode;
+                } else {
+                    var currentNode = this.head;
+                    while (currentNode.next) {
+                        currentNode = currentNode.next;
+                    }
+                    currentNode.next = newNode;
+                }
+                this.length += 1;
+            },
+
+            // 将节点data转字符串
+            toString: function () {
+                var currentNode = this.head;
+                var linkedListStr = '';
+                while (currentNode) {
+                    linkedListStr += currentNode.data + '';
+                    currentNode = currentNode.next;
+                }
+                return linkedListStr;
+            },
+
+            insert: function (position, data) {
+                // 对position进行越界判断
+                if (position < 0 || position > this.length) {
+                    return false
+                };
+
+                var newDate = new Node(data);
+
+                // 判断插入的位置是否是第一个
+                if (position == 0) {
+                    newNode.next = this.head;
+                    this.head = newNode;
+                } else {
+                    var index = 0,
+                        currentNode = this.head,
+                        prevNode = null;
+                    while (index++ < position) {
+                        prevNode = currentNode
+                        currentNode = currentNode.next;
+                    }
+                    prevNode.next = newDate;
+                    newNode.next = currentNode;
+                };
+                this.length += 1;
+                return true;
+            },
+
+        };
+
+        return LinkedList;
+
+    })();
+
+    (function () {
+
+        var list = new LinkedList();
+
+        list.append("abc")
+        list.append("123")
+        list.append("xxx")
+        console.log(list, "list")
+
+    })();
+</script>
