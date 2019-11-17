@@ -2,7 +2,7 @@
  * @Description: 单项链表结构
  * @Author: wangqi
  * @Date: 2019-11-16 22:19:14
- * @LastEditTime: 2019-11-17 00:12:47
+ * @LastEditTime: 2019-11-17 16:45:01
  -->
 <script>
     var LinkedList = (function () {
@@ -43,14 +43,14 @@
                 return linkedListStr;
             },
 
+            // 插入节点
             insert: function (position, data) {
                 // 对position进行越界判断
                 if (position < 0 || position > this.length) {
                     return false
                 };
 
-                var newDate = new Node(data);
-
+                var newNode = new this.Node(data);
                 // 判断插入的位置是否是第一个
                 if (position == 0) {
                     newNode.next = this.head;
@@ -59,15 +59,92 @@
                     var index = 0,
                         currentNode = this.head,
                         prevNode = null;
+                    // 这里++的顺序是先比较,然后在++; 和在while里边执行++是一个道理
                     while (index++ < position) {
                         prevNode = currentNode
                         currentNode = currentNode.next;
                     }
-                    prevNode.next = newDate;
+                    prevNode.next = newNode;
                     newNode.next = currentNode;
                 };
                 this.length += 1;
                 return true;
+            },
+
+            // 获取节点
+            get: function (position) {
+                if (position < 0 || position >= this.length) {
+                    return false
+                };
+                var index = 0,
+                    currentNode = this.head;
+                while (index++ < position) {
+                    currentNode = currentNode.next;
+                };
+                return currentNode.data;
+            },
+
+            // 返回链表首个满足条件的下标
+            indexOf: function (data) {
+                var index = 0,
+                    currentNode = this.head;
+                while (currentNode) {
+                    if (currentNode.data == data) {
+                        return index;
+                    }
+                    currentNode = currentNode.next;
+                    index += 1;
+                };
+                return -1;
+            },
+
+            // 更新节点
+            update: function (position, newData) {
+                if (position < 0 || position >= this.length) {
+                    return false
+                };
+                var index = 0,
+                    currentNode = this.head;
+                while (index++ < position) {
+                    currentNode = currentNode.next;
+                };
+                currentNode.data = newData;
+                return true;
+            },
+
+            // 依据position来删除节点
+            removeAt: function (position) {
+                if (position < 0 || position >= this.length) {
+                    return null;
+                };
+                var currentNode = this.head;
+                if (position == 0) {
+                    this.head = this.head.next;
+                } else {
+                    var index = 0,
+                        prevNode = null;
+                    while (index++ < position) {
+                        prevNode = currentNode;
+                        currentNode = currentNode.next;
+                    };
+                    prevNode.next = currentNode.next;
+
+                }
+                this.length -= 1;
+                return currentNode.data
+            },
+
+            // 删除元素
+            remove: function (data) {
+                var position = this.indexOf(data);
+                return this.removeAt(position);
+            },
+
+            isEmpty: function () {
+                return this.length == 0;
+            },
+            size: function () {
+                return this.length;
             },
 
         };
@@ -80,10 +157,22 @@
 
         var list = new LinkedList();
 
-        list.append("abc")
-        list.append("123")
-        list.append("xxx")
-        console.log(list, "list")
+        list.append("aa")
+        list.append("bb")
+        list.append("cc")
+
+        // list.insert(0, "cc-new");
+        list.insert(3, "dd");
+        // list.insert(5, [111]);
+
+        // // console.log(list);
+        // list.update(0, "xxx");
+        // list.update(3, "fff");
+        // list.update(5, "ggg");
+        // list.remove("xxx")
+        console.log(list)
+
+
 
     })();
 </script>
