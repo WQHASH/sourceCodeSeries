@@ -1,0 +1,23 @@
+<!--
+ * @Description: iscludes
+ * @Author: wangqi
+ * @Date: 2019-11-17 09:57:41
+ * @LastEditTime: 2019-11-17 10:20:14
+ -->
+<script>
+    (function () {
+        Array.prototype.myIscludes = function (num) {
+            for (var i = 0; i < this.length; i++) {
+                var isnan = (num !== num && this[i] !== this[i]);
+                if (isnan || this[i] == num) {
+                    return true
+                }
+            }
+            return false;
+        };
+        var arr = [2, 3, 5, 7, 8, NaN];
+        var result = arr.myIscludes(NaN);
+        // console.log(result, "result");
+
+    })();
+</script>
