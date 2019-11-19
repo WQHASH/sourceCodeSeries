@@ -1,0 +1,21 @@
+<!--
+ * @Description: 数组排序
+ * @Author: wangqi
+ * @Date: 2019-11-19 23:22:42
+ * @LastEditTime: 2019-11-19 23:27:05
+ -->
+<script>
+    (function () {  
+        var arr = [{sage:34}, {sage:12}, {sage:65}, {sage:18}];
+
+        function sortBy(left, rigth) {
+            return rigth.sage - left.sage
+        };
+
+        var newArr = arr.sort(sortBy);
+        console.log(newArr,"newArr");
+
+
+    })();
+
+</script>
