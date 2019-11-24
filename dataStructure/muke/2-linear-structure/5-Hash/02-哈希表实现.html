@@ -1,0 +1,114 @@
+<!--
+ * @Description: 哈希表实现
+ * @Author: wangqi
+ * @Date: 2019-11-24 22:15:49
+ * @LastEditTime: 2019-11-24 22:52:56
+ -->
+<script>
+    function HashTable() {
+        this.storage = [];
+        this.count = 0;
+        this.limit = 7;
+    };
+    HashTable.prototype = {
+        // 哈希函数
+        hashFun: function (str, size) {
+            var hashCode = 0;
+
+            // 通过算法[霍纳算法] 来计算hashCode的值
+            for (var i = 0; i < str.length; i++) {
+                hashCode = 37 * hashCode + str.charCodeAt(i)
+            }
+            // 通过取余操作, 转成size范围之内
+            var index = hashCode % size;
+            return index;
+        },
+
+        // 插入&修改操作
+        put: function (key, value) {
+            // 1.获取key对应的下标
+            var index = this.hashFun(key, this.limit);
+
+            // 2.根据index取出对应的bucket（桶）
+            var bucket = this.storage[index];
+
+            // 3.判断bucket是否存在
+            if (!bucket) {
+                bucket = [];
+                this.storage[index] = bucket;
+            }
+
+            // 4.判断是否为修改数据
+            for (var i = 0; i < bucket.length; i++) {
+                var tuple = bucket[i];
+                if (tuple[0] == key) {
+                    tuple[1] = value;
+                    return true;
+                }
+            };
+
+            // 添加数据
+            bucket.push([key, value]);
+            this.count += 1;
+        },
+
+        // 获取
+        get: function (key) {
+            // 1.根据key得到相应的index
+            var index = this.hashFun(key, this.limit);
+
+            // 2.根据index得到相应的bucket(桶)
+            var bucket = this.storage[index];
+
+            // 3.如果bucket(桶)不存在
+            if (!bucket) {
+                return null
+            }
+
+            // 4.如果bucket存在, 线性遍历bucket内数据得到value
+            for (var i = 0; i < bucket.length; i++) {
+                var tuple = bucket[i];
+                if (tuple[0] == key) {
+                    return tuple[1];
+                }
+            }
+
+            // 5.没找到则返回null
+            return null;
+        },
+
+        // 删除
+        remove: function (key) {
+            var index = this.hashFun(key, this.limit);
+            var bucket = this.storage[index];
+            if (!bucket) {
+                return null
+            };
+
+            for (var i = 0; i < bucket.length; i++) {
+                var tuple = bucket[i];
+                if (tuple[0] == key) {
+                    bucket.splice(i, 1);
+                    this.count--;
+                    return tuple[1];
+                }
+            }
+            return null;
+        },
+
+        //其他方法
+        // 判断哈希表是否为null
+        isEmpty: function () {
+            return this.count == 0;
+        },
+        // 获取哈希表中元素个数
+        size: function () {
+            return this.count;
+        },
+    };
+
+
+    var ht = new HashTable();
+    ht.put("qq", "111");
+    ht.put("ww", "222");
+</script>
