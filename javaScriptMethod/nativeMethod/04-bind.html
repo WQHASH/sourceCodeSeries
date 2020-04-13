@@ -1,0 +1,57 @@
+<script>
+	
+	Function.prototype.myBind
+		? Function.prototype.myBind
+		: Function.prototype.myBind = function(thisObj){
+			if(typeof this !== "function"){ return;}
+
+			var fn = this; 
+			var args = Array.prototype.slice.call(arguments,1);
+			var funExcessive = function(){};
+			var funBuild = function(){
+				//处理new判断
+				var _this = this instanceof  fn ? this : thisObj
+				// return fn.call(_this, args.concat.apply(args, arguments)) =>自行理解函数将函数参数打散
+				//以上方法貌似有问题？？？
+				// return fn.apply(_this, args.concat.apply(args, arguments)) 
+				return fn.apply(_this, args.concat(Array.prototype.slice.call(arguments)))
+			};
+			funExcessive.prototype = fn.prototype;
+			funBuild.prototype = new funExcessive();
+
+			// funBuild.prototype = Object.create(fn.prototype);
+			return funBuild;
+
+		};
+
+
+
+		//简易版 => var self = this;
+		(function(){
+
+			var obj = {
+				hitch: function(scope, callBack){
+					return function(){
+						callBack.apply(scope, arguments || []);
+					}
+				}
+			};
+
+			window.sname = "wq";
+			var o = {
+				sname:"wangqi",
+				get:function(){
+					var self = this;
+					setTimeout(obj.hitch(self, function(){
+						console.log(this, "o.get");
+					}))
+				}
+			};
+			o.get();
+
+
+		})();
+
+
+
+</script>

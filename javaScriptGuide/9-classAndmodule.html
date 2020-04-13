@@ -1,0 +1,58 @@
+<script type="text/javascript">
+	/**
+	 * 9.2.2 counstructor属性
+	 */
+
+	(function(){
+		function Fun(){
+			this.sname ="wq";
+		};
+		// 这里的构造函数都是重写的，如果没重写他将会继承Object的原型，
+		Fun.prototype = {
+			constructor: Fun,
+			say: function(){},
+			fill: function(){},
+		}
+		var fun = new Fun();
+		// console.log(fun, "fun");
+	})();
+
+	//关于bind方法的理解： es5中bind方法返回的函数是没有prototype属性的, (我们自己写的是有的)
+	(function(){
+		// function fun(sname){
+		// 	this.sname=sname;
+		// 	return this;
+		// };
+		// var obj ={
+		// 	sname:"wqwqwqw",
+		// 	sage:"12",
+		// };
+		// var f = fun.bind(obj);
+		// console.log(f,"F");
+		// console.log(new f(),"ff");
+	})();
+	(function(){
+		var obj = {"sname":"wq"};					
+		function fun(sname){
+			this.sname = sname
+		}			
+		fun.prototype = {
+			say:function(){}
+		}
+		var Bind = fun.bind(obj);
+		// console.log(Bind.prototype,"Bind");
+		// console.log(new Bind("wangqi"),"Bind")	
+	})();
+
+
+	(function(){
+		function fun(){};
+		fun.prototype ={
+			say:function(){}
+		}
+		var f = new fun();
+		var p;
+		console.log(fun.prototype.isPrototypeOf(f));
+	})();
+
+</script>

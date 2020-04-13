@@ -1,0 +1,233 @@
+<script type="text/javascript">
+	/**
+	 * 5.2 实质问题
+	 *  理解闭包
+	 * 	①. 闭包是基于词法作用域书写代码时所长生的自然结果。
+	 * 	②. 当函数可以记住并访问所在的词法作用域时，就产生了闭包，即便函数式在当前词法作用域之外执行。
+	 * 	
+	 */
+	 // **这个例子体现闭包并不明显，重要的是说明了词法作用域，体现作用域在词法阶段已定义好，然后可以通过就近原则访问
+	(function(){
+		var b = 123;
+		function foo(){
+			var a = 2;
+			function bar(){
+				// console.log(a,b, "bar");
+			};
+			bar();
+		};
+		foo();
+	})();
+
+	//体现闭包，bar() 声明的位置涵盖了foo()内部作用域的闭包 [引用]，	
+	//理解:这种保存下来的引用关系就成为闭包
+	(function(){
+		function foo(){
+			var a = 2;
+			function bar(){
+				console.log(a);
+			};
+			return bar;
+		};
+		var baz = foo();
+		//baz();	// 2
+	})();	
+
+	// 体现在 baz()被当做参数fn 传入 bar(fn)  在bar内部直接调用，
+	// 	由于词法作用域的原因 , 这个函数能记住之前的作用域，那么这种引用就可以成为闭包
+	(function(){
+		function foo(){
+			var a = 2;
+			function baz(){
+				console.log(a);
+			};
+			bar(baz);
+		};
+		function bar(fn){
+			fn(); // 这里形成了闭包
+		};
+		// foo();
+	})();
+
+	// 无论通过何种手段将内部函数传递到所在的【**词法作用域之外**】，它都会持有对原始定义作用域的引用，
+	// 无论在何处执行这个函数都会使用 闭包 [**闭包可以理解为引用**]
+	(function(){
+		var fn;
+		function foo(){
+			var a = 2;
+			function baz(){
+				console.log(a);
+			};
+			fn = baz;
+		};
+		function bar(){
+			fn();
+		};
+		// foo(); 
+		// bar();
+	})();
+
+	/**
+	 * 5.3 现在我懂了
+	 * 	理解闭包: 如果将函数当做第一级的值类型并到处传递，且用了回调函数，实际上就是在使用闭包了
+	 * 				这些回调包括: 定时器，事件监听，Ajax请求，跨窗口通信，webWorkers 或者其他的异步||同步任务
+	 * 							
+	 */
+
+	(function(){
+		//当wait执行1秒完后，他的内部作用域不会释放，因为被timer引用中，词法作用域在这个过程就保持了完整
+		function wait(message){
+			setTimeout(function timer(){
+				console.log(message, "==message");
+			}, 1000);
+		};
+		// wait("hello word!");
+
+	})();
+
+	(function(){
+		/**
+		 * 这里所体现的也是关于回调形成的闭包，之前的关注点在函数在当前词法作用域之外执行
+		 * 这种回调在当前作用域内部执行，本质理解：还是在于 函数能否记住并访问所在的词法作用域
+		 */
+	    // function setupBot(name){
+	    //     $(".btn").click(function active(){
+	    //         console.log("active:" + name);
+	    //     });
+	    //     console.log("setupBot");
+	    // };
+	    // setupBot("wangqi");
+	})();
+
+	/**
+	 * 5.4 循环和闭包
+	 * 		重点在于外层函数参数的传递，如果只是在每次迭代中创建作用域还是不够的
+	 * 		如果没有参数，定时器中访问的变量，还将会全局的，那么新创建的作用域也就没有意义了
+	 * 		加上参数的，定时器中访问的变量将是这个新创建作用域局部传递进来的 [可配合就近原则理解]
+	 */
+
+	(function(){
+		for(var i=0;i<=5;i++){
+			function time(i){
+				setTimeout(function(){
+					console.log(i);
+				}, 500);
+			};
+			// time(i);
+		};
+
+	})();
+
+
+	/**
+	 * 5.4 重返块作用域
+	 * 	循环中的let能够为每次迭代开辟一个新的作用域，而后在这个作用域内部又做处理将会外部没关系了
+	 * 
+	 */
+
+	(function(){
+
+		{
+			for(let i=0;i<5;i++){
+				// console.log(i);	//
+			}
+			// console.log(i)   //体现let能够劫持作用域
+		}
+
+		//******用另外一种方式来说明 let是怎么在迭代时进行重新绑定赋值的*********	
+		{
+			// let j;	//和下面写一样，重点在于循环内部的let把作用域劫持了
+			for(let j=0;j<5;j++){
+				let i = j;
+				// console.log(i);
+			};
+		}
+
+	})();
+
+	/**
+	 * 块作用域配合闭包使用
+	 */
+	(function(){
+		for(let i=0;i<=5;i++){
+			setTimeout(function timer(){
+				// console.log(i);
+			},i*1000);
+		}
+	})();
+
+
+	/**
+	 * 5.5.1 现代的模块机制
+	 */
+	(function(){
+		var MyModules = (function(){
+			var modules = {};
+			function define(name, deps, impl){
+				for(var i=0; i<deps.length; i++){
+					deps[i] = modules[deps[i]];
+				}
+				//apply把数组打散了，导致方法体中，接收到的是一个个的参数，而不是整个函数体
+				modules[name] = impl.apply(impl, deps);
+			};
+			function get(name){
+				return modules[name];
+			};
+			return {
+				define: define,
+				get: get, 
+			};
+		})();
+
+		MyModules.define("bar", [], function(){
+			function hello(who){
+				return "来自define:" + who;
+			};
+			return {
+				hello: hello,
+			};
+		});
+
+		MyModules.define("ba", [], function(){
+			function ho(){
+				return "xx:" + "gg";
+			};
+			return {
+				ho: ho,
+			};
+		});
+
+		MyModules.define("foo", ["bar","ba"], function(bar){
+			// console.log(arguments,"arguments");
+			var test = "test";
+			function awesome(){
+				return "来自添加依赖:"+ bar.hello(test);
+			};
+			return {
+				awesome: awesome,
+			}
+		})
+
+		var bar = MyModules.get("bar");
+		var foo = MyModules.get("foo");
+		// console.log(bar.hello("bar"), "bar");
+		// console.log(foo.awesome(), "foo");
+
+
+
+
+	})();
+
+	(function(){
+		/**
+		 * AMD（Asynchromous Module Definition（异步模块定义） RequireJS ）
+		 * 		//全部依赖加载完后在执行回调函数
+		 *  define(["jquery","b","c", function($,b,c){}]) 
+		 *  
+		 * CMD: (Common Module Definition（公共模块定义） SeaJS 国内)  
+		 * 		//按需加载, 而这些依赖都来自主入口
+		 * define(function(require,exports,module){ var jquery = require('jquery'); }) 
+		 */
+
+	})();
+</script>

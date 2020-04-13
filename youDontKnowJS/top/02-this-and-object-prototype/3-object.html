@@ -1,0 +1,273 @@
+<script>
+    /***
+     * 3.2 类型： =>明白 js 中 类型 和 内置对象的区别  
+     *   也是这种 var a = "qwe"; a.lenth 字符串不是对象为啥他有有属性可以访问??
+     *      因为： js会将字符串通过调用 new String("qwe")的方式转换成对象。
+     * */
+
+    (function(){
+
+        var isBool = new Boolean(0) === false;
+        // console.log(isBool,"isBool");           // false
+        // console.log(Boolean(0),"isBool");       // false => 作为显示类型转换使用，转成Boolean类型 
+        // console.log(new Boolean(0),"isBool");   // Boolean对象 包装对象的方式
+
+    })();
+
+    //配合理解为什么 字符串可以有属性??
+    (function(){
+        var str = "wq";
+        str.len = 45;        // 在这个过程中就已经通过 new String("wq")方式创建了一个临时对象
+                             //，但赋值完后又随即吧这个对象销毁了，所以这个属性为undefined
+        // console.log(str.len) // undefined
+
+        var strNew = new String("wangqi");  //这种显示的创建对象，则会一直存在，所以能取到值
+        strNew.len = 43;
+        // console.log(strNew.len);
+    })();
+
+    /**
+    *   3.3 内容
+    *   对象访问属性2种方式区别：
+    *   ①：  myobject.idx  => 属性访问
+    *   ②：  myobject[idx] => 键访问
+    *       区别：  属性访问属性不能 "烤串命名" myobject.id-x,  键访问可以 myobject["id-x"]
+    *               键访问可以动态生成属性,(不赋值，只是访问), 属性访问不行。
+    *                    =>[==由于[".."]语法使用字符串来访问，所以可以在程序中构造这个字符串==]
+    */
+
+    (function(){
+        var myobject = {
+            a:2,
+        };
+        var idx = "a";
+        // console.log(myobject[idx],"[idx]"); //2 =>这里为2是因为，对象的键名为String形式，该变量刚好满足条件
+        // console.log(myobject.idx, idx);     //undefined
+        
+    })();
+
+    /**
+    *   3.3.3 数组
+    *       改例子体现的是，属性访问 键访问对于数组来说虽然都能赋值取值，
+    *       但注意的是，数组的键名最好是能够自动转成Number类型，否则类型对象的话数组的leng不会自动追加
+    **/ 
+
+    (function(){
+        var myArray = ["foo", 42, "bar"];
+        myArray.baz = "baz";
+        // console.log(myArray.length);
+        // console.log(myArray.baz);
+        myArray["3"] = "sname"; 
+        myArray["sage"] = "sage";   
+        // console.log(myArray, "myArray");   
+        
+    })();
+
+
+    /***
+    *   3.3.4 复制对象:
+    *      理解深拷贝和浅拷贝理解
+    *           如何区分深拷贝与浅拷贝，简单点来说，就是假设B复制了A，当修改A时，看B是否会发生变化，如果B也跟着变了，说明这是浅拷贝。
+    *           如果B没变，那就是深拷贝  
+    *       浅拷贝：As：基本数据类型的赋值都属于浅拷贝范围，    
+    *       深拷贝：深拷贝本身只针对较为复杂的object类型数据
+    *
+    *      es6中的 Object.assign() 方法实现浅拷贝 
+    **/
+
+    (function(){
+        //浅拷贝：
+        var num = 123;
+        var obj = {sname:"wq"};
+
+        var numNew = num;
+        var objNew = obj;
+
+        num = 456;
+        obj = {sage:"12"};
+       
+        // console.log(obj,objNew) // sage:12,  sname:"wq"
+        // console.log(num,numNew) // 456,      123 
+
+        //深拷贝：
+        function isType(obj){
+            return Object.prototype.toString.call(obj).slice(8, -1);
+        }
+        function deepCopy(obj){
+            var data;
+            if(obj =="null") {return}
+            var type = isType(obj);
+            if(type == "Array"){
+                data = [];
+                for(var i=0,len=obj.length; i<len; i++){
+                   data.push(deepCopy(obj[i]));
+                }
+                return data;
+            }else if(type == "Object"){
+                data = {};
+                for(var key in obj){
+                    data[key] = deepCopy(obj[key]); 
+                }
+                return data;
+            }else{
+                return data = obj;
+            }
+        };
+
+        var obj = {"sname":"wq","say":[1,2,3],fun:function(){console.log(12)}};
+        var cloneData = deepCopy(obj);
+        obj = {"sname":"wq111","say":[1,2,3]};
+        // console.log(cloneData, "cloneData");
+        // console.log(obj, "obj");
+
+        //Es6中的 Object.assign() => 实现合并对象
+        var target = {};
+        var a = {a:"a"};
+        var b = {b:"b"};
+        var c = {c:"c"};
+        var d = {dd:[12]};
+        var newObj = Object.assign(target,a,b,c,d);
+        target = {};
+        // console.log(newObj,"newObj");
+
+    })();
+
+    
+    /***
+     * 3.3.5 属性描述
+     * 
+     * */  
+    
+    (function(){
+        var myObject = {
+            a: 2,
+        };
+        // console.log(Object.getOwnPropertyDescriptor(myObject, "a"));
+        //  值， 可否配置， 可否配置， 可否读写
+        // {value:2, configurable: true, enumerable: true, writable: true};
+        //**** 注意的是 configurable 针对的是属性的键名来说的，不能再重新修改 ****
+
+        var myObject = {};
+        Object.defineProperty(myObject, "a", {
+            value:"333",
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+        myObject.a = 3; //  严格模式下会报错！ TypeError
+        // console.log(myObject,"myObject"); // 非严格模式中这里无法修改 value:333;
+        Object.defineProperty(myObject, "a", {
+            value:"333",
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+        myObject.a = 33333;
+        // console.log(myObject)   //不论是否在严格模式下，前面的configurable:false然后就不能再修改其属性了
+
+        
+    })();
+
+
+    /***
+     * 3.3.10 存在性 => 判断对象中的属性名是不是存在，
+     * (当属性值undefined的，或者根本不存在该值的时候，用这两个属性可区分开。但该属性还是用区别的!!)
+     *     in: 该方法一般用在能够 new的对象中，因为它处理的包括 prototype中属性
+                ***in方法检测的属性名是否存在，碰到数组它只能检测下标***
+     *     hasOwnproperty:  该方法一般直接用在普通对象中就可以，它不检测 prototype中属性
+     *  *****注意的是如果对象是通过 Object.create(null) 需要注意, ❤❤解决方法如下:❤❤******    
+     * */
+    (function(){
+        var myoBject  = function(){};
+        myoBject.prototype = {
+            "c":undefined
+        };
+
+        var obj = new myoBject();
+        obj.a = undefined;
+        // console.log("a" in obj,"in");    // true
+        // console.log("c" in obj,"in");       // true
+        // console.log(obj.hasOwnProperty("a"), "hasOwnproperty"); // true
+        // console.log(obj.hasOwnProperty("c"), "hasOwnproperty"); //false
+
+        var createObj = Object.create(null);    //原型为null创建的对象，没有方法可继承
+        // console.log(createObj,"createObj");
+        // 可以利用强绑定来借用方法
+        // Object.prototype.hashOwnproperty.call(createObj,"需要检测的参数")
+
+
+    })();
+
+    (function(){
+        /**
+        *   枚举：
+        *       propertyIsEnumerable(obj) => 返回布尔值 枚举对象本身，不含原型
+        *       Object.keys(obj) => 返回一个数组 ，枚举对象本身，不含原型
+        *
+        *       in hasOwnProperty它们检测可能会查找原型，而枚举一般都不会去查找原型属性(除非手动修改参数)
+        ***/
+
+        var myObject = {};
+        Object.defineProperty(
+            myObject,
+            "a",
+            {enumerable:true, value:2},
+        );
+        Object.defineProperty(
+            myObject,
+            "b",
+            {enumerable:false, value:3},
+        );
+        myObject.__proto__.wq= "wqwqwqw";
+        
+
+        Object.defineProperty(
+            myObject,
+            "hasOwnProperty",
+            {enumerable:true, value:2},
+        );
+        
+        // console.log(myObject)
+        // console.log(myObject.propertyIsEnumerable("wq"),"myObject");
+        // console.log(Object.keys(myObject),"keys")
+
+    })();
+
+
+      /***
+     * 3.4 遍历
+     *  for in 循环遍历下标
+     *  for of 遍历属性值    
+     *   for of 原理：    
+     *          数组中有内置的@@iterator所以可以直接遍历
+     *          对象中没有所以无法直接采用 for of 遍历但是可以手动添加
+     *          Object.definedProperty()配置    Symbol.iteratord对象[=>来自Es6属性参考下：] 
+     *
+     * */
+
+    (function(){
+        //这里是直接在定义对象时进行声明的，
+        //如果采用Object.definedProperty方式定义 (**主要是为了它不可枚举**)
+        var myArray = [11,22,33,44];
+        var myObj = {sname:"wq",sage:"12",[Symbol.iterator]: function(){
+            var o = this;
+            var idx = 0;
+            var ks = Object.keys(o);
+            return {
+                next: function(){
+                    return {
+                        value: o[ks[idx++]],
+                        done: (idx>ks.length)
+                    };
+                }
+            }
+        }};
+        
+        for(var val of myObj){
+            // console.log(val,"val");
+        }
+
+    })();
+
+    
+</script>

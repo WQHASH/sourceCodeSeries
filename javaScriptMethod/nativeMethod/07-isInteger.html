@@ -1,0 +1,24 @@
+<script>
+    //这里用这种方式，因为javaScript原生也是这种模式
+    (function () {
+        // 是否为整数
+        if (!Number.IsInteger) {
+            Number.IsInteger = function (num) {
+                return typeof num === 'number' && num % 1 == 0;
+            };
+        }
+        console.log(Number.IsInteger(42));
+
+
+        // 是否在安全范围内的整数
+        if (!Number.isSafeInteger) {
+            Number.isSafeInteger = function (num) {
+                return Number.IsInteger && Math.abs(num) <= Number.MAX_SAFE_INTEGER;
+            };
+
+        }
+        console.log(Number.isSafeInteger(Math.pow(2,53) - 1));
+
+
+    })();
+</script>

@@ -1,0 +1,22 @@
+<script>
+
+	Array.prototype.myFilter
+		? Array.prototype.myFilter
+		: Array.prototype.myFilter = function(fn){
+			var filter = [];
+			for(var i=0,len=this.length; i<len; i++){
+				fn.call(this, this[i], i, this)?filter.push(this[i]):"";
+			};
+			return filter;
+		};
+
+	var arr = [2,3,4];
+	var filter = arr.myFilter(function(val, index, list){
+		if(val>3){return true}
+
+	});
+	console.log(filter, "filter");
+
+	
+
+</script>

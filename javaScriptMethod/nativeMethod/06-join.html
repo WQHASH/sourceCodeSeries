@@ -1,0 +1,19 @@
+<script>
+    Array.prototype.fakeJoin = function (connector) {
+        var str = "";
+        for (var i = 0; i < this.length; i++) {
+            //目的就是让最开始的位置是数组中的元素
+            if (i > 0) {
+                str += connector;
+            }
+            if (arr[i]) {
+                str += arr[i];
+            }
+        }
+        return str;
+    };
+
+    var arr = [1, 2, 3, 4];
+    var newArr = arr.fakeJoin("-");
+    console.log(newArr, "newArr");
+</script>

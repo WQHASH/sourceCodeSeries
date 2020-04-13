@@ -26,6 +26,7 @@
 			for(var i = 0; i<arr.length; i++){
 				// 这里在内循环中 减i, 因为每次外循环中最大的数已经排过了，
 				// 而在内循环不需要每次重新比较，减i刚好表示了内循环只比较外层循环没跑完的轮数 
+				// length-1是因循环内有j+1刚好能取到数组最后一个有数的值，否则直接为length,j+1将超出数组长度且没值
 				for(var j = 0; j<arr.length-1-i; j++){
 					if(arr[j]>arr[j+1]){
 						var temp = arr[j];

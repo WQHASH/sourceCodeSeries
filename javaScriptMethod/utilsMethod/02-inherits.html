@@ -1,0 +1,51 @@
+<script>
+    /**
+     * 
+     *     prototype: 是构造函数的属性,[通过proto设置继承父类属性]
+     *     Object.setPrototypeOf:设置一个指定的对象的原型到另一个对象或  null。 [该方法返回修改后的指定对象]
+     *                 设置的对象的 __proto__，目的让obj.__proto__ = .... 这种写法更优雅
+     * 
+     *     Object.getPrototypeOf:  方法返回指定对象的原型
+     *           Object.getPrototypeOf(obj)
+     *              注意这里的obj 可以是对象，可以是函数, 当为函数时注意的是 __proto__指向
+     * 
+     * */
+
+    {
+        function inherits(subClass, superClass) {
+            function create(obj) {
+                function F() { };
+                F.prototype = obj;
+                return new F();
+            };
+            // subClass 的实例继承 superClass 的实例, (不同于setPrototypeOf的是这里需要一个空对象承接)
+            subClass.prototype.__proto__ = Object.create(superClass.prototype);
+            // subClass.prototype.constructor = subClass; =>通过prototype.__proto__这样设置后, constructor属性保留了下来, 不用再重写;
+            //es6中的继承的理解：subClass 继承 superClass 的静态属性
+            subClass.__proto__ = superClass;
+            // Object.setPrototypeOf(subClass, superClass);
+        };
+
+        function Map() {
+            this.width = 100;
+        }
+        Map.staticMethod = "静态属性";
+
+        Map.prototype = {
+            setWidth: function () {
+                this.width = 200;
+            },
+        };
+
+        function mapInherits() {
+            Map.apply(this, arguments);
+            this.height = 200;
+        };
+
+        inherits(mapInherits, Map);
+        mapInherits.prototype.add = function () { };
+        console.log(new mapInherits());
+        // console.log(Object.getPrototypeOf(mapInherits) === mapInherits.__proto__ ,"getPrototypeOf")
+    }
+
+</script>

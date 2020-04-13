@@ -1,0 +1,29 @@
+<script type="text/javascript">
+	
+	/**
+	 * 1.2.1 指向自身 
+	 */
+	(function(){
+		function foo(num){
+			console.log("foo:" + num);
+			// this.count++;
+			// foo.count++;		//方法1: 这种方法同样逃避了this的问题，并且完全依赖于foo的词法作用域
+			this.count++;
+		};
+		foo.count = 0;
+		for(var i=0;i<10;i++){
+			if(i>5){
+				// foo(i);
+				//foo.call(foo, i);	// 方法2: 使用call的方法借用来修改了foo函数中this的指向，解决了this问题
+			}
+		};
+		// console.log(foo.count);		
+
+	})();
+
+
+	
+
+
+
+</script>

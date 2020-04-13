@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue路由</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script> 
+<script>
+
+    var bus = new Vue();
+
+    Vue.component("childFirst", {
+        data() {
+            return {
+                "first": "我是第一个",
+            }
+        },
+        template: `<div>你是一哥 <button @click="sendToTwo">按钮</button></div>`,
+        methods: {
+            sendToTwo() {
+                console.log("1哥开始发送")
+                bus.$emit("sendToTwo", "来自一哥的数据");
+            },
+        }
+    });
+
+    Vue.component("childTwo", {
+        data() {
+            return {
+                "first": "我是第二个",
+            }
+        },
+        template: `<div>你是二哥 </div>`,
+        mounted() {
+            bus.$on("sendToTwo", (val) => {
+                console.log(val, "val+++");
+            });
+        }
+    });
+    var App = {
+        data() {
+            return {
+                isShow:false
+            }
+        },
+        template: `
+           <div class="box">
+                <childFirst/>
+                <childTwo/>
+                <input type= "text" v-show="isShow" ref="input"/>
+            </div>
+        `,
+        mounted(){
+            this.isShow = true;
+            console.log(this);
+            // vue钩子函数中this的理解???
+            this.$nextTick(function(){
+                console.log(this,"this");
+                this.$refs.input.focus();
+            });
+            // this.$nextTick(()=>{
+            //     console.log(this,"this");
+            //     this.$refs.input.focus();
+            // });
+        },
+    };
+    var vm = new Vue({
+        el: "#app",
+        data() {},
+        components: {
+            App,
+        },
+        template: '<App/>',
+
+    });
+</script>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"> </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+
+        var App = {
+            data(){
+                return {
+                    isShow: true,
+                }
+            },
+            //这里的模板在mounted阶段会彻底将 el属性绑定的标签进行替换了
+
+             //vue内置组件: <keep-alive>
+             // 能在组件切换过程中将状态保留在内存中。 防止重复渲染Dom
+            template: ` 
+                    <div class='content'>     
+                    <keep-alive> 
+                            <Test v-if="isShow"/>
+                    </keep-alive>
+                    <button @click="isShow=!isShow">按钮</button>
+                    </div>`,   
+        };
+        Vue.component("Test", {
+            data(){ 
+                return {
+                    msg: "我是一个小虎牙",
+                   
+                }
+            },
+            template: `
+                    <div> 
+                        <div>{{msg}}</div> 
+                    </div>`,
+            methods: {
+            },
+            beforeCreate() {
+                // console.log(this, "beforeCreate");
+                // 在实例创建之前 绑定到实例上的数据不能获取到
+            },
+            created() {
+                //现在这一阶段已经可以获取data中的数据了
+                console.log(this, "create");
+                
+            },
+            // 挂载数据到Dom之前会调用
+            beforeMount() {
+                console.log(document.getElementsByClassName("content")[0], "beforeMount");
+                // console.log(document.getElementById("app"), "beforeMount"); // 目前标签元素仍是id="app"
+            },
+            mounted() {
+                //应用： 挂载数据到Dom之后，这样可用Vue操作Dom
+                console.log(document.getElementsByClassName("content")[0], "mounted");
+                // console.log(document.getElementById("app"), "beforeMount"); // null  class="content"
+            },
+            beforeUpdate() {
+                // 在更新Dom之前调用该钩子。  应用:可以获取原始的Dom
+            },
+            updated () {    
+                // 在更新Dom之后调用该钩子。 应用: 可以获取最新的Dom 
+            },
+            beforeDestroy () {
+                //   
+                console.log("beforeDestroy");
+            },
+            destroyed() {
+                // 组件销毁执行该钩子函数
+                console.log("beforeDestroy");
+            },
+            activated() {
+                console.log("组件被激活了");
+            },
+            deactivated () {
+                console.log("组件被停用了");
+            }
+
+
+        });
+
+        var vm = new Vue({
+            el: "#app",
+            data() { },
+            template:'<App/>',
+            components: {
+                App
+            },
+        });
+
+
+    </script>
+</body>
+
+</html>

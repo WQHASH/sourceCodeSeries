@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" value="1" class="ipt">
+    <button class="btn">提交</button>
+</body>
+
+</html>
+<script>
+    var ipt = document.getElementsByClassName("ipt")[0];
+    var btn = document.getElementsByClassName("btn")[0];
+    // 防抖函数
+    var debounceThinking = function (fn, wait, immediate) {
+        var timeout;
+        return function () {
+            var self = this;
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            if (immediate) {
+                var fnNow = !timeout;
+                if (fnNow) { fn.apply(this, arguments) }
+                timeout = setTimeout(function () {
+                    timeout = null;
+                }, wait);
+            } else {
+                timeout = setTimeout(function () {
+                    fn.apply(this, arguments);
+                    timeout = null;
+                }, wait);
+            }
+
+        }
+    };
+
+    // 防抖函数
+    var debounce = function (func, wait, immediate) {
+        let timeout, args, context, timestamp, result
+        const later = function () {
+            let last = +new Date() - timestamp;
+            // 如果连续触发太快了情况下, 这里采用的不再是清除定时器
+            // 而是不让其执行有效方法体，一直处于定时器的循环中，只有满足等待时间才能跳出该判断
+            if (last < wait && last > 0) {
+                timeout = setTimeout(later, wait - last);
+            } else {
+                timeout = null;
+                if (!immediate) {
+                    result = func.apply(context, args);
+                    if (!timeout) { context = args = null }
+                }
+            }
+        };
+
+        return function () {
+            context = this;
+            timestamp = +new Date();
+            const callNow = immediate && !timeout;
+            if (!timeout) {
+                timeout = setTimeout(later, wait);
+            }
+            if (callNow) {
+                result = func.apply(context, args);
+                context = args = null
+            }
+            return result
+        }
+
+    }
+
+    var callback = function () {
+        let iptVal = ipt.value;
+        console.log(iptVal, "ipt")
+    }
+    btn.onclick = debounce(callback, 1000, false)
+
+</script>

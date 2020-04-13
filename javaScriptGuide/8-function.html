@@ -220,20 +220,27 @@
 				return self.apply(that, args.concat(Array.prototype.slice.call(arguments)))
 
 			};  
-			if(self.prototype){
-				fuBuild.prototype = self.prototype
-			}
-			Func.prototype = new fuBuild();
+			// if(self.prototype){
+			// 	fuBuild.prototype = self.prototype
+			// }
+			// Func.prototype = new fuBuild();
+			//这种方式就和es5中的结果也一样，但是为了理解继承建议用上面的（区别: 多了一层fuBuild的空属性）
+			//且es5的这种 bind()返回的函数没有prototype属性的
+			Func.prototype = self.prototype;	
 			return Func;
 		};
 
 
 		var obj = {"sname":"wq"};					
-		function fun(){
-			return this.sname
+		function fun(sname){
+			this.sname = sname
 		}			
+		fun.prototype = {
+			say:function(){}
+		}	
 		var Bind = fun._bind(obj);
-		// console.log(new Bind("wangqi"),"Bind");	
+		// console.log(Bind.prototype,"Bind");
+		// console.log(new Bind("wangqi"),"Bind")	
 
 
 
@@ -323,11 +330,56 @@
 
 
 	
-
+	/**
+	 * 8.8,4: 记忆
+	 * 函数可以将先前操作的结果记录在某个对象里，从而避免无谓的重复运算。这种优化方式被称为记忆
+	 * 记忆是一种编程技巧，本质上是牺牲算法的空间复杂度以换取更优的时间复杂度
+	 */
 	(function(){
+		function memorize(f){
+			var cache = {};
+			return function(){	
+				var key = arguments.length + Array.prototype.join.call(arguments, ",");
+				if(key in cache){
+					return cache[key];
+				} else{
+					return cache[key] = f.apply(this, arguments);
+				}
+			};
+		};
+		var factorial = memorize(function(n){
+			return (n<=1)?1:n*factorial(n-1);
+		});
+		// console.log(factorial(5), "factorial");
 
+	})();
 
+	/**
+	 * 理解记忆函数
+	 *  https://www.cnblogs.com/zczhangcui/p/6410161.html
+	 *  当函数被调用时，这个函数首先检查结果是否已经存在，如果已经存在，就立刻返回这个结果。
+	 *  这样值操作了 29次 如果不这样处理 需要执行453次
+	 */
+	(function(){
+		var count=0;
+		var fibonacci=function(){
+		    var memo=[0,1];
+		    var fib=function(n){
+		                count++;
+		        var result=memo[n];
+		        if(typeof result!=='number'){
+		            result=fib(n-1)+fib(n-2);
+		            memo[n]=result;
+		        }
+		        return result;
+		    };
+		    return fib;
+		}();
 
+		for(var i=0;i<=10;i++){
+		    // console.log(fibonacci(i))
+		}
+		// console.log(count,"count")
 	})();
 
 </script>
