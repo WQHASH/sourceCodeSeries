@@ -2,7 +2,7 @@
  * @Description: Array.prototype.fill()源码实现
  * @Author: wangqi
  * @Date: 2020-04-13 16:58:50
- * @LastEditTime: 2020-04-13 17:13:08
+ * @LastEditTime: 2020-04-13 21:32:57
  -->
 
 <script>
@@ -15,7 +15,6 @@
         
         注意的是：
             注意，如果填充的类型为对象，那么被赋值的是同一个内存地址的对象，而不是深拷贝对象。
-        
     **/
 
 
@@ -26,19 +25,15 @@
             }
         }
 
-        
-        
+        let len = args[2] - 1;
+        let arr = [];
+        for (let i = 0; i < len; i++) {
+            arr.push(args[0]);
+        }
+        this.splice(args[1], args[2] - 1, ...arr);
         return this;
     };
-    var arr = ['a', 'b', 'c'];
-    var newA = arr.myFill(7, 1, 2);
-    console.log(newA)
 
-    {
-        var arr = ['a', 'b', 'c']
-        var newA = arr.myFill(7);
-        // console.log(arr);
-        // console.log(newA)
-    }
-
+    var arr = ['a', 'b', 'c'].fill(7, 1, 2)
+    console.log(arr);
 </script>
