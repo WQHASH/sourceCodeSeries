@@ -1,0 +1,80 @@
+<!--
+ * @Description: 自定义视频播放器
+ * @Author: wangqi
+ * @Date: 2020-02-16 14:39:31
+ * @LastEditTime: 2020-03-08 16:34:29
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/CommentCoreLibrary/style.css">
+</head>
+
+<body>
+    <!-- controls controlslist="nofullscreen" currentTime muted -->
+    <div id="video-wrap">
+
+        <!-- 弹幕 -->
+        <div id='my-player' class='abp'>
+            <video class="my-video">
+                <source src="./data/1.mp4" type="video/mp4">
+                <p>游览器暂时不支持!</p>
+            </video>
+
+            <!-- 控制条 -->
+            <div id="controll-bar">
+                <div class="btns">
+                    <div class="start-btn"></div>
+                    <div class="end-btn"></div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-gray"></div>
+                    <div class="progress-pink"></div>
+                    <div class="progress-slider"></div>
+                </div>
+
+                <div class="tools">
+                    <div class="time">
+                        <span>00:00:00</span>
+                        /
+                        <span>00:00:00</span>
+                    </div>
+
+                    <div class="volume">
+                        <div class="volume-btn">
+                            <span></span>
+                        </div>
+                        <div class="volume-progress">
+                            <div class="progress-gray"></div>
+                            <div class="progress-pink"></div>
+                            <div class="progress-slider"></div>
+                        </div>
+
+                    </div>
+                    <div class="fullscreen">
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id='my-comment-stage' class='container'></div>
+        </div>
+    </div>
+
+    <button class="add-comment">插入弹幕</button>
+
+</body>
+
+
+<script src="./src/CommentCoreLibrary/CommentCoreLibrary.js"></script>
+<script src="./src/CommentCoreLibrary/debugger.js"> </script>
+<script src="src/index.js"></script>
+
+</html>

@@ -1,0 +1,117 @@
+<!--
+ * @Description: 集合类封装
+ * @Author: wangqi
+ * @Date: 2019-11-23 20:52:05
+ * @LastEditTime: 2019-12-01 17:44:33
+ -->
+<script>
+    (function () {
+
+        var mySet = (function () {
+            function mySet() {
+                this.item = {};
+            };
+
+            mySet.prototype = {
+                add: function (value) {
+                    if (this.has(value)) {
+                        return false;
+                    }
+                    this.item[value] = value;
+                    return true
+                },
+
+                has: function (value) {
+                    // hasOwnProperty 得到的只是构造函数中的属性,不包括原型继承的;
+                    return this.item.hasOwnProperty(value);
+                },
+
+                remove: function (value) {
+                    if (!this.has(value)) {
+                        return false
+                    };
+                    delete this.item[value];
+                    return true
+                },
+
+                clear: function () {
+                    this.item = {};
+                    return true
+                },
+
+                size: function () {
+                    return Object.keys(this.item).length;
+                },
+
+                //获取集合中所有的键名
+                values: function () {
+                    return Object.keys(this.item)
+                },
+
+                // 集合间的操作
+                // ------------------
+
+                // 并集
+                union: function (otherSet) {
+                    var unionSet = new mySet();
+                    var values = this.values();
+                    for (var i = 0; i < values.length; i++) {
+                        unionSet.add(values[i]);
+                    }
+
+                    values = otherSet.values();
+                    for (var i = 0; i < values.length; i++) {
+                        unionSet.add(values[i]);
+                    }
+                    return unionSet
+                },
+
+                // 交集
+                intersection: function (otherSet) {
+                    var intersectionSet = new mySet();
+                    var values = this.values();
+                    for (var i = 0; i < values.length; i++) {
+                        if (otherSet.has(values[i])) {
+                            intersectionSet.add(values[i]);
+                        }
+                    }
+                    return intersectionSet;
+                },
+
+                // 差集
+                defference: function (otherSet) {
+                    var defferenceSet = new mySet();
+                    var values = this.values();
+                    for (var i = 0; i < values.length; i++) {
+                        if (!otherSet.has(values[i])) {
+                            defferenceSet.add(values[i]);
+                        }
+                    }
+                    return defferenceSet;
+                },
+
+                // 子集
+                subset: function (otherSet) {
+                    var subsetSet = new mySet();
+                    var values = this.values();
+                    for (var i = 0; i < values.length; i++) {
+                        if (!otherSet.has(values[i])) {
+                            return false;
+                        }
+                    }
+                    return true
+                },
+
+            };
+
+            return mySet
+        })();
+
+
+        (function () {
+            var myset = new mySet();
+
+        })();
+
+    })();
+</script>

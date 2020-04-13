@@ -1,0 +1,61 @@
+<script>
+    /**
+     *  3.2 封装对象包装
+     *      var strA = "wangqi";                //得到的是一个字符串类型
+     *      var strB = String("wangqi")         //得到的是一个字符串类型            => 显示类型转换
+     *      var strC = new String("wangqi");    //得到的是一个字符串对象类型      => 包装对象 , 取值的可用valueOf()方法
+     *      new String("wangqi")创建的是字符串"wangqi" 的封装对象, 而非基本类型值 "wangqi";
+     * 
+     *      包装对象:
+     *          包装对象值的是基本类型 String, Number, Boolean 这些构造函数显示的创建包装对象,
+     *          这样他们才能继承对象的属性，才能通过点的形式来读取属性，不过这些对象都是临时的，
+     *          引用一旦结束，该对象就自动销毁了。
+     *      
+     * 
+     *  3.4.1 Array 
+     *      构造函数Array() 不要求必须带new关键字。 不带时，它会自动补上; 
+     *           [**** 需要和基本类型构造函数区别!!! 基本类型加和不加是两种类型 ****]
+     *      
+     * 
+     *      var arrA = [];
+     *      var arrB = new Array(3) //如果该参数只有一个时, 作为数组length的预设长度; 参数大于1时，和var声明的也就一样了
+     *      
+     *      注意：(****** 尽量不要用这种形式创建数组 ********)
+     *          new Array(); 产生稀疏数组的情况;
+     *          稀疏数组：
+     *              我们将包含至少一个 "空单元" 的数组称为 "稀疏数组";
+     *              它在不同游览器中的而表现形式还不太相同;
+     * 
+     * 
+     *  3.4.4   Symbol (符号是具有唯一性的特殊值)  [还需深入理解??]
+     *  
+     *  3.4.5   原生原型
+     *          扩张到你不知道的js(上卷) 第6章需要细看??
+     *          注意点：
+     *             构造函数.prototytype 得到的不一定都是对象的形式
+     *              有些原生原型并非普通对象那么简单：
+     *                  As:     Function.prototype  => ƒ () { [native code] }  函数体
+     *                          Array.prototype     => ["key":value,"key1":value1] 数组体   
+     *                          Object.prototyep    => {} 对象
+     *                          原始类型数据的prototye拿到的基本都是对象的形式
+     *                          
+     * ***/
+    (function(){
+        var str = new String("wangqi")
+        // console.log(str,"str");                   // String {"wangqi"} "str"
+
+        var arr = new Array(1,2,3);
+        // console.log(arr,"Arr");                  // [1, 2, 3] "Arr"
+
+
+        var data = new Date();
+        // console.log(typeof data,"data")          //object data
+
+        var data1 = Date()
+        // console.log(typeof data1,"data1")         //string data1
+    })();
+
+    (function(){
+      
+    })();
+</script>

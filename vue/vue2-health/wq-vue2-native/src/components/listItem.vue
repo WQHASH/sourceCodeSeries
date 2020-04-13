@@ -1,8 +1,8 @@
 <template>
   <ul class="listItem" :class="{'checkBox' : visible}">
-    <template v-for="section in itemJson">
+    <template v-for="(section, index) in itemJson">
       <!-- 视频 -->
-      <li v-if="section.playonlineurl" @click.stop="saveData(section)">
+      <li v-if="section.playonlineurl" @click.stop="saveData(section)" :key="index">
         <!-- checkBox -->
         <div class="checkBox" v-if="visible">
           <input type="checkbox" :id="section.id" v-if="visible">
@@ -26,7 +26,7 @@
         </router-link>
       </li>
       <!-- 1张大图 -->
-      <li v-else-if="section.ptitlepic" @click.stop="saveData(section)">
+      <li v-else-if="section.ptitlepic" @click.stop="saveData(section)" :key="index">
         <!-- checkBox -->
         <div class="checkBox" v-if="visible">
           <input type="checkbox" :id="section.id" v-if="visible">
@@ -44,7 +44,7 @@
         </router-link>
       </li>
       <!-- 3张小图 -->
-      <li v-else-if="section.titlepic3" @click.stop="saveData(section)">
+      <li v-else-if="section.titlepic3" @click.stop="saveData(section)" :key="index">
         <!-- checkBox -->
         <div class="checkBox" v-if="visible">
           <input type="checkbox" :id="section.id" v-if="visible">
@@ -72,7 +72,7 @@
         </router-link>
       </li>
       <!-- 1张小图 -->
-      <li v-else-if="section.titlepic" @click.stop="saveData(section)">
+      <li v-else-if="section.titlepic" @click.stop="saveData(section)" :key="index">
         <!-- checkBox -->
         <div class="checkBox" v-if="visible">
           <input type="checkbox" :id="section.id" v-if="visible">
@@ -90,7 +90,7 @@
         </router-link>
       </li>
       <!-- 文字 -->
-      <li v-else-if="section.title" @click.stop="saveData(section)">
+      <li v-else-if="section.title" @click.stop="saveData(section)" :key="index">
         <!-- checkBox -->
         <div class="checkBox" v-if="visible">
           <input type="checkbox" :id="section.id" v-if="visible">
@@ -102,7 +102,7 @@
           <!-- <list-info :json='section'></list-info> -->
         </router-link>
       </li>
-      <li v-else-if="section.type" id="lookHere">
+      <li v-else-if="section.type" id="lookHere" :key="index">
         <p>
           上次看到这里，点击刷新
           <i class="icon-refresh"></i>
@@ -123,9 +123,6 @@ export default {
       default: false
     },
     checkBoxMethod: Function
-  },
-  mounted() {
-    console.log(this.itemJson, "itemJsonitemJson");
   },
   methods: {
     ...mapMutations("detail", ["set_listArticle"]),

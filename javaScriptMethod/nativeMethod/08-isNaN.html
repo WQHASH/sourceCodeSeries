@@ -1,0 +1,24 @@
+<script>
+    /**
+     *   Es5中的 window.isNaN存在缺陷所以需要做调整 (Es6中的正常)
+     *       es5中的isNaN只检查参数是否为NaN,和不是数字则返回true
+     **/
+
+    (function () {
+        if (!Number.isNaN) {
+            Number.isNaN = function (num) {
+                return (typeof num === "number" && window.isNaN(num))
+            };
+        }
+
+    })();
+
+    //根据NaN不等于自身这个特点
+    (function () {
+        if (!Number.isNaN) {
+            Number.isNaN = function (num) {
+                return num !== num
+            }
+        }
+    })();
+</script>

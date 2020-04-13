@@ -1,0 +1,21 @@
+<script>
+    /***
+     * 1.1  异步控制台
+     *
+     * */
+    (function () {
+        var a = {index: 1};
+        //这里在控制台打印是看到 {index:1} =>  但是点开三角形后会得到 {index:2}; 体现了点击异步的
+        // console.log(a, "a"); 
+        a.index++;
+        // console.log(a.index, "a");       // 2
+
+    })();
+
+
+    /**
+     * 文字版来介绍理解的异步 和 回调:
+     * */
+
+   
+</script>

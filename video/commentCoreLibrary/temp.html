@@ -1,0 +1,64 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-02-16 15:31:25
+ * @LastEditTime: 2020-02-16 15:44:27
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/temp.css">
+</head>
+
+<body>
+    <div class="video-box" id="videoBox">
+        <!--video 盒子-->
+        <div class="video-box-body">
+            <video class="video-body" id="videoBody" src="./data/1.mp4">
+                您的浏览器不支持video
+            </video>
+            <!--控制条盒子-->
+            <div class="video-control" id="videoControl">
+                <div class="pull-left fontzero control-leftview">
+                    <!--刷新键-->
+                    <div class="control-btn loadbtn" id="loadBtn"></div>
+                    <!--暂停/播放键-->
+                    <div class="control-btn playbtn" id="playPausebtn"></div>
+                </div>
+                <div class="pull-left fontzero progress-box">
+                    <div class="progress-box-body">
+                        <!--播放时长-->
+                        <div class="current-time pull-left" id="currentTime">00:00</div>
+                        <div class="durationbar-box pull-left">
+                            <!--总视频长度进度条-->
+                            <div class="durationbar" id="durationBar">
+                                <!--缓冲进度条-->
+                                <div class="bufferbar" id="bufferBar"></div>
+                                <!--正在播放进度条-->
+                                <div class="currentbar" id="currentBar"></div>
+                                <div class="drawbar" id="drawBar"></div>
+                            </div>
+                        </div>
+                        <!--总时长-->
+                        <div class="duration-time pull-left" id="durationTime">00:00</div>
+                    </div>
+                </div>
+                <div class="pull-left fontzero control-rightview">
+                    <!--音量键-->
+                    <div class="control-btn mutedbtn" id="mutedBtn"></div>
+                    <!--全屏键-->
+                    <div class="control-btn fullscreenbar" id="fullScreenBar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script src="./src/temp.js"> </script>
+
+</html>

@@ -1,0 +1,228 @@
+<!--
+ * @Description: 双项链表结构
+ * @Author: wangqi
+ * @Date: 2019-11-16 22:19:14
+ * @LastEditTime: 2019-11-17 19:28:14
+ -->
+<script>
+    var DoublyLinkedList = (function () {
+        function DoublyLinkedList() {
+            this.head = null;
+            this.tail = null;
+            this.length = 0;
+            this.Node = function (data) {
+                this.data = data;
+                this.next = null;
+                this.prev = null;
+            };
+        };
+
+        DoublyLinkedList.prototype = {
+            // 插入节点
+            append: function (data) {
+                var newNode = new this.Node(data);
+                //判断是否是第一个节点
+                if (this.length == 0) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    newNode.prev = this.tail;
+                    this.tail.next = newNode;
+                    this.tail = newNode;
+                }
+                this.length += 1;
+            },
+
+            // 将节点data转字符串 [准守从前向后遍历原则]
+            toString: function () {
+                return this.backwardString();
+            },
+
+            // 从后向前遍历, 将data转成字符串
+            forwardString: function () {
+                var current = this.tail;
+                var resultString = '';
+                while (current) {
+                    resultString += current.data + '';
+                    current = current.prev;
+                };
+                return resultString;
+            },
+
+            // 从前向后遍历, 将data转成字符串
+            backwardString: function () {
+                var current = this.head;
+                var resultString = '';
+                while (current) {
+                    resultString += current.data + '';
+                    current = current.next;
+                };
+                return resultString;
+            },
+
+
+            // 插入节点
+            insert: function (position, data) {
+                // 对position进行越界判断
+                if (position < 0 || position > this.length) {
+                    return false
+                };
+                var newNode = new this.Node(data);
+                // 双向链表插入和单项的不同, 需要判断节点是否存在
+                if (this.length == 0) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    //插入第一个, 只管head就行,tail自己按原来的处理的
+                    if (position == 0) {
+                        this.head.prev = newNode;
+                        newNode.next = this.head;
+                        this.head = newNode;
+                    } else if (position == this.length) {
+                        newNode.prev = this.tail;
+                        this.tail.next = newNode;
+                        this.tail = newNode;
+                    } else {
+                        var currentNode = this.head,
+                            index = 0;
+                        // prevNode = null;
+                        while (index++ < position) {
+                            // prevNode = currentNode;
+                            currentNode = currentNode.next;
+                        };
+                        // newNode.prev = prevNode;
+                        // newNode.next = currentNode;
+                        // prevNode.next = newNode;
+                        // currentNode.prev = newNode;
+
+                        newNode.next = currentNode;
+                        newNode.prev = currentNode.prev;
+                        currentNode.prev.next = newNode;
+                        currentNode.prev = newNode;
+                    }
+                };
+                this.length += 1;
+
+                return true;
+            },
+
+            // 获取节点
+            get: function (position) {
+                // 对position进行越界判断
+                if (position < 0 || position >= this.length) {
+                    return null;
+                };
+                var current = this.head;
+                var index = 0;
+                while (index++ < position) {
+                    current = current.next;
+                };
+                return current.data;
+            },
+
+            // 返回链表首个满足条件的下标
+            indexOf: function (data) {
+                var currentNode = this.head,
+                    index = 0;
+                while (currentNode) {
+                    if (currentNode.data == data) {
+                        return index;
+                    }
+                    index += 1;
+                    currentNode = currentNode.next;
+                };
+                return -1;
+            },
+
+            // 更新节点
+            update: function (position, newNode) {
+                if (position < 0 || position >= this.length) {
+                    return false;
+                }
+                var index = 0,
+                    currentNode = this.head;
+                while (index++ < position) {
+                    currentNode = currentNode.next;
+                };
+                currentNode.data = newNode;
+                return true;
+
+            },
+
+            // 依据position来删除节点
+            removeAt: function (position) {
+                if (position < 0 || position >= this.length) {
+                    return null;
+                }
+                var currentNode = this.head;
+                if (this.length == 1) {
+                    this.head = null;
+                    this.tail = null;
+                } else {
+                    if (position == 0) {
+                        this.head.next.prev = null;
+                        this.head = this.head.next;
+                    } else if (position == this.length - 1) {
+                        currentNode = this.tail;
+                        this.tail.prev.next = null;
+                        this.tail = this.tail.prev;
+                    } else {
+                        var index = 0;
+                        while (index++ < position) {
+                            currentNode = currentNode.next;
+                        };
+                        currentNode.prev.next = currentNode.next;
+                        currentNode.next.prev = currentNode.prev;
+                    }
+                }
+                this.length -= 1;
+                return currentNode.data;
+            },
+
+            // 删除元素
+            remove: function (data) {
+                var index = this.indexOf(data);
+                return this.removeAt(index);
+            },
+
+            // 链表是否为空
+            isEmpty: function () {
+                return this.length == 0;
+            },
+
+            // 获取链表的长度
+            size: function () {
+                return this.length;
+            },
+
+            // 获取链表头部元素
+            getHead: function () {
+                return this.head.data
+            },
+            // 获取链表尾部元素
+            getTail: function () {
+                return this.tail.data
+            },
+
+        };
+
+        return DoublyLinkedList;
+
+    })();
+
+    (function () {
+
+        var list = new DoublyLinkedList();
+        list.append("aa");
+        list.append("bb");
+        list.append("cc");
+
+        list.insert(0, "aa-0");
+        list.insert(4, "aa-4");
+        list.insert(1, "aa-1");
+        // list.update(0, "mmm")
+        // list.remove("mmm")
+
+        console.log(list);
+    })();
+</script>

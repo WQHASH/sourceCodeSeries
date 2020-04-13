@@ -1,0 +1,34 @@
+<!--
+ * @Description: 哈希函数
+ * @Author: wangqi
+ * @Date: 2019-11-24 20:08:07
+ * @LastEditTime: 2019-11-24 20:16:48
+ -->
+<script>
+    (function () {
+
+        // 创建hash函数的两点
+        // 1. 字符串转为大数字 [hashCode],作为下标值
+        // 2. 将大数字[hashCode]压缩到数组size范围内
+        function hashFunc(str, size) {
+            var hashCode = 0;
+
+            // 通过算法[霍纳算法] 来计算hashCode的值
+            for (var i = 0; i < str.length; i++) {
+                hashCode = 37 * hashCode + str.charCodeAt(i)
+            }
+            // 通过取余操作, 转成size范围之内
+            var index = hashCode % size;
+            return index;
+        }
+
+        // console.log(hashFunc("aa", 7))
+        // console.log(hashFunc("bb", 7))
+        // console.log(hashFunc("cc", 7))
+        // console.log(hashFunc("dd", 7))
+        // console.log(hashFunc("dd", 7))
+        // console.log(hashFunc("dd", 7))
+        // console.log(hashFunc("aa", 7))
+
+    })();
+</script>

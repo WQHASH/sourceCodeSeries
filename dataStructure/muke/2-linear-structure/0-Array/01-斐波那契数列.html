@@ -1,0 +1,30 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2019-11-18 23:05:52
+ * @LastEditTime: 2019-11-18 23:29:20
+ -->
+<script>
+    // 求斐波那契数列的前20个数字
+    // 求斐波那契数列规则:  第一个数为1, 第二个数为2, 第三项开始，每一项等于前两项之和
+
+    function sum(num) {
+        var arr = [];
+        arr[1] = 1; // 这里相当于第二数了
+        arr[2] = 2;
+        for (var i = 3; i < num; i++) {
+            arr[i] = arr[i - 1] + arr[i - 2];
+        }
+
+        return arr.slice(1);
+    };
+    console.log(sum(20))
+
+
+    var arr = [3,4,5,6,7,8,9];
+    var newA = arr.slice(2, 3);
+    console.log(newA, arr)
+    var newB = arr.splice(2, 3);
+    console.log(newB, arr)
+    
+</script>
