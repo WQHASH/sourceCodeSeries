@@ -1,0 +1,34 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-04-18 11:20:46
+ * @LastEditTime: 2020-04-19 18:09:58
+ -->
+<script src="testClass.js"></script>
+<script>
+    let test = new TestClass();
+    console.log(test, "test");
+
+
+    console.log("============");
+    var obj = {
+        sanme: "wq"
+    };
+    var newO = {
+        sage: 12
+    };
+
+    function isShow() {
+        console.log(this)
+    }
+    let isShownew = isShow.bind(obj)();
+
+   
+   var obj = {
+       fn(){
+           console.log(this,"fnthIS");
+       },
+       show(){},
+   }
+   obj.fn();
+</script>
