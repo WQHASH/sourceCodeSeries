@@ -20,6 +20,7 @@ class MyPromise {
         this._rejectedQueues = []
         // 执行handle
         try {
+            // 因为使用的是严格模式，不绑定的话this指向undefined
             handle(this._resolve.bind(this), this._reject.bind(this))
         } catch (err) {
             this._reject(err)
@@ -27,6 +28,7 @@ class MyPromise {
     }
     // 添加resovle时执行的函数
     _resolve(val) {
+        console.log(val, "thisxxxxxxx--0-");
         const run = () => {
             if (this._status !== PENDING) return
             this._status = FULFILLED
