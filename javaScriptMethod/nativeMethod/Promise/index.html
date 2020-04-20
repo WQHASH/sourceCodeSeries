@@ -1,0 +1,31 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-04-15 10:46:53
+ * @LastEditTime: 2020-04-16 09:30:27
+ -->
+<script src="Promise.js"></script>
+<script>
+    let p = Promise.resolve("失败");
+    let promise = new Promise(function (resolve, reject) {
+        // throw new Error("xxxx");
+        setTimeout(function () {
+            resolve(p);
+        });
+    });
+    console.log(p,"ppp");
+    console.log(promise, "promise");
+    
+    promise.then(function (data) {
+        console.log("succe", data);
+    }, function (err) {
+        console.log("err", err);
+    }).catch(function (err) {
+        console.log("catch", err)
+    });
+
+  
+
+    
+
+</script>
