@@ -2,33 +2,47 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-04-18 11:20:46
- * @LastEditTime: 2020-04-19 18:09:58
+ * @LastEditTime: 2020-04-20 22:01:21
  -->
 <script src="testClass.js"></script>
 <script>
+    'use strict'
     let test = new TestClass();
     console.log(test, "test");
 
 
-    console.log("============");
-    var obj = {
-        sanme: "wq"
-    };
-    var newO = {
-        sage: 12
-    };
+    let show1 = test.show;
+    show1();
 
-    function isShow() {
-        console.log(this)
+
+    {
+        let p = function () {
+
+        }
+        p.prototype = {
+            show: function () {
+                console.log(this, "show")
+            }
+        }
+
+        let newP = new p();
+        let menthP = newP.show;
+        menthP();
+
     }
-    let isShownew = isShow.bind(obj)();
+    console.log("-----------------"); {
+        let obj = {
+            say() {
+                console.log(this, "say");
+            }
+        };
+        let p = obj.say;
+        p();
 
-   
-   var obj = {
-       fn(){
-           console.log(this,"fnthIS");
-       },
-       show(){},
-   }
-   obj.fn();
+        let arraw = () => {
+            console.log(this, "ssx")
+        };
+        arraw()
+
+    }
 </script>
