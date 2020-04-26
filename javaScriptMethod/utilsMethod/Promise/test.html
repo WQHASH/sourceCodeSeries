@@ -2,52 +2,13 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-04-18 11:20:46
- * @LastEditTime: 2020-04-25 19:04:01
+ * @LastEditTime: 2020-04-26 10:12:47
  -->
 <script src="testClass.js"></script>
 <script>
     'use strict'
-    let test = new TestClass();
-    console.log(test, "test");
-
-
-    let show1 = test.show;
-    show1();
-
-
-    {
-        let p = function () {
-
-        }
-        p.prototype = {
-            show: function () {
-                console.log(this, "show")
-            }
-        }
-
-        let newP = new p();
-        let menthP = newP.show;
-        menthP();
-
-    }
-
-
-    {
-        function Test() {
-            this.getThis = () => {
-                return this
-            }
-          
-
-        }
-        Test.getThis = function () {  
-            console.log(this);
-        }
-        
-        let obj = new Test();
-        let f = obj.getThis();
-        console.log(f, "实例");
-        Test.getThis();
-
-    }
+    let p = new newPromise((resolve, reject) => {
+        resolve("ok");
+    });
+    console.log(p, "p");
 </script>
