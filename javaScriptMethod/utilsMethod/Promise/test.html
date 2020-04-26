@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-04-18 11:20:46
- * @LastEditTime: 2020-04-20 22:01:21
+ * @LastEditTime: 2020-04-25 19:04:01
  -->
 <script src="testClass.js"></script>
 <script>
@@ -30,19 +30,24 @@
         menthP();
 
     }
-    console.log("-----------------"); {
-        let obj = {
-            say() {
-                console.log(this, "say");
-            }
-        };
-        let p = obj.say;
-        p();
 
-        let arraw = () => {
-            console.log(this, "ssx")
-        };
-        arraw()
+
+    {
+        function Test() {
+            this.getThis = () => {
+                return this
+            }
+          
+
+        }
+        Test.getThis = function () {  
+            console.log(this);
+        }
+        
+        let obj = new Test();
+        let f = obj.getThis();
+        console.log(f, "实例");
+        Test.getThis();
 
     }
 </script>
