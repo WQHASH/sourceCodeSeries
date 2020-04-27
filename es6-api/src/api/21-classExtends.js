@@ -2,9 +2,15 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2019-07-28 22:30:34
- * @LastEditTime: 2019-09-01 10:43:06
+ * @LastEditTime: 2020-04-27 13:31:41
  */
 let classExtends = "class的继承";
+let classExtends1 = "class的继承1";
+let classExtends2 = "class的继承2";
+let classExtends3 = {
+    sname: "wq",
+    sage: 12
+};
 // 1.*************简介*************
 // es5中的继承和es6中的比较
 // ==== es5继承 ====
@@ -14,7 +20,7 @@ let classExtends = "class的继承";
     // f.__porto__ = Foo.prototype; //=> 然后再将父类的方法添加到this上面（Parent.apply(this)）
     // Foo.apply(f);                //=> 这里也是将父类的方法加到实例中
 
-    function Parent(){};
+    function Parent() { };
     Parent.prototype = {};
     /****
      * wq: 201904081109
@@ -30,16 +36,16 @@ let classExtends = "class的继承";
      *  Child.prototype = build(Parent);
      * 
      */
-    
-    function build(){
+
+    function build() {
         //借用Parent构造中属性
         Parent.apply(this);
     };
 
-    function Child(){};
+    function Child() { };
     // Child.prototype = Object.create(Parent.prototype);
 
-    if(Parent.prototype){
+    if (Parent.prototype) {
         build.prototype = Parent.prototype; //这种暴力赋值原型方法不推荐，父类实例也可以调用子类原型
     }
     Child.prototype = new build();
@@ -53,41 +59,41 @@ let classExtends = "class的继承";
     // console.log(Child.__proto__ == Function.prototype);
     // console.log(Child.prototype.__proto__ == Parent.prototype)
 
-    
 
-    
-    
+
+
+
 
 
 }
 // ==== es6继承 ====
 {
     // es6继承机制： 先将父类对象的属性，加到this上面，(供 子类的 ***构造函数*** 修改this)
-     class Parent {
-        static staticMethod(){console.log("staticMethod-Parent")}
-        point(){console.log("point")}
-     };
-     Object.assign(Parent.prototype, {
-        say(){console.log("parent-form-say")},
-        sing(){},
-     });
+    class Parent {
+        static staticMethod() { console.log("staticMethod-Parent") }
+        point() { console.log("point") }
+    };
+    Object.assign(Parent.prototype, {
+        say() { console.log("parent-form-say") },
+        sing() { },
+    });
 
-     class Child extends Parent{
-         constructor(){
-             //在子类的构造函数中，只有调用super之后，才可以使用this关键字，否则会报错。
-             //因为 子类实例的构建，基于父类实例，只有super方法才能调用父类实例。
-             //super它在这里表示父类的构造函数，用来新建父类的this对象。也用做调用父类方法
-             super()
+    class Child extends Parent {
+        constructor() {
+            //在子类的构造函数中，只有调用super之后，才可以使用this关键字，否则会报错。
+            //因为 子类实例的构建，基于父类实例，只有super方法才能调用父类实例。
+            //super它在这里表示父类的构造函数，用来新建父类的this对象。也用做调用父类方法
+            super()
             //  console.log(this,"this");
             // super.point();
             this.otherAttribute = "otherAttribute";
-         }
-         otherMethod(){console.log("otherMethod")}
+        }
+        otherMethod() { console.log("otherMethod") }
 
-     };
-    
+    };
+
     //  Child.staticMethod();
-     let {say, otherMethod} = new Child();
+    let { say, otherMethod } = new Child();
 
 
 
@@ -105,42 +111,42 @@ let classExtends = "class的继承";
 
 // ****** 3.super 关键字 ******
 {
-   /****
-    *   super关键字的使用情况：
-    *      1.作为方法使用
-    *           => 出现在子类的构造函数中来实现继承
-    *           =>  相当于：Parent.prototype.constructor.call(Child)
-    *      2.作为对象使用 
-    *           => 为对象使用时super指向的就是 父类的原型对象!!
-    * 
-    */
+    /****
+     *   super关键字的使用情况：
+     *      1.作为方法使用
+     *           => 出现在子类的构造函数中来实现继承
+     *           =>  相当于：Parent.prototype.constructor.call(Child)
+     *      2.作为对象使用 
+     *           => 为对象使用时super指向的就是 父类的原型对象!!
+     * 
+     */
 
-    class A{
-        constructor(){
+    class A {
+        constructor() {
             this.x = 1;
         }
-        static parentMethod(){
-            console.log(new this(),"childMethod"); 
+        static parentMethod() {
+            console.log(new this(), "childMethod");
         }
-        print(){
-            console.log(this,"AAAAA");
+        print() {
+            console.log(this, "AAAAA");
         }
     }
 
-    class B extends A{
-        constructor(){
+    class B extends A {
+        constructor() {
             // A.prototype.constructor.call(this) => 这里的this指向B的实例对象
             super();
             this.x = 2;
             // A.prototype.print.call(this); 最为对象使用 super == A.prototype
             super.print();
         }
-        static childMethod(){
+        static childMethod() {
             // A.parentMethod.call(B) => 这里是B类，而不再用this(B的实例),
             // =>静态方法中使用super,他指向的是父类本身,而此时父类中的this,指向当前的子类【本身】
             super.parentMethod();
         }
-        print(){
+        print() {
             // A.prototype.print.call(this)
             // => 原型中的方法 super,他指向的是父类的原型对象，此时父类中的this,指向当前子类【实例】
             super.print();
@@ -154,7 +160,7 @@ let classExtends = "class的继承";
 }
 
 // ****** 4.类的 prototype 属性和__proto__属性 ******
-{   
+{
     /**
      * Class 作为构造函数的语法糖，
      *  同时有prototype属性和__proto__属性，因此同时存在两条继承链。
@@ -163,15 +169,15 @@ let classExtends = "class的继承";
      * 2.子类prototype属性的__proto__属性，表示方法的继承，总是指向父类的prototype属性。(和es5中的一样理解)
      */
 
-    class A{
-        say(){}
+    class A {
+        say() { }
     };
-    class B extends A{
-        constructor(){
+    class B extends A {
+        constructor() {
             // A.prototype.constructor.call(this)
             super();
         }
-        song(){}
+        song() { }
     };
 
     let b = new B();
@@ -186,7 +192,7 @@ let classExtends = "class的继承";
     // console.log(B.prototype.__proto__ === A.prototype);  
     //A是基类，返回的是一个空对象(即Object实例)
     // console.log(A.prototype.__proto__ ===Object.prototype)  
-    
+
 }
 
 
@@ -204,12 +210,12 @@ let classExtends = "class的继承";
      * 和es5中的区别： es5中是直接借用原生方法，es6中是通过借用原生的实例，间接的借用了原生
      */
 
-    function fun (){
+    function fun() {
         this.sname = "www";
     };
     // fun.prototype = {say:function(){},"s":"ssss"};
     var obj = {};
-    var newOBJ = {say:"1212",f:function(){}};
+    var newOBJ = { say: "1212", f: function () { } };
 
     fun.prototype.constructor.call(obj);
     // console.log(fun.prototype.constructor.call(obj))
@@ -227,13 +233,13 @@ let classExtends = "class的继承";
      */
     const a = {
         a: 'a'
-      };
-      const b = {
+    };
+    const b = {
         b: 'b'
-      };
+    };
     //   const c = {...a, ...b};  //原本返回结果:{a:"a",b:"b"}, 但是现在报语法错误???
 
 }
 
 
-export {classExtends};
+export { classExtends, classExtends1, classExtends2, classExtends3};

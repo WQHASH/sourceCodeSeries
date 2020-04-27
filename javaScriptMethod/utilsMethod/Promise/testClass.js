@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-04-18 11:19:47
- * @LastEditTime: 2020-04-26 10:32:18
+ * @LastEditTime: 2020-04-27 16:19:30
  */
 
 let isFunction = (variable) => {
@@ -171,3 +171,5 @@ class newPromise {
     static race(arrList) { }
 
 }
+
+export default newPromise;
