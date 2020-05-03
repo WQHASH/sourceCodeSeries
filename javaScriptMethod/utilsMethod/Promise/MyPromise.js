@@ -62,7 +62,7 @@ class MyPromise {
                 runFulfilled(val)
             }
         }
-        // 为了支持同步的Promise，这里采用异步调用
+        // 为了支持同步的Promise，这里采用异步调用 => 重点在于执行 .then的时候status == pending状态,保证了 成功失败回调能够shift()进行执行函数
         setTimeout(run, 0)
     }
     // 添加reject时执行的函数
@@ -80,7 +80,7 @@ class MyPromise {
         // 为了支持同步的Promise，这里采用异步调用
         setTimeout(run, 0)
     }
-    // 添加then方法
+    // 添加then方法 
     then(onFulfilled, onRejected) {
         const { _value, _status } = this
         // 返回一个新的Promise对象
