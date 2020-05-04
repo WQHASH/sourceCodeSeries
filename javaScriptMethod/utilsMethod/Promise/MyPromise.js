@@ -28,7 +28,6 @@ class MyPromise {
     }
     // 添加resovle时执行的函数
     _resolve(val) {
-        console.log(val, "thisxxxxxxx--0-");
         const run = () => {
             if (this._status !== PENDING) return
             this._status = FULFILLED

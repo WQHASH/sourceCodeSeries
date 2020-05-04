@@ -2,52 +2,17 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-04-18 11:20:46
- * @LastEditTime: 2020-04-25 19:04:01
+ * @LastEditTime: 2020-04-27 16:22:03
  -->
-<script src="testClass.js"></script>
-<script>
-    'use strict'
-    let test = new TestClass();
-    console.log(test, "test");
+<!-- <script src="testClass.js"></script> -->
+<script type="module">
+    // 模块脚本自动采用严格模式，不管有没有声明use strict。
+    // 'use strict'
+    import newPromise from "./testClass.js"
 
+    let p = new newPromise((resolve, reject) => {
+        resolve("ok");
+    });
+    console.log(p, "p");
 
-    let show1 = test.show;
-    show1();
-
-
-    {
-        let p = function () {
-
-        }
-        p.prototype = {
-            show: function () {
-                console.log(this, "show")
-            }
-        }
-
-        let newP = new p();
-        let menthP = newP.show;
-        menthP();
-
-    }
-
-
-    {
-        function Test() {
-            this.getThis = () => {
-                return this
-            }
-          
-
-        }
-        Test.getThis = function () {  
-            console.log(this);
-        }
-        
-        let obj = new Test();
-        let f = obj.getThis();
-        console.log(f, "实例");
-        Test.getThis();
-
-    }
 </script>

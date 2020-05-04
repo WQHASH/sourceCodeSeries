@@ -27,6 +27,7 @@
   "dependencies": {
     "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
+    "parcel-bundler": "^1.12.4",
     "style-loader": "^0.21.0"
   }
 }
