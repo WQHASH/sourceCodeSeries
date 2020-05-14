@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-06 08:58:28
- * @LastEditTime: 2020-05-06 10:07:44
+ * @LastEditTime: 2020-05-14 15:48:11
  */
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
@@ -98,7 +98,7 @@ class testPromise {
                         if (result instanceof testPromise) {
                             result.then(onResolveNext, onRejectNext);
                         } else {
-                            onRejectNext(result);
+                            onResolveNext(result);
                         }
                     }
                 } catch (e) {
