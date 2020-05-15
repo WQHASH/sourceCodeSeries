@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-06 08:58:28
- * @LastEditTime: 2020-05-15 12:55:51
+ * @LastEditTime: 2020-05-15 13:16:56
  */
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
@@ -176,7 +176,8 @@ class testPromise {
     any() { }
 
     // ** ES2020 引入。
-    //只有等到所有这些参数实例都返回结果，不管是fulfilled还是rejected，包装实例才会结束。
+    // 只有等到所有这些参数实例都返回结果，不管是fulfilled还是rejected，包装实例才会结束。
+    // 一旦结束，状态总是fulfilled，不会变成rejected。结果收到每个 Promise实例
     allSettled() {
         return new testPromise((resolve, reject) => {
             let values = [];
@@ -191,9 +192,6 @@ class testPromise {
                 }, (error) => {
                     values[i] = error;
                     count++;
-                    if (count == list.length) {
-                        reject(values);
-                    }
                 })
             }
         });
