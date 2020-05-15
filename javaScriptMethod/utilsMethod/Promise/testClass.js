@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-06 08:58:28
- * @LastEditTime: 2020-05-14 16:19:51
+ * @LastEditTime: 2020-05-15 12:55:51
  */
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
@@ -127,8 +127,84 @@ class testPromise {
         })
     }
 
-    static resolve() { }
-    static reject() { }
+    catch(onRejected) {
+        return this.then(undefined, onRejected);
+    }
 
+    fillnay(callBack) {
+        return this.then(
+            value => testPromise.resolve(callBack()).then(() => value),
+            error => testPromise.reject(callBack()).then(() => { error })
+        )
+    }
+
+    // 等待所有返回再执行
+    all(list) {
+        return new testPromise((resolve, reject) => {
+            let values = [];
+            let count = 0;
+            for (let [i, val] of list.entrys()) {
+                this.resolve(val).then((data) => {
+                    values[i] = data;
+                    count++;
+                    if (count == list.length) {
+                        resolve(values);
+                    }
+                }, (error) => {
+                    resolve(error);
+                })
+            }
+        });
+    }
+
+    // 竞态关系,执行最先返回的一个
+    race(list) {
+        return new testPromise((resolve, reject) => {
+            for (let [i, val] of list.entrys()) {
+                this.resolve((res) => {
+                    resolve(res);
+                }, (err) => {
+                    reject(err);
+                })
+            }
+        });
+    }
+
+    // ** 提案
+    // 只要参数实例有一个变成fulfilled状态，包装实例就会变成fulfilled状态;
+    // 如果所有参数实例都变成rejected状态，包装实例就会变成rejected状态。
+    any() { }
+
+    // ** ES2020 引入。
+    //只有等到所有这些参数实例都返回结果，不管是fulfilled还是rejected，包装实例才会结束。
+    allSettled() {
+        return new testPromise((resolve, reject) => {
+            let values = [];
+            let count = 0;
+            for (let [i, val] of list.entrys()) {
+                this.resolve(val).then((data) => {
+                    values[i] = data;
+                    count++;
+                    if (count == list.length) {
+                        resolve(values);
+                    }
+                }, (error) => {
+                    values[i] = error;
+                    count++;
+                    if (count == list.length) {
+                        reject(values);
+                    }
+                })
+            }
+        });
+    }
+
+    static resolve(value) {
+        if (value instanceof testPromise) { return value };
+        return new testPromise(resolve => resolve(value));
+    }
+    static reject(error) {
+        return new testPromise((resolve, reject) => reject(error));
+    }
 
 };
