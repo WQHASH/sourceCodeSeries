@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-18 23:03:41
+ * @LastEditTime: 2020-05-27 19:53:14
  */
 
 const { resolve } = require('path');
@@ -41,6 +41,15 @@ module.exports = {
                             presets: ['@babel/preset-env']
                         },
                         // plugins:[]
+                    }
+                ]
+            },
+            {
+                test: /\.vue/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'vue-loader'
                     }
                 ]
             },
@@ -85,7 +94,7 @@ module.exports = {
 
             },
             {
-                test: /\.(jpg|png|jpe?g|gif|bmp)$/i,
+                test: /\.(jpg|png|jpe?g|gif|svg|bmp)$/i,
                 exclude: /node_modules/,
                 use: [
                     {
@@ -125,15 +134,12 @@ module.exports = {
                         }
                     }
                 ]
-            },
-            {
+            }, {
                 test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                exclude: /node_modules/,
                 use: 'url-loader?limit=10000',
             },
             {
                 test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-                exclude: /node_modules/,
                 use: 'file-loader',
             }
         ]
@@ -157,10 +163,13 @@ module.exports = {
         // 指定解析的第三方包
         modules: [resolve('node_modules')],
         // 省略引用文件的后缀名，可按配置规则以此查找
-        extensions: [".js", ".css", ".json", ".vue"],
+        extensions: ['', '.js', '.vue', '.less', '.css', '.scss'],
         // 指定引用包的别名
         alias: {
-            bootstrap: 'bootstrap/dist/css/bootstrap.css'
+            'vue$': 'vue/dist/vue.common.js',
+            'src': resolve(__dirname, '../src'),
+            'assets': resolve(__dirname, '../src/assets'),
+            'components': resolve(__dirname, '../src/components')
         }
     },
     plugins: [

@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-18 22:58:01
+ * @LastEditTime: 2020-05-27 19:53:28
  */
 
 const { resolve } = require('path');
@@ -47,6 +47,15 @@ module.exports = {
                             presets: ['@babel/preset-env']
                         },
                         // plugins:[]
+                    }
+                ]
+            },
+            {
+                test: /\.vue/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'vue-loader'
                     }
                 ]
             },
@@ -141,11 +150,6 @@ module.exports = {
                 use: 'file-loader',
             }
         ]
-    },
-    devServer: {
-        port: 3000,
-        progress: true,
-        contentBase: './dist'
     },
     optimization: {
         minimizer: [
