@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-27 19:53:14
+ * @LastEditTime: 2020-05-27 20:09:59
  */
 
 const { resolve } = require('path');
@@ -16,7 +16,7 @@ const HappyPack = require('happypack');
 
 module.exports = {
     mode: process.env.NODE_ENV == 'development' ? 'development' : 'production',
-    entry: resolve("./src/index.js"),
+    entry: resolve("./src/main.js"),
     devtool: 'cheap-module-eval-source-map',
     output: {
         path: resolve("./dist"),
@@ -163,7 +163,7 @@ module.exports = {
         // 指定解析的第三方包
         modules: [resolve('node_modules')],
         // 省略引用文件的后缀名，可按配置规则以此查找
-        extensions: ['', '.js', '.vue', '.less', '.css', '.scss'],
+        extensions: ['.js', '.vue', '.less', '.css', '.scss'],
         // 指定引用包的别名
         alias: {
             'vue$': 'vue/dist/vue.common.js',
@@ -225,6 +225,3 @@ module.exports = {
 // 关于该文件介绍: .env (类似公共配置) .env.development (开发) .env.production (上线); 先加载 .env文件, 然后以文件覆盖形式加载！
 // 该文件属性名必须以VUE_APP_开头，比如VUE_APP_XXX
 //-----------------------------------
-
-console.log("NODE_ENV名称:", process.env.NODE_ENV);
-console.log("VUE_APP_ENV名称:", process.env.VUE_APP_ENV);

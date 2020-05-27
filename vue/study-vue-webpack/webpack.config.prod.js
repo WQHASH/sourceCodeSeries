@@ -23,7 +23,7 @@ const HappyPack = require('happypack');
 
 module.exports = {
     mode: 'production',
-    entry: resolve("./src/index.js"),
+    entry: resolve("./src/main.js"),
     output: {
         path: resolve("./dist"),
         filename: "assets/js/[name].[hash:8].js",
