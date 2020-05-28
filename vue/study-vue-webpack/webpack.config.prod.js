@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-27 19:53:28
+ * @LastEditTime: 2020-05-28 17:19:23
  */
 
 const { resolve } = require('path');
@@ -18,6 +18,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // 图片压缩
 const imagemin = require('imagemin');
+// vue文件编译
+const { VueLoaderPlugin } = require("vue-loader");
 // 使用多线程打包
 const HappyPack = require('happypack');
 
@@ -192,6 +194,10 @@ module.exports = {
             },
             hash: true,
         }),
+
+        // vueLoader 编译
+        new VueLoaderPlugin(),
+
         // css抽取插件
         new MiniCssExtractPlugin({
             filename: 'assets/css/[name].[hash:8].css',

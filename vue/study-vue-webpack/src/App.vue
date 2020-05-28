@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-27 16:02:59
- * @LastEditTime: 2020-05-27 20:49:39
+ * @LastEditTime: 2020-05-28 19:39:34
 -->
 <template>
   <div>
@@ -11,19 +11,14 @@
         <router-view></router-view>
       </keep-alive>
     </transition>
-    <transition name="router-fade" mode="out-in">
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
-    </transition>
-    <svg-icon></svg-icon>
   </div>
 </template>
 
 <script>
+  export default {};
 </script>
 
-<style lang="scss">
-  @import "./style/common";
-
+<style lang="less">
   .router-fade-enter-active,
   .router-fade-leave-active {
     transition: opacity 0.3s;

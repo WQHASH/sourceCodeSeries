@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-27 20:09:59
+ * @LastEditTime: 2020-05-28 20:46:05
  */
 
 const { resolve } = require('path');
@@ -11,6 +11,8 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // 用于抽离html中的style内容到单独的css文件中
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// vue文件编译
+const { VueLoaderPlugin } = require("vue-loader");
 // 使用多线程打包
 const HappyPack = require('happypack');
 
@@ -167,9 +169,9 @@ module.exports = {
         // 指定引用包的别名
         alias: {
             'vue$': 'vue/dist/vue.common.js',
-            'src': resolve(__dirname, '../src'),
-            'assets': resolve(__dirname, '../src/assets'),
-            'components': resolve(__dirname, '../src/components')
+            '@': resolve(__dirname, './src'),
+            'assets': resolve(__dirname, './src/assets'),
+            'components': resolve(__dirname, './src/components')
         }
     },
     plugins: [
@@ -187,6 +189,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: 'assets/css/[name].[hash:8].css',
         }),
+
+        // vueLoader 编译
+        new VueLoaderPlugin(),
 
         // 多线程打包; [适用于项目较大的情况下]
         new HappyPack({
