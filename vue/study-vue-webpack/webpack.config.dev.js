@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-28 20:46:05
+ * @LastEditTime: 2020-05-28 21:08:17
  */
 
 const { resolve } = require('path');
@@ -23,7 +23,7 @@ module.exports = {
     output: {
         path: resolve("./dist"),
         filename: "assets/js/[name].[hash:8].js",
-        publicPath: ""
+        publicPath: "/"
     },
     module: {
         rules: [
@@ -149,8 +149,12 @@ module.exports = {
     devServer: {
         hot: true,
         port: 3000,
+        host: '0.0.0',
         progress: true,
         contentBase: './build',
+        historyApiFallback: {
+            index: '/index.html'
+        },
         // proxy: {
         //     "/api": {
         //         target: "http://localhost:3000",
