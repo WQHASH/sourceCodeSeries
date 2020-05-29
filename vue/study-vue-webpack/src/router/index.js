@@ -2,18 +2,18 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-27 16:02:13
- * @LastEditTime: 2020-05-29 10:09:41
+ * @LastEditTime: 2020-05-29 16:55:35
  */
 
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
 
 import App from '@/App.vue';
 console.log(App, "App")
-import Home from '@/views/Home.vue'
-import Other from '@/views/Other.vue'
+// import Home from '@/views/Home.vue'
+// import Other from '@/views/Other.vue'
 
-Vue.use(VueRouter)
+Vue.use(Router)
 // const routes = [
 //     {
 //         path: '/',
@@ -40,16 +40,16 @@ const routes = [
     {
         path: '/home',
         name: "home",
-        component: Home
+        component: import("@/views/Home.vue")
     },
     {
         path: '/other',
         name: "other",
-        component: Other
+        component: import("@/views/Home.vue")
     }
 ]
 
-const router = new VueRouter({
+const router = new Router({
     // hash || history
     mode: 'history',
     // base: process.env.BASE_URL,

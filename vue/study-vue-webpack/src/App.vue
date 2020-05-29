@@ -2,30 +2,33 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-27 16:02:59
- * @LastEditTime: 2020-05-28 19:39:34
+ * @LastEditTime: 2020-05-29 16:54:29
 -->
 <template>
   <div>
-    <transition name="router-fade" mode="out-in">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
-    </transition>
+    <router-view />
   </div>
 </template>
 
-<script>
-  export default {};
-</script>
-
 <style lang="less">
-  .router-fade-enter-active,
-  .router-fade-leave-active {
-    transition: opacity 0.3s;
+  #app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
   }
 
-  .router-fade-enter,
-  .router-fade-leave-active {
-    opacity: 0;
+  #nav {
+    padding: 30px;
+
+    a {
+      font-weight: bold;
+      color: #2c3e50;
+
+      &.router-link-exact-active {
+        color: #42b983;
+      }
+    }
   }
 </style>
