@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-28 17:19:23
+ * @LastEditTime: 2020-05-29 13:10:26
  */
 
 const { resolve } = require('path');
@@ -29,7 +29,8 @@ module.exports = {
     output: {
         path: resolve("./dist"),
         filename: "assets/js/[name].[hash:8].js",
-        publicPath: ""
+        // 控制打包后静态文件的引用规则
+        publicPath: "./"
     },
     module: {
         rules: [
@@ -152,6 +153,21 @@ module.exports = {
                 use: 'file-loader',
             }
         ]
+    },
+
+    resolve: {
+        // 指定解析的第三方包
+        modules: [resolve('node_modules')],
+        // 省略引用文件的后缀名，可按配置规则以此查找
+        extensions: ['.js', '.vue', '.less', '.css', '.scss'],
+        // 指定引用包的别名
+        alias: {
+            // 'vue$': 'vue/dist/vue.common.js',
+            'vue': resolve(__dirname, './node_modules/vue/dist/vue.js'),
+            '@': resolve(__dirname, './src'),
+            'static': resolve(__dirname, './src/static'),
+            'components': resolve(__dirname, './src/components')
+        }
     },
     optimization: {
         minimizer: [

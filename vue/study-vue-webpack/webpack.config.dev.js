@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-02 23:05:02
- * @LastEditTime: 2020-05-28 21:08:17
+ * @LastEditTime: 2020-05-29 12:55:48
  */
 
 const { resolve } = require('path');
@@ -23,7 +23,7 @@ module.exports = {
     output: {
         path: resolve("./dist"),
         filename: "assets/js/[name].[hash:8].js",
-        publicPath: "/"
+        publicPath: ""
     },
     module: {
         rules: [
@@ -149,20 +149,18 @@ module.exports = {
     devServer: {
         hot: true,
         port: 3000,
-        host: '0.0.0',
-        progress: true,
+        host: '0.0.0.0',
         contentBase: './build',
-        historyApiFallback: {
-            index: '/index.html'
+        // 处理路由history刷新报错
+        historyApiFallback: true,
+        proxy: {
+            "/api": {
+                target: "192.168.4.235:80",
+                pathRewrite: {
+                    "^/api": "",
+                },
+            }
         },
-        // proxy: {
-        //     "/api": {
-        //         target: "http://localhost:3000",
-        //         pathRewrite: {
-        //             "^/api": "",
-        //         },
-        //     }
-        // },
 
     },
     resolve: {
@@ -172,9 +170,10 @@ module.exports = {
         extensions: ['.js', '.vue', '.less', '.css', '.scss'],
         // 指定引用包的别名
         alias: {
-            'vue$': 'vue/dist/vue.common.js',
+            // 'vue$': 'vue/dist/vue.common.js',
+            'vue': resolve(__dirname, './node_modules/vue/dist/vue.js'),
             '@': resolve(__dirname, './src'),
-            'assets': resolve(__dirname, './src/assets'),
+            'static': resolve(__dirname, './src/static'),
             'components': resolve(__dirname, './src/components')
         }
     },

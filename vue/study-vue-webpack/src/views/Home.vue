@@ -2,16 +2,17 @@
  * @Description: 
  * @Author: wangqi
  * @Date: 2020-05-14 10:04:56
- * @LastEditTime: 2020-05-28 19:39:08
+ * @LastEditTime: 2020-05-29 13:09:44
  -->
 <template>
   <div class="home">
-      <h2>Home~</h2>
+    <h2>ssssss</h2>
   </div>
 </template>
 
 <script>
-export default {
-  name: "Home"
-};
+  console.log("home~~~");
+  export default {
+    name: "Home"
+  };
 </script>
