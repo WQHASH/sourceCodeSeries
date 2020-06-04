@@ -1,175 +1,208 @@
 /*
  * @Description: 
  * @Author: wangqi
- * @Date: 2020-04-18 11:19:47
- * @LastEditTime: 2020-04-27 16:19:30
+ * @Date: 2020-05-06 08:58:28
+ * @LastEditTime: 2020-05-15 13:16:56
  */
-
-let isFunction = (variable) => {
-    return typeof variable === 'function';
-};
-
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED';
 const REJECTED = 'REJECTED';
-
-
-class newPromise {
-    _status = PENDING;
-    _value = undefined;
-    // 成功的回调函数队列
-    _fulfilledQueues = [];
-    // 失败的回调函数队列
-    _rejectedQueues = [];
-
-    constructor(callBack) {
-        if (!isFunction(callBack)) {
-            throw new Error("请传递一个函数");
-        }
+let isFunction = (val) => { return typeof val === "function" };
+class testPromise {
+    constructor(executor) {
+        if (!isFunction(executor)) { throw new Error("请输入一个函数!") };
+        this._status = PENDING;
+        this._value = "";
+        this._fulfilledQueue = [];
+        this._rejectedQueue = [];
         try {
-            callBack(this._resove.bind(this), this._reject.bind(this));
-        } catch (e) {
+            executor(this._resolve.bind(this), this._reject.bind(this));
+        } catch (err) {
             this._reject(err);
         }
+
     }
 
-    _resove(val) {
+    _resolve(data) {
+        if (this._status !== PENDING) return;
+        this._status = FULFILLED;
         const run = () => {
-            // 在这里状态还应该是进行中的 
-            if (this._status !== PENDING) {
-                return;
-            }
-            this._status = FULFILLED;
-
-            const runFulfilled = (value) => {
-                let cb = this._fulfilledQueues.shift();
-                while (cb) {
+            // 执行 then存储的_fulfilledQueue队列
+            let runFulfilled = (value) => {
+                let cb;
+                while (cb = this._fulfilledQueue.shift()) {
                     cb(value);
                 }
-            }
-
-            const runRejected = (err) => {
-                let cb = this._rejectedQueues.shift();
-                while (cb) {
-                    cb(err);
+            };
+            let runRejected = (error) => {
+                let cb;
+                while (cb = this._rejectedQueue.shift()) {
+                    cb(value);
                 }
-            }
+            };
 
-            if (val instanceof newPromise) {
-                val.then((value) => {
-                    this._value = value;
-                    runFulfilled(value);
+            if (data instanceof testPromise) {
+                data.then((val) => {
+                    this._value = val;
+                    runFulfilled(val)
                 }, (err) => {
                     this._value = err;
                     runRejected(err);
-                });
+                })
             } else {
-                this._value = val;
-                runFulfilled(val);
+                this._value = data;
+                runFulfilled(data);
             }
+
         }
 
         setTimeout(run, 0);
     }
 
     _reject(err) {
-        if (this._status !== PENDING) {
-            return;
-        }
+        if (this._status !== PENDING) return;
+        // 执行 then存储的_rejectedQueue队列
         const run = () => {
             this._status = REJECTED;
             this._value = err;
-            let cb = this._rejectedQueues.shift();
-            while (cb) {
-                cb(err);
+            let cb;
+            while (cb = this._rejectedQueue.shift()) {
+                cb(value);
             }
         }
         setTimeout(run, 0);
     }
 
-    then(onFulfilled, onRejected) {
-        const { _value, _status } = this;
-        return new newPromise((onFulfilledNext, onRejectedNext) => {
-            let fulfilled = (value) => {
+    then(onResolve, onReject) {
+        const { _status, _value } = this;
+        return new testPromise((onResolveNext, onRejectNext) => {
+            let resolvedCallBack = (value) => {
                 try {
-                    if (!isFunction(onFulfilled)) {
-                        onFulfilledNext(value);
+                    if (!isFunction(onResolve)) {
+                        onResolveNext(value);
                     } else {
-                        let res = onFulfilled(value);
-                        // 如果 then 成功回调执行完后，返回的还是 promsie对象
-                        if (res instanceof newPromise) {
-                            res.then(onFulfilledNext, onRejectedNext);
+                        let res = onResolve(value);
+                        if (res instanceof testPromise) {
+                            res.then(onResolveNext, onRejectNext);
                         } else {
-                            onFulfilledNext(res);
-                        }
-
-                    }
-                } catch (err) {
-                    onRejectedNext(err);
-                }
-            }
-
-            let rejected = (err) => {
-                try {
-                    if (!isFunction(onRejected)) {
-                        onRejectedNext(err);
-                    } else {
-                        let res = onRejected(err);
-                        if (res instanceof newPromise) {
-                            res.then(onFulfilledNext, onRejectedNext);
-                        } else {
-                            onFulfilledNext(res);
+                            onResolveNext(res);
                         }
                     }
-                } catch (e) {
-                    onRejectedNext(e);
+                } catch (error) {
+                    onRejectNext(error);
                 }
+
             }
 
+            let rejectedCallBack = (err) => {
+                try {
+                    if (!isFunction(onReject)) {
+                        onRejectNext(err);
+                    } else {
+                        let res = onReject(err);
+                        if (res instanceof testPromise) {
+                            res.then(onResolveNext, onRejectNext);
+                        } else {
+                            // 这里用成功回调是因为, res的结果这里可以排除错误的情况，以及Promsie实例
+                            // 那么剩下来的就是 resolve的处理方式
+                            onResolveNext(res);
+                        }
+                    }
+                } catch (error) {
+                    onRejectNext(error);
+                }
+            }
             switch (_status) {
-                // 状态为 pending时, 将then方法回调函数加入到队列中
                 case PENDING:
-                    this._fulfilledQueues.push(fulfilled);
-                    this._rejectedQueues.push(rejected);
+                    this._fulfilledQueue.push(resolvedCallBack);
+                    this._rejectedQueue.push(rejectedCallBack);
                     break;
                 case FULFILLED:
-                    fulfilled(_value);
+                    resolvedCallBack(_value);
                     break;
                 case REJECTED:
-                    rejected(_value);
+                    rejectedCallBack(_value);
                     break;
+            }
+        })
+    }
+
+    catch(onRejected) {
+        return this.then(undefined, onRejected);
+    }
+
+    fillnay(callBack) {
+        return this.then(
+            value => testPromise.resolve(callBack()).then(() => value),
+            error => testPromise.reject(callBack()).then(() => { error })
+        )
+    }
+
+    // 等待所有返回再执行
+    all(list) {
+        return new testPromise((resolve, reject) => {
+            let values = [];
+            let count = 0;
+            for (let [i, val] of list.entrys()) {
+                this.resolve(val).then((data) => {
+                    values[i] = data;
+                    count++;
+                    if (count == list.length) {
+                        resolve(values);
+                    }
+                }, (error) => {
+                    resolve(error);
+                })
             }
         });
     }
 
-    catch(onRejectedCallBack) {
-        return this.then(undefined, onRejectedCallBack);
+    // 竞态关系,执行最先返回的一个
+    race(list) {
+        return new testPromise((resolve, reject) => {
+            for (let [i, val] of list.entrys()) {
+                this.resolve((res) => {
+                    resolve(res);
+                }, (err) => {
+                    reject(err);
+                })
+            }
+        });
     }
 
-    finally(callBack) {
-        return this.then((value) => {
-            return newPromise.resolve(callBack()).then(() => {
-                return value;
-            });
-        }, (err) => {
-            return newPromise.reject(callBack()).then(() => {
-                throw err;
-            });
+    // ** 提案
+    // 只要参数实例有一个变成fulfilled状态，包装实例就会变成fulfilled状态;
+    // 如果所有参数实例都变成rejected状态，包装实例就会变成rejected状态。
+    any() { }
+
+    // ** ES2020 引入。
+    // 只有等到所有这些参数实例都返回结果，不管是fulfilled还是rejected，包装实例才会结束。
+    // 一旦结束，状态总是fulfilled，不会变成rejected。结果收到每个 Promise实例
+    allSettled() {
+        return new testPromise((resolve, reject) => {
+            let values = [];
+            let count = 0;
+            for (let [i, val] of list.entrys()) {
+                this.resolve(val).then((data) => {
+                    values[i] = data;
+                    count++;
+                    if (count == list.length) {
+                        resolve(values);
+                    }
+                }, (error) => {
+                    values[i] = error;
+                    count++;
+                })
+            }
         });
     }
 
     static resolve(value) {
-        if (value instanceof newPromise) {
-            return value
-        }
-        return new newPromise((resolve) => { return resolve(value) });
+        if (value instanceof testPromise) { return value };
+        return new testPromise(resolve => resolve(value));
     }
-    static reject(value) {
-        return new newPromise((resolve, reject) => { return reject(value) });
+    static reject(error) {
+        return new testPromise((resolve, reject) => reject(error));
     }
-    static all(arrList) { }
-    static race(arrList) { }
 
-}
-
-export default newPromise;
+};

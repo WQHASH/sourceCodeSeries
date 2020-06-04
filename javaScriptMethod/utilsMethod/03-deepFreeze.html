@@ -1,0 +1,33 @@
+<!--
+ * @Description: 深冻结函数
+ * @Author: wangqi
+ * @Date: 2020-06-03 10:59:40
+ * @LastEditTime: 2020-06-03 11:06:50
+-->
+<script>
+    'use strict'
+    {
+
+        function deepFreeze(obj) {
+            let propNames = Object.getOwnPropertyNames(obj);
+
+            propNames.forEach((name, index, list) => {
+                let prop = obj[name];
+                if (typeof prop == 'object' && prop !== null) {
+                    deepFreeze(prop);
+                }
+            });
+            return Object.freeze(obj);
+        }
+
+        let obj = {
+            internale: {},
+            arr: [],
+        }
+        deepFreeze(obj);
+        obj.internale.a = "wq";
+        console.log(obj, "obj");
+
+    }
+
+</script>
