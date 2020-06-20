@@ -1,13 +1,19 @@
 'use strict'
 const path = require('path')
-const pkg = require('./package.json')
+const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = pkg.name || 'vue-element-admin' // page title
-const port = 9527 // dev port
+const name = defaultSettings.title || 'vue Element Admin' // page title
+
+// If your port is set to 80,
+// use administrator privileges to execute the command line.
+// For example, Mac: sudo npm run
+// You can change the port by the following method:
+// port = 9527 npm run dev OR npm run dev --port = 9527
+const port = process.env.port || process.env.npm_config_port || 9527 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -30,18 +36,7 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    proxy: {
-      // change xxx-api/login => mock/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
-      [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:${port}/mock`,
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
-      }
-    },
-    after: require('./mock/mock-server.js')
+    before: require('./mock/mock-server.js')
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -54,8 +49,11 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    config.plugins.delete('preload') // TODO: need test
-    config.plugins.delete('prefetch') // TODO: need test
+    // it can improve the speed of the first screen, it is recommended to turn on preload
+    // config.plugins.delete('preload')
+
+    // when there are many pages, it will cause too many meaningless requests
+    config.plugins.delete('prefetch')
 
     // set svg-sprite-loader
     config.module
@@ -84,11 +82,6 @@ module.exports = {
         return options
       })
       .end()
-
-    config
-      .when(process.env.NODE_ENV === 'development',
-        config => config.devtool('cheap-source-map')
-      )
 
     config
       .when(process.env.NODE_ENV !== 'development',
