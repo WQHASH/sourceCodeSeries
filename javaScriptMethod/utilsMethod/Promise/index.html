@@ -1,0 +1,43 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-04-18 11:11:49
+ * @LastEditTime: 2020-04-20 20:54:17
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script src="MyPromise.js"> </script>
+<script>
+    let obj = Promise.reject("改变状态");
+    let p = new MyPromise(function (resolve, reject) {
+        resolve(obj);
+    });
+    let result = p.then((data) => {
+        console.log(data, "succet");
+        return 11
+    }, (err) => {
+        console.log(err, "err");
+        return Promise.reject("xxx");
+    }).catch((err) => {
+        console.log(err, "catch");
+        return Promise.reject("ggg");
+    });
+
+    console.log(p, "p");
+    console.log(result, "result");
+</script>
+
+
+
+</html>

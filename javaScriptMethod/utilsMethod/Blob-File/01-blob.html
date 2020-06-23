@@ -1,0 +1,38 @@
+<!--
+ * @Description: 
+ * @Author: wangqi
+ * @Date: 2020-06-01 23:08:51
+ * @LastEditTime: 2020-06-01 23:43:45
+-->
+
+<script>
+    /**
+        Blob介绍：
+            Blob是一个大数据块的不透明引用，表示二进制大对象. 在js中Blob通常表示二进制数据; (以字节为单位)
+
+        Blob来源：
+            1. File对象本质是 Blob的子类,所以 new File()实例继承了Blob的一系列属性方法;
+            2. 下载Blob (通过Ajax请求的形式指定后端 xhr.responseType = 'blob');
+            3. 构造Blob生成实例对象
+
+
+     */
+
+
+    {
+        let debug = {
+            hello: "world"
+        };
+        let blob = new Blob([1212], {
+            type: 'application/json'
+        });
+
+        console.log(blob, "blob");
+
+        // 类型化数组
+        let arr = new Int8Array([0, 1, 2, 3]);
+        console.log(arr, "arr");
+
+
+    }
+</script>

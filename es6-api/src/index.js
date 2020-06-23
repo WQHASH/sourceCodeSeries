@@ -10,3 +10,4 @@ import {classExtends} from "./useApi/21-use-classExtends";
 import {usePromise} from "./useApi/15-use-promise";
 import {symbol} from "./useApi/11-use-symbol";
 import {setAndMap} from "./useApi/12-use-setAndMap";
+import foo from "./useApi/23-use-module";

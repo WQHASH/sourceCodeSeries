@@ -1,0 +1,42 @@
+<!--
+ * @Description: Object.assign(tarhet, origin,...) 原理实现
+ * @Author: wangqi
+ * @Date: 2020-04-13 15:04:26
+ * @LastEditTime: 2020-04-13 16:28:48
+ -->
+
+<script>
+    Object.prototype.myAssign = function (...args) {
+        if (args.length == 1) {
+            return args;
+        }
+        let newArgs = args.splice(1);
+        for (let item of newArgs.values()) {
+            for (let [key, val] of Object.entries(item)) {
+                args[0][key] = val;
+            }
+        }
+        return args;
+    };
+
+    let a = {
+        name: "advanced",
+        age: 18
+    }
+    let b = {
+        name: "saucxs",
+        book: {
+            title: "You Don't Know JS",
+            price: "45"
+        }
+    }
+
+
+    let c = Object.myAssign(a, b);
+    b.name = "change";
+    b.book.price = "55";
+
+    console.log(b);
+    console.log(a)
+
+</script>
