@@ -50,7 +50,7 @@
     "imagemin": "^7.0.1",
     "img-loader": "^3.0.1",
     "jquery": "^3.5.0",
-    "moment": "^2.25.1",
+    "moment": "^2.29.4",
     "vue": "^2.6.11",
     "vue-router": "^3.3.0",
     "vuex": "^3.4.0"
